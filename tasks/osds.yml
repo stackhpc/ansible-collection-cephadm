@@ -1,0 +1,10 @@
+---
+- name: Add OSDs
+  vars:
+    ansible_host: "{{ hostvars[cephadm_host].ansible_host | default(cephadm_host) }}"
+  command:
+    cmd: "cephadm shell -- ceph orch daemon add osd {{ inventory_hostname }}:{{ item }}"
+  become: true
+  when: cephadm_osd_devices | length > 0
+  with_items: "{{ cephadm_osd_devices }}"
+  delegate_to: "{{ cephadm_host }}"

@@ -1,0 +1,25 @@
+---
+- name: Get Ceph FSID
+  command:
+    cmd: "cephadm shell -- ceph fsid"
+  become: true
+  register: cephadm_destroy_fsid
+  delegate_to: "{{ groups['mons'][0] }}"
+  run_once: True
+  changed_when: false
+  failed_when: false
+
+- name: Destroy cluster
+  command:
+    cmd: "cephadm rm-cluster --fsid {{ cephadm_destroy_fsid.stdout }} --force"
+  become: true
+  when: cephadm_destroy_fsid.rc != 1
+
+- name: Remove ssh keys
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ cephadm_ssh_private_key }}"
+    - "{{ cephadm_ssh_public_key }}"
+  become: true

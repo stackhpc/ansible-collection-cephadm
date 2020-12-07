@@ -1,0 +1,27 @@
+---
+service_type: mon
+placement:
+  label: "mon"
+---
+service_type: mgr
+placement:
+  label: "mgr"
+---
+service_type: crash
+placement:
+  host_pattern: "*"
+{% for host in groups['mons'] %}
+---
+service_type: host
+hostname: {{ host }}
+labels:
+- mon
+- mgr
+{% endfor %}
+{% for host in groups['osds'] %}
+---
+service_type: host
+hostname: {{ host }}
+labels:
+- osd
+{% endfor %}

@@ -1,0 +1,75 @@
+---
+- name: Bootstrap cephadm
+  block:
+  - name: Template out cluster.yml
+    template:
+      src: "templates/cluster.yml.j2"
+      dest: "/tmp/cephadm_cluster.yml"
+    become: true
+    run_once: True
+
+  - name: Bootstrap cephadm
+    vars:
+      mon_ip: "{{ hostvars[inventory_hostname]['ansible_'~cephadm_public_interface].ipv4.address }}"
+      monitoring_stack: "{{ '--skip-monitoring-stack' if not (cephadm_enable_monitoring | bool) else '' }}"
+      dashboard: "{{ '--skip-dashboard' if not cephadm_enable_dashboard | bool else '' }}"
+      firewalld: "{{ '--skip-firewalld' if not cephadm_enable_firewalld | bool else '' }}"
+    command:
+      cmd: >
+           cephadm bootstrap
+           {{ monitoring_stack }}
+           {{ dashboard }}
+           {{ firewalld }}
+           --ssh-private-key={{ cephadm_ssh_private_key }}
+           --ssh-public-key={{ cephadm_ssh_public_key }}
+           {% if cephadm_registry_url | length > 0 %}
+           --registry-url={{ cephadm_registry_url }}
+           --registry-username={{ cephadm_registry_username }}
+           --registry-password={{ cephadm_registry_password }}
+           {% endif %}
+           --skip-pull
+           --fsid={{ cephadm_fsid }}
+           --mon-ip={{ mon_ip }}
+    become: true
+    when: not cephadm_check_ceph_conf.stat.exists
+
+  - name: Set public network
+    command:
+      cmd: "cephadm shell -- ceph config set global public_network {{ cephadm_public_network }}"
+    become: true
+
+  - name: Set cluster network
+    command:
+      cmd: "cephadm shell -- ceph config set global cluster_network {{ cephadm_cluster_network }}"
+    when: cephadm_cluster_network | length > 0
+    become: true
+
+  - name: Template out cluster.yml
+    template:
+      src: "templates/cluster.yml.j2"
+      dest: "/var/run/ceph/{{ cephadm_fsid }}/cephadm_cluster.yml"
+    become: true
+    run_once: True
+
+  - name: Apply spec
+    command:
+      cmd: >
+           cephadm shell --
+           ceph orch apply -i /var/run/ceph/cephadm_cluster.yml
+    become: true
+
+  - name: Install ceph cli on mon hosts
+    command:
+      cmd: "cephadm install ceph"
+    become: true
+    when: cephadm_install_ceph_cli
+
+  - name: Add OSDs
+    command:
+      cmd: "cephadm daemon add osd {{ ansible_hostname }}:{{ item }}"
+    become: true
+    when: cephadm_osd_devices | length > 0
+    with_items: "{{ cephadm_osd_devices }}"
+
+  delegate_to: "{{ groups['mons'][0] }}"
+  run_once: True

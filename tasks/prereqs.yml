@@ -1,0 +1,57 @@
+---
+- name: Install centos-release-ceph-octopus package
+  dnf:
+    name: "centos-release-ceph-octopus"
+    state: present
+  when: not cephadm_custom_repos | bool
+  become: true
+
+- name: Install cephadm package
+  dnf:
+    name: "cephadm"
+    state: present
+  become: true
+
+- name: Prepare cephadm bootstrap dependencies
+  block:
+  - name: Ensure /etc/ceph directory exists
+    file:
+      path: /etc/ceph
+      state: directory
+    become: true
+
+  - name: Check if /etc/ceph/ceph.conf exists
+    stat:
+      path: /etc/ceph/ceph.conf
+    register: cephadm_check_ceph_conf
+
+  - name: Check if cephadm ssh key exists
+    stat:
+      path: "{{ cephadm_ssh_private_key }}"
+    register: cephadm_check_ceph_id
+
+  - name: Generate ssh key for cephadm
+    openssh_keypair:
+      path: "{{ cephadm_ssh_private_key }}"
+      size: 4096
+      comment: "ceph-{{ cephadm_fsid }}"
+    when: not cephadm_check_ceph_id.stat.exists
+    register: cephadm_ssh_key
+    become: true
+
+  - name: Save public key
+    copy:
+      content: "{{ cephadm_ssh_key.public_key }}"
+      dest: "{{ cephadm_ssh_public_key }}"
+    become: true
+    when: not cephadm_check_ceph_id.stat.exists
+  delegate_to: "{{ groups['mons'][0] }}"
+  run_once: True
+
+- name: Copy cephadm public key to all hosts
+  authorized_key:
+    user: root
+    state: present
+    key: "{{ cephadm_ssh_key.public_key }}"
+  become: true
+  when: not cephadm_check_ceph_id.stat.exists

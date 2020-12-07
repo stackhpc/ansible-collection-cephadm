@@ -1,0 +1,26 @@
+---
+cephadm_skip_prechecks: false
+# FSID
+cephadm_fsid: "4aaf9419-b281-4672-9f6d-2f549ac7c774"
+# Recreate cluster
+cephadm_recreate: false
+# Packages
+cephadm_custom_repos: true
+# Registry
+cephadm_registry_url: ""
+cephadm_registry_username: ""
+cephadm_registry_password: ""
+# Bootstrap settings
+cephadm_enable_dashboard: false
+cephadm_enable_firewalld: false
+cephadm_enable_monitoring: false
+cephadm_install_ceph_cli: false
+cephadm_ssh_public_key: "/etc/ceph/cephadm.pub"
+cephadm_ssh_private_key: "/etc/ceph/cephadm.id"
+# Networking
+cephadm_public_interface: "{{ storage_net_interface }}"
+cephadm_cluster_interface: "{{ storage_mgmt_net_interface }}"
+cephadm_public_network: "{{ storage_net_cidr }}"
+cephadm_cluster_network: "{{ storage_mgmt_net_cidr }}"
+# OSDs
+cephadm_osd_devices: []
