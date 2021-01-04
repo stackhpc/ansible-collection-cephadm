@@ -1,3 +1,18 @@
+{% for host in groups['ceph'] %}
+---
+service_type: host
+hostname: {{ host }}
+labels:
+{% if host in groups['mons'] %}
+- mon
+{% endif %}
+{% if host in groups['mgrs'] %}
+- mgr
+{% endif %}
+{% if host in groups['osds'] %}
+- osd
+{% endif %}
+{% endfor %}
 ---
 service_type: mon
 placement:
@@ -10,18 +25,3 @@ placement:
 service_type: crash
 placement:
   host_pattern: "*"
-{% for host in groups['mons'] %}
----
-service_type: host
-hostname: {{ host }}
-labels:
-- mon
-- mgr
-{% endfor %}
-{% for host in groups['osds'] %}
----
-service_type: host
-hostname: {{ host }}
-labels:
-- osd
-{% endfor %}
