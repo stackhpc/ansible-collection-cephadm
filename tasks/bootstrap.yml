@@ -64,12 +64,5 @@
     become: true
     when: cephadm_install_ceph_cli
 
-  - name: Add OSDs
-    command:
-      cmd: "cephadm daemon add osd {{ ansible_hostname }}:{{ item }}"
-    become: true
-    when: cephadm_osd_devices | length > 0
-    with_items: "{{ cephadm_osd_devices }}"
-
   delegate_to: "{{ groups['mons'][0] }}"
   run_once: True
