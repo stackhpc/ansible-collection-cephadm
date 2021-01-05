@@ -1,10 +1,27 @@
 ---
 - name: Add OSDs
-  vars:
-    ansible_host: "{{ hostvars[cephadm_host].ansible_host | default(cephadm_host) }}"
-  command:
-    cmd: "cephadm shell -- ceph orch daemon add osd {{ inventory_hostname }}:{{ item }}"
-  become: true
-  when: cephadm_osd_devices | length > 0
-  with_items: "{{ cephadm_osd_devices }}"
-  delegate_to: "{{ cephadm_host }}"
+  block:
+  - name: Add OSDs individually
+    command:
+      cmd: "cephadm daemon add osd {{ ansible_hostname }}:{{ item }}"
+    become: true
+    when: cephadm_osd_devices | length > 0
+    with_items: "{{ cephadm_osd_devices }}"
+
+  - name: Template out osd_spec.yml
+    copy:
+      content: "{{ cephadm_osd_spec | to_nice_yaml(indent=2) }}"
+      dest: "/var/run/ceph/{{ cephadm_fsid }}/osd_spec.yml"
+    when: cephadm_osd_spec | length > 0
+    become: true
+
+  - name: Apply OSDs spec
+    command:
+      cmd: >
+           cephadm shell --
+           ceph orch apply osd -i /var/run/ceph/osd_spec.yml
+    when: cephadm_osd_spec | length > 0
+    become: true
+
+  delegate_to: "{{ groups['mons'][0] }}"
+  run_once: True
