@@ -28,5 +28,3 @@ jobs:
       # Runs a single command using the runners shell
       - name: Lint Ansible playbook
         uses: ansible/ansible-lint-action@master
-        with:
-          targets: "./"
