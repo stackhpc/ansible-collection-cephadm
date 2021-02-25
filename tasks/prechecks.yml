@@ -1,0 +1,8 @@
+---
+- name: Populate service facts
+  service_facts:
+
+- name: Set cephadm_bootstrap
+  set_fact:
+    cephadm_bootstrap: True
+  when: ansible_facts.services['ceph.target'] is defined

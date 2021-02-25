@@ -4,7 +4,10 @@
 
 - include_tasks: "prechecks.yml"
   when: not cephadm_skip_prechecks | bool
+
 - include_tasks: "prereqs.yml"
+
 - include_tasks: "bootstrap.yml"
   when: cephadm_bootstrap | bool
+
 - include_tasks: "osds.yml"
