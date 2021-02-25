@@ -1,13 +1,13 @@
 namespace: "stackhpc"
 name: "cephadm"
-version: "1.0"
+version: "1.0.0"
 readme: "README.md"
 authors:
   - "Michal Nasiadka"
   - "Bartosz Bezak"
   - "John Garbutt"
 license:
-  - "Apache2"
+  - "Apache-2.0"
 tags:
   - cephadm
 repository: "https://github.com/stackhpc/ansible-collection-cephadm"
