@@ -18,6 +18,9 @@
     file:
       path: /etc/ceph
       state: directory
+      owner: root
+      group: root
+      mode: 0755
     become: true
 
   - name: Check if /etc/ceph/ceph.conf exists
@@ -43,6 +46,9 @@
     copy:
       content: "{{ cephadm_ssh_key.public_key }}"
       dest: "{{ cephadm_ssh_public_key }}"
+      owner: root
+      group: root
+      mode: 0644
     become: true
     when: not cephadm_check_ceph_id.stat.exists
   delegate_to: "{{ groups['mons'][0] }}"
@@ -54,4 +60,3 @@
     state: present
     key: "{{ cephadm_ssh_key.public_key }}"
   become: true
-  when: not cephadm_check_ceph_id.stat.exists

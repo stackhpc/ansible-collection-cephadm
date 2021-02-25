@@ -1,13 +1,6 @@
 ---
 - name: Bootstrap cephadm
   block:
-  - name: Template out cluster.yml
-    template:
-      src: "templates/cluster.yml.j2"
-      dest: "/tmp/cephadm_cluster.yml"
-    become: true
-    run_once: True
-
   - name: Bootstrap cephadm
     vars:
       mon_ip: "{{ hostvars[inventory_hostname]['ansible_'~cephadm_public_interface].ipv4.address }}"
@@ -48,6 +41,9 @@
     template:
       src: "templates/cluster.yml.j2"
       dest: "/var/run/ceph/{{ cephadm_fsid }}/cephadm_cluster.yml"
+      owner: root
+      group: root
+      mode: 0644
     become: true
     run_once: True
 
