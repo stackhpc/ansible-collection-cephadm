@@ -30,7 +30,3 @@ jobs:
         uses: ansible/ansible-lint-action@master
         with:
           targets: "./"
-          override-deps: |
-            ansible<2.10
-            ansible-lint==5.0.2
-          args: ""
