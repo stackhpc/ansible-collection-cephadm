@@ -31,7 +31,7 @@
 
   - name: Save public key
     copy:
-      content: "{{ cephadm_ssh_key.public_key }}"
+      content: "{{ cephadm_ssh_key.public_key | default }}"
       dest: "{{ cephadm_ssh_public_key }}"
       owner: root
       group: root
@@ -42,8 +42,10 @@
   run_once: True
 
 - name: Copy cephadm public key to all hosts
+  vars:
+    content: "{{ lookup('file', cephadm_ssh_public_key) if cephadm_check_ceph_id.stat.exists else cephadm_ssh_key.public_key }}"
   authorized_key:
     user: root
     state: present
-    key: "{{ cephadm_ssh_key.public_key }}"
+    key: "{{ content }}"
   become: true
