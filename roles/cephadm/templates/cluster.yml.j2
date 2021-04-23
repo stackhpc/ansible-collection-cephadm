@@ -1,7 +1,7 @@
 {% for host in groups['ceph'] %}
 ---
 service_type: host
-hostname: {{ host }}
+hostname: {{ hostvars[host]['ansible_hostname'] }}
 labels:
 {% if host in groups['mons'] %}
 - mon

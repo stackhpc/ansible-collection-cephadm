@@ -5,4 +5,4 @@
 - name: Set cephadm_bootstrap
   set_fact:
     cephadm_bootstrap: True
-  when: ansible_facts.services['ceph.target'] is defined
+  when: ansible_facts.services['ceph.target'] is not defined

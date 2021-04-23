@@ -1,0 +1,19 @@
+---
+- name: Add Ceph signing keys
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: E84AC2C0460F3994
+  become: true
+
+- name: Add Ceph repository
+  apt_repository:
+    repo: "deb https://download.ceph.com/debian-{{ cephadm_ceph_release }}/ {{ ansible_distribution_release }} main"
+    state: present
+  when: not cephadm_custom_repos | bool
+  become: true
+
+- name: Install cephadm package
+  apt:
+    name: "cephadm"
+    state: present
+  become: true
