@@ -1,4 +1,5 @@
 ---
+cephadm_ceph_release: octopus
 cephadm_skip_prechecks: False
 # FSID
 cephadm_fsid: ""

@@ -1,17 +1,4 @@
 ---
-- name: Install centos-release-ceph-octopus package
-  dnf:
-    name: "centos-release-ceph-octopus"
-    state: present
-  when: not cephadm_custom_repos | bool
-  become: true
-
-- name: Install cephadm package
-  dnf:
-    name: "cephadm"
-    state: present
-  become: true
-
 - name: Prepare cephadm bootstrap dependencies
   block:
   - name: Ensure /etc/ceph directory exists
