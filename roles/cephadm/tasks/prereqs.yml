@@ -38,12 +38,19 @@
       mode: 0644
     become: true
     when: not cephadm_check_ceph_id.stat.exists
+
+  - name: Slurp public key if already exist
+    slurp:
+      src: "{{ cephadm_ssh_public_key }}"
+    register: cephadm_ssh_public_key_slurp
+    when: cephadm_check_ceph_id.stat.exists
+
   delegate_to: "{{ groups['mons'][0] }}"
   run_once: True
 
 - name: Copy cephadm public key to all hosts
   vars:
-    content: "{{ lookup('file', cephadm_ssh_public_key) if cephadm_check_ceph_id.stat.exists else cephadm_ssh_key.public_key }}"
+    content: "{{ cephadm_ssh_public_key_slurp.content | b64decode if cephadm_check_ceph_id.stat.exists else cephadm_ssh_key.public_key }}"
   authorized_key:
     user: root
     state: present
