@@ -8,7 +8,7 @@ Tested with the current Ansible 2.9 releases.
 
 ## Included content
 
-cephadm_deploy role
+cephadm role for deployment/bootstrapping
 
 ## Using this collection
 
