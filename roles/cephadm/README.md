@@ -3,6 +3,18 @@ cephadm
 
 This role bootstraps and configures Ceph using cephadm.
 
+Inventory
+---------
+
+This role assumes the existence of the following groups:
+
+* `ceph`
+* `mons`
+* `mgrs`
+* `osds`
+
+All Ceph hosts must be in the `ceph` group.
+
 Role variables
 --------------
 
