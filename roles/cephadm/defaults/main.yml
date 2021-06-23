@@ -7,6 +7,7 @@ cephadm_fsid: ""
 cephadm_recreate: False
 # Packages
 cephadm_custom_repos: False
+cephadm_package_update: False
 # Registry
 cephadm_registry_url: ""
 cephadm_registry_username: ""

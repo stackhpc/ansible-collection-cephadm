@@ -40,5 +40,5 @@
 - name: Install cephadm package
   dnf:
     name: "cephadm"
-    state: present
+    state: "{{ 'latest' if cephadm_package_update | bool else 'present' }}"
   become: true
