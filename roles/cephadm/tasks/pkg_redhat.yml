@@ -10,6 +10,8 @@
   rpm_key:
     key: "https://download.ceph.com/keys/release.asc"
     state: present
+  when: not cephadm_custom_repos | bool
+  become: true
 
 - name: Add Ceph repository
   yum_repository:
