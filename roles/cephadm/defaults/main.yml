@@ -7,6 +7,12 @@ cephadm_fsid: ""
 cephadm_recreate: False
 # Packages
 cephadm_custom_repos: False
+cephadm_ceph_repos:
+  - "$basearch"
+  - "noarch"
+cephadm_ceph_versions:
+  - "octopus"
+  - "pacific"
 # Registry
 cephadm_registry_url: ""
 cephadm_registry_username: ""

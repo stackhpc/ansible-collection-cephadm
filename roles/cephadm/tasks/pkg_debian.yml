@@ -5,12 +5,13 @@
     id: E84AC2C0460F3994
   become: true
 
-- name: Add Ceph repository
+- name: Ensure Ceph repositories are defined
   apt_repository:
-    repo: "deb https://download.ceph.com/debian-{{ cephadm_ceph_release }}/ {{ ansible_distribution_release }} main"
-    state: present
+    repo: "deb https://download.ceph.com/debian-{{ item }}/ {{ ansible_distribution_release }} main"
+    state: "{{ 'present' if item == cephadm_ceph_release else 'absent' }}"
   when: not cephadm_custom_repos | bool
   become: true
+  loop: "{{ cephadm_ceph_versions }}"
 
 - name: Install cephadm package
   apt:
