@@ -13,6 +13,7 @@ cephadm_ceph_repos:
 cephadm_ceph_versions:
   - "octopus"
   - "pacific"
+cephadm_package_update: False
 # Registry
 cephadm_registry_url: ""
 cephadm_registry_username: ""

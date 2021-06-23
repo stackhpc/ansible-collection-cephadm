@@ -23,6 +23,7 @@ Role variables
   * `cephadm_fsid`: FSID to use for cluster (default: empty - cephadm will generate FSID)
   * `cephadm_recreate`: If existing cluster should be destroyed and recreated (default: False)
   * `cephadm_custom_repos`: If enabled - the role won't define yum/apt repositories (default: False)
+  * `cephadm_package_update`: If enabled - cephadm package will be updated to latest version (default: False)
   * Bootstrap settings
     * `cephadm_enable_dashboard`: If enabled - dashboard service on MGR will be enabled (default: False)
     * `cephadm_enable_firewalld`: If enabled - firewalld will be installed and rules will be applied (default: False)
