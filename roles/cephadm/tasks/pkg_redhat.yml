@@ -16,8 +16,8 @@
 - name: Ensure Ceph repositories are defined
   yum_repository:
     file: "ceph"
-    name: "ceph-{{ item.1 }}"
-    description: "Ceph repo {{ item.0 }}"
+    name: "ceph-{{ item.0 + '-' + item.1 if item.0 == 'noarch' else item.1 }}"
+    description: "Ceph {{ item.1 }} repo {{ item.0 }}"
     baseurl: "https://download.ceph.com/rpm-{{ item.1 }}/el8/{{ item.0 }}"
     gpgcheck: yes
     gpgkey: "https://download.ceph.com/keys/release.asc"
