@@ -17,4 +17,5 @@
   apt:
     name: "cephadm"
     state: "{{ 'latest' if cephadm_package_update | bool else 'present' }}"
+    update_cache: yes
   become: true
