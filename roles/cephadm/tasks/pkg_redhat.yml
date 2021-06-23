@@ -1,7 +1,38 @@
 ---
-- name: Install centos-release-ceph-octopus package
+- name: Ensure centos-release-ceph-octopus package is removed
   dnf:
     name: "centos-release-ceph-octopus"
+    state: absent
+  when: not cephadm_custom_repos | bool
+  become: true
+
+- name: Add Ceph gpgkey
+  rpm_key:
+    key: "https://download.ceph.com/keys/release.asc"
+    state: present
+  when: not cephadm_custom_repos | bool
+  become: true
+
+- name: Add Ceph repository
+  yum_repository:
+    file: "ceph"
+    name: "ceph-{{ cephadm_ceph_release }}"
+    description: "Ceph repo"
+    baseurl: "https://download.ceph.com/rpm-{{ cephadm_ceph_release }}/el8/$basearch"
+    gpgcheck: yes
+    gpgkey: "https://download.ceph.com/keys/release.asc"
+    state: present
+  when: not cephadm_custom_repos | bool
+  become: true
+
+- name: Add Ceph noarch repository
+  yum_repository:
+    file: "ceph"
+    name: "ceph-noarch-{{ cephadm_ceph_release }}"
+    description: "Ceph noarch repo"
+    baseurl: "https://download.ceph.com/rpm-{{ cephadm_ceph_release }}/el8/noarch"
+    gpgcheck: yes
+    gpgkey: "https://download.ceph.com/keys/release.asc"
     state: present
   when: not cephadm_custom_repos | bool
   become: true
