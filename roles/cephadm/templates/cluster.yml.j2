@@ -33,7 +33,7 @@ placement:
 service_type: rgw
 placement:
   label: "rgw"
-{% if cephadm_radosgw_port | length >0 %}
+{% if cephadm_radosgw_port != 0 %}
 port: {{ cephadm_radosgw_port }}
 {% endif %}
 {% endif %}
