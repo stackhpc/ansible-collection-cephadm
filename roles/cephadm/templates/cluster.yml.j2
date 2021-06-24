@@ -34,6 +34,6 @@ service_type: rgw
 placement:
   label: "rgw"
 {% if cephadm_radosgw_port != 0 %}
-port: {{ cephadm_radosgw_port }}
+rgw_frontend_port: {{ cephadm_radosgw_port }}
 {% endif %}
 {% endif %}
