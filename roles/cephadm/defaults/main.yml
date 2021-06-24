@@ -28,6 +28,4 @@ cephadm_cluster_network: ""
 cephadm_osd_devices: []
 cephadm_osd_spec: []
 # RADOSGW
-cephadm_radosgw_services:
-  - id: 'radosgw'
-    port: 8000
+cephadm_radosgw_services: []
