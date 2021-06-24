@@ -1,0 +1,38 @@
+---
+- name: Deploy Ceph cluster
+  block:
+  - name: Get cluster fsid
+    command:
+      cmd: "cephadm shell -- ceph fsid"
+    when: cephadm_fsid | length == 0
+    changed_when: false
+    become: true
+    register: cephadm_fsid_current
+
+  - name: Template out cluster.yml
+    vars:
+      fsid: "{{ cephadm_fsid if cephadm_fsid | length > 0 else cephadm_fsid_current.stdout }}"
+    template:
+      src: "templates/cluster.yml.j2"
+      dest: "/var/run/ceph/{{ fsid }}/cephadm_cluster.yml"
+      owner: root
+      group: root
+      mode: 0644
+    become: true
+    run_once: True
+
+  - name: Apply spec
+    command:
+      cmd: >
+           cephadm shell --
+           ceph orch apply -i /var/run/ceph/cephadm_cluster.yml
+    become: true
+
+  - name: Install ceph cli on mon hosts
+    command:
+      cmd: "cephadm install ceph"
+    become: true
+    when: cephadm_install_ceph_cli
+
+  delegate_to: "{{ groups['mons'][0] }}"
+  run_once: True
