@@ -1,5 +1,7 @@
 # StackHPC cephadm collection
 
+[![Ansible lint](https://github.com/stackhpc/ansible-collection-cephadm/actions/workflows/main.yml/badge.svg)](https://github.com/stackhpc/ansible-collection-cephadm/actions/workflows/main.yml) [![Publish](https://github.com/stackhpc/ansible-collection-cephadm/actions/workflows/publish.yml/badge.svg)](https://github.com/stackhpc/ansible-collection-cephadm/actions/workflows/publish.yml)
+
 This repo contains `stackhpc.cephadm` Ansible Collection. The collection includes modules and plugins supported by StackHPC for cephadm based deployments.
 
 ## Tested with Ansible
