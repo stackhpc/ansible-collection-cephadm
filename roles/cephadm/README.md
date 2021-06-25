@@ -13,6 +13,10 @@ This role assumes the existence of the following groups:
 * `mgrs`
 * `osds`
 
+Optional groups (those services will be deployed when group exists)::
+
+* `rgws`
+
 All Ceph hosts must be in the `ceph` group.
 
 Role variables

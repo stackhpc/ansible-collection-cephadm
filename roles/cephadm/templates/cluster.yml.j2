@@ -12,6 +12,9 @@ labels:
 {% if host in groups['osds'] %}
 - osd
 {% endif %}
+{% if host in groups['rgws'] %}
+- rgw
+{% endif %}
 {% endfor %}
 ---
 service_type: mon
@@ -25,3 +28,15 @@ placement:
 service_type: crash
 placement:
   host_pattern: "*"
+---
+{% if groups['rgws'] | length > 0 %}
+{% for service in cephadm_radosgw_services %}
+service_type: rgw
+service_id: {{ service.id }}
+placement:
+  label: "rgw"
+{% if service.port is defined %}
+rgw_frontend_port: {{ service.port }}
+{% endif %}
+{% endfor %}
+{% endif %}
