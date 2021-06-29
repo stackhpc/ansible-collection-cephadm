@@ -47,14 +47,14 @@ Role variables
       Example:
       ```
           cephadm_osd_spec:
-          service_type: osd
-          service_id: osd_spec_default
-          placement:
-            host_pattern: '*'
-          data_devices:
-            model: MZ7KH960HAJR0D3
-          db_devices:
-            model: Dell Express Flash PM1725b 1.6TB SFF
+            service_type: osd
+            service_id: osd_spec_default
+            placement:
+              host_pattern: '*'
+            data_devices:
+              model: MZ7KH960HAJR0D3
+            db_devices:
+              model: Dell Express Flash PM1725b 1.6TB SFF
       ```
     
 * Registry
