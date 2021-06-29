@@ -24,7 +24,7 @@
     state: "{{ 'present' if item.1 == cephadm_ceph_release else 'absent' }}"
   when: not cephadm_custom_repos | bool
   become: true
-  loop: "{{ cephadm_rpm_repos | product(cephadm_ceph_versions) | list }}"
+  loop: "{{ cephadm_rpm_repos | product(cephadm_ceph_releases) | list }}"
 
 - name: Install cephadm package
   dnf:
