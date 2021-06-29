@@ -2,6 +2,6 @@
 cephadm_rpm_repos:
   - "$basearch"
   - "noarch"
-cephadm_ceph_versions:
+cephadm_ceph_releases:
   - "octopus"
   - "pacific"

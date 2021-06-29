@@ -11,7 +11,7 @@
     state: "{{ 'present' if item == cephadm_ceph_release else 'absent' }}"
   when: not cephadm_custom_repos | bool
   become: true
-  loop: "{{ cephadm_ceph_versions }}"
+  loop: "{{ cephadm_ceph_releases }}"
 
 - name: Install cephadm package
   apt:
