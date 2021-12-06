@@ -52,7 +52,7 @@
   vars:
     content: "{{ cephadm_ssh_public_key_slurp.content | b64decode if cephadm_check_ceph_id.stat.exists else cephadm_ssh_key.public_key }}"
   authorized_key:
-    user: root
+    user: "{{ cephadm_ssh_user }}"
     state: present
     key: "{{ content }}"
   become: true
