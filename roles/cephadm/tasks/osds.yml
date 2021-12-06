@@ -8,32 +8,33 @@
     when: cephadm_osd_devices | length > 0
     with_items: "{{ cephadm_osd_devices }}"
 
-  - name: Get cluster fsid
-    command:
-      cmd: "cephadm shell -- ceph fsid"
-    when: cephadm_fsid | length == 0
-    become: true
-    register: cephadm_fsid_current
+  - block:
+    - name: Get cluster fsid
+      command:
+        cmd: "cephadm shell -- ceph fsid"
+      when: cephadm_fsid | length == 0
+      changed_when: false
+      become: true
+      register: cephadm_fsid_current
 
-  - name: Template out osd_spec.yml
-    vars:
-      fsid: "{{ cephadm_fsid if cephadm_fsid | length > 0 else cephadm_fsid_current.stdout }}"
-    copy:
-      content: "{{ cephadm_osd_spec | to_nice_yaml(indent=2) }}"
-      dest: "/var/run/ceph/{{ fsid }}/osd_spec.yml"
-      owner: root
-      group: root
-      mode: 0644
-    when: cephadm_osd_spec | length > 0
-    become: true
+    - name: Template out osd_spec.yml
+      vars:
+        fsid: "{{ cephadm_fsid if cephadm_fsid | length > 0 else cephadm_fsid_current.stdout }}"
+      copy:
+        content: "{{ cephadm_osd_spec | to_nice_yaml(indent=2) }}"
+        dest: "/var/run/ceph/{{ fsid }}/osd_spec.yml"
+        owner: root
+        group: root
+        mode: 0644
+      become: true
 
-  - name: Apply OSDs spec
-    command:
-      cmd: >
-           cephadm shell --
-           ceph orch apply osd -i /var/run/ceph/osd_spec.yml
+    - name: Apply OSDs spec
+      command:
+        cmd: >
+             cephadm shell --
+             ceph orch apply osd -i /var/run/ceph/osd_spec.yml
+      become: true
     when: cephadm_osd_spec | length > 0
-    become: true
 
   delegate_to: "{{ groups['mons'][0] }}"
   run_once: True

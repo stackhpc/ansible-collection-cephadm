@@ -5,11 +5,15 @@
 - include_tasks: "prechecks.yml"
   when: not cephadm_skip_prechecks | bool
 
-- include_tasks: "pkg_{{ ansible_os_family | lower }}.yml"
+- import_tasks: "pkg_{{ ansible_os_family | lower }}.yml"
 
-- include_tasks: "prereqs.yml"
+- import_tasks: "prereqs.yml"
 
 - include_tasks: "bootstrap.yml"
   when: cephadm_bootstrap | bool
 
-- include_tasks: "osds.yml"
+- import_tasks: "config.yml"
+
+- import_tasks: "cluster.yml"
+
+- import_tasks: "osds.yml"

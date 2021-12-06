@@ -1,0 +1,16 @@
+---
+- name: Configure Ceph
+  block:
+  - name: Set public network
+    command:
+      cmd: "cephadm shell -- ceph config set global public_network {{ cephadm_public_network }}"
+    become: true
+
+  - name: Set cluster network
+    command:
+      cmd: "cephadm shell -- ceph config set global cluster_network {{ cephadm_cluster_network }}"
+    when: cephadm_cluster_network | length > 0
+    become: true
+
+  delegate_to: "{{ groups['mons'][0] }}"
+  run_once: True
