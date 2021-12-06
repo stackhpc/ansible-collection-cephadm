@@ -1,10 +1,15 @@
-cephadm
-=======
+# cephadm
 
 This role bootstraps and configures Ceph using cephadm.
 
-Inventory
----------
+## Prerequisites
+
+### Host prerequisites
+
+* The role assumes target hosts connection over SSH with user that has passwordless sudo configured.
+* Either direct Internet access or private registry with desired Ceph image accessible to all hosts is required.
+
+### Inventory
 
 This role assumes the existence of the following groups:
 
@@ -19,8 +24,7 @@ Optional groups (those services will be deployed when group exists)::
 
 All Ceph hosts must be in the `ceph` group.
 
-Role variables
---------------
+## Role variables
 
 * General
   * `cephadm_ceph_release`: Ceph release to deploy (default: octopus)
@@ -35,6 +39,7 @@ Role variables
     * `cephadm_install_ceph_cli`: If enabled - ceph cli will be installed on the hosts (default: False)
     * `cephadm_ssh_public_key`: Location where ssh public key used by cephadm will be saved (default: /etc/ceph/cephadm.pub)
     * `cephadm_ssh_private_key`: Location where ssh private key used by cephadm will be saved (default: /etc/ceph/cephadm.id)
+    * `cephadm_ssh_user`: Pre-existing user name that should be used for bootstrapping the cluster. User must have passwordless sudo enabled. Since 1.4.0 (default: `ansible_user`)
   * OSDs
     * `cephadm_osd_devices`: List of /dev/device paths to use (e.g. for multipath devices that can't be used using an OSD spec)
       Example:
@@ -56,7 +61,7 @@ Role variables
             db_devices:
               model: Dell Express Flash PM1725b 1.6TB SFF
       ```
-    
+
 * Registry
     * `cephadm_registry_url`: (default: not used)
     * `cephadm_registry_username`: (default: not used)
