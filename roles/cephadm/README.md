@@ -43,10 +43,10 @@ Role variables
             - /dev/sdb
             - /dev/sdc
       ```
-    * `cephadm_osd_spec`: OSD spec to apply in yaml format
+    * `cephadm_osd_spec`: OSD spec to apply in YAML (recommended) or dict format
       Example:
       ```
-          cephadm_osd_spec:
+          cephadm_osd_spec: |
             service_type: osd
             service_id: osd_spec_default
             placement:
@@ -56,7 +56,7 @@ Role variables
             db_devices:
               model: Dell Express Flash PM1725b 1.6TB SFF
       ```
-    
+
 * Registry
     * `cephadm_registry_url`: (default: not used)
     * `cephadm_registry_username`: (default: not used)
