@@ -4,6 +4,7 @@ service_type: host
 hostname: {{ hostvars[host]['ansible_hostname'] }}
 labels:
 {% if host in groups['mons'] %}
+- _admin
 - mon
 {% endif %}
 {% if host in groups['mgrs'] %}
