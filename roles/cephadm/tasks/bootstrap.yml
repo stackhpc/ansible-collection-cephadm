@@ -9,7 +9,11 @@
       firewalld: "{{ '--skip-firewalld' if not cephadm_enable_firewalld | bool else '' }}"
     command:
       cmd: >
-           cephadm bootstrap
+           cephadm
+           {% if cephadm_image | length > 0 %}
+           --image={{ cephadm_image }}
+           {% endif %}
+           bootstrap
            {{ monitoring_stack }}
            {{ dashboard }}
            {{ firewalld }}
