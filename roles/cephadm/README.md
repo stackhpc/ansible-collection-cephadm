@@ -48,10 +48,10 @@ All Ceph hosts must be in the `ceph` group.
             - /dev/sdb
             - /dev/sdc
       ```
-    * `cephadm_osd_spec`: OSD spec to apply in yaml format
+    * `cephadm_osd_spec`: OSD spec to apply in YAML (recommended) or dict format
       Example:
       ```
-          cephadm_osd_spec:
+          cephadm_osd_spec: |
             service_type: osd
             service_id: osd_spec_default
             placement:
