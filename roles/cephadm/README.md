@@ -72,5 +72,6 @@ All Ceph hosts must be in the `ceph` group.
     * `cephadm_public_interface`: Public interface (mandatory)
     * `cephadm_public_network`: Public network including CIDR (mandatory)
   * Optional
+    * `cephadm_admin_interface`: Admin interface (default: use ``cephadm_public_interface``)
     * `cephadm_cluster_interface`: Cluster interface (optional - if not defined ceph will not use dedicated cluster network)
     * `cephadm_cluster_network`: Cluster network including CIDR (optional - if not defined ceph will not use dedicated cluster network)

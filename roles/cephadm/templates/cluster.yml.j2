@@ -2,6 +2,7 @@
 ---
 service_type: host
 hostname: {{ hostvars[host]['ansible_hostname'] }}
+addr: {{ hostvars[host]['ansible_'~cephadm_admin_interface]['ipv4']['address'] }}
 labels:
 {% if host in groups['mons'] %}
 - _admin
