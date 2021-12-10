@@ -20,6 +20,9 @@ cephadm_install_ceph_cli: False
 cephadm_ssh_public_key: "/etc/ceph/cephadm.pub"
 cephadm_ssh_private_key: "/etc/ceph/cephadm.id"
 cephadm_ssh_user: "{{ ansible_user }}"
+# MONs and MGRs
+cephadm_mon_count: "{{ groups.get('mons', []) | length }}"
+cephadm_mgr_count: "{{ groups.get('mgrs', []) | length }}"
 # Networking
 cephadm_public_interface: ""
 cephadm_cluster_interface: ""

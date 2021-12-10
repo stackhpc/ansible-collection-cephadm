@@ -20,10 +20,12 @@ labels:
 ---
 service_type: mon
 placement:
+  count: {{ cephadm_mon_count }}
   label: "mon"
 ---
 service_type: mgr
 placement:
+  count: {{ cephadm_mgr_count }}
   label: "mgr"
 ---
 service_type: crash
