@@ -36,6 +36,7 @@ All Ceph hosts must be in the `ceph` group.
     * `cephadm_enable_dashboard`: If enabled - dashboard service on MGR will be enabled (default: False)
     * `cephadm_enable_firewalld`: If enabled - firewalld will be installed and rules will be applied (default: False)
     * `cephadm_enable_monitoring`: If enabled - cephadm monitoring stack will be deployed i.e. prometheus/node-exporters/grafana (default: False)
+    * `cephadm_image`: If set - cephadm will use this image
     * `cephadm_install_ceph_cli`: If enabled - ceph cli will be installed on the hosts (default: False)
     * `cephadm_ssh_public_key`: Location where ssh public key used by cephadm will be saved (default: /etc/ceph/cephadm.pub)
     * `cephadm_ssh_private_key`: Location where ssh private key used by cephadm will be saved (default: /etc/ceph/cephadm.id)
