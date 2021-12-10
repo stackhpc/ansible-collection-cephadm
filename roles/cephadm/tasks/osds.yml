@@ -31,7 +31,7 @@
     command:
       cmd: >
            cephadm shell --
-           ceph orch apply osd -i /var/run/ceph/osd_spec.yml
+           ceph orch apply -i /var/run/ceph/osd_spec.yml
     when: cephadm_osd_spec | length > 0
     become: true
 
