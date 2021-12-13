@@ -4,4 +4,4 @@
 
 - name: Set cephadm_bootstrap
   set_fact:
-    cephadm_bootstrap: "{{ ansible_facts.services['ceph.target'] is not defined }}"
+    cephadm_bootstrap: "{{ ansible_facts.services | dict2items | selectattr('key', 'match', '^ceph.*') | list | length == 0 }}"
