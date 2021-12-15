@@ -27,9 +27,8 @@ import datetime
 import json
 import os
 
-DOCUMENTATION = '''
----
-module: ceph_pool
+DOCUMENTATION = r'''
+module: cephadm_pool
 author: Guillaume Abrioux <gabrioux@redhat.com>
         Michal Nasiadka <michal@stackhpc.com>
 short_description: Manage Ceph Pools
@@ -43,11 +42,11 @@ options:
         required: true
     state:
         description:
-            If 'present' is used, the module creates a pool if it doesn't exist
-            or update it if it already exists.
-            If 'absent' is used, the module will simply delete the pool.
-            If 'list' is used, the module will return all details about the
-            existing pools. (json formatted).
+            - If 'present' is used, the module creates a pool if it doesn't exist
+              or update it if it already exists.
+              If 'absent' is used, the module will simply delete the pool.
+              If 'list' is used, the module will return all details about the
+              existing pools. (json formatted).
         required: false
         choices: ['present', 'absent', 'list']
         default: present
@@ -85,22 +84,22 @@ options:
         description:
             - set the pool type, either 'replicated' or 'erasure'
         required: false
-        default: 'replicated'
+        default: replicated
     erasure_profile:
         description:
             - When pool_type = 'erasure', set the erasure profile of the pool
         required: false
-        default: 'default'
+        default: default
     rule_name:
         description:
             - Set the crush rule name assigned to the pool
         required: false
-        default: 'replicated_rule' when pool_type is 'erasure' else None
+        default: replicated_rule␣when␣pool_type␣is␣erasure␣else␣none
     expected_num_objects:
         description:
-            -   Set the expected_num_objects parameter of the pool.
+            - Set the expected_num_objects parameter of the pool.
         required: false
-        default: '0'
+        default: 0
     application:
         description:
             - Set the pool application on the pool.
@@ -108,10 +107,14 @@ options:
         default: None
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 pools:
-  - { name: foo, size: 3, application: rbd, pool_type: 'replicated',
-      pg_autoscale_mode: 'on' }
+  - name: foo
+    size: 3
+    application: rbd
+    pool_type: 'replicated'
+    pg_autoscale_mode: 'on
+
 - hosts: all
   become: true
   tasks:

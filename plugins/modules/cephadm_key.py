@@ -30,18 +30,18 @@ import time
 import base64
 import socket
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: cephadm_key
 
 author: Sebastien Han <seb@redhat.com>
         Michal Nasiadka <michal@stackhpc.com>
-
+version_added: "1.6.0"
 short_description: Manage Cephx key(s)
 
 description:
     - Manage CephX creation, deletion and updates.
-    It can also list and get information about keyring(s).
+      It can also list and get information about keyring(s).
 
 options:
     name:
@@ -51,19 +51,19 @@ options:
     state:
         description:
             - If 'present' is used, the module creates a keyring
-            with the associated capabilities.
-            If 'present' is used and a secret is provided the module
-            will always add the key. Which means it will update
-            the keyring if the secret changes, the same goes for
-            the capabilities.
-            If 'absent' is used, the module will simply delete the keyring.
-            If 'list' is used, the module will list all the keys and will
-            return a json output.
-            If 'info' is used, the module will return in a json format the
-            description of a given keyring.
-            If 'generate_secret' is used, the module will simply output a cephx keyring.
+              with the associated capabilities.
+              If 'present' is used and a secret is provided the module
+              will always add the key. Which means it will update
+              the keyring if the secret changes, the same goes for
+              the capabilities.
+              If 'absent' is used, the module will simply delete the keyring.
+              If 'list' is used, the module will list all the keys and will
+              return a json output.
+              If 'info' is used, the module will return in a json format the
+              description of a given keyring.
+              If 'generate_secret' is used, the module will simply output a cephx keyring.
         required: false
-        choices: ['present', 'update', 'absent', 'list', 'info', 'fetch_initial_keys', 'generate_secret']
+        choices: ['present', 'update', 'absent', 'list', 'info', 'generate_secret']
         default: present
     caps:
         description:
@@ -75,56 +75,65 @@ options:
             - keyring's secret value
         required: false
         default: None
+
     import_key:
         description:
-            - Wether or not to import the created keyring into Ceph.
-            This can be useful for someone that only wants to generate keyrings
-            but not add them into Ceph.
+            - Whether or not to import the created keyring into Ceph.
+              This can be useful for someone that only wants to generate keyrings
+              but not add them into Ceph.
         required: false
         default: True
     output_format:
         description:
             - The key output format when retrieving the information of an
-            entity.
+              entity.
         required: false
         default: json
 '''
 
 EXAMPLES = '''
 keys_to_create:
-  - { name: client.key, key: "AQAin8tUUK84ExAA/QgBtI7gEMWdmnvKBzlXdQ==", caps: { mon: "allow rwx", mds: "allow *" } , mode: "0600" }  # noqa: E501
-  - { name: client.cle, caps: { mon: "allow r", osd: "allow *" } , mode: "0600" }  # noqa: E501
-caps:
-  mon: "allow rwx"
-  mds: "allow *"
+  - name: client.key
+    secret: "AQAin8tUUK84ExAA/QgBtI7gEMWdmnvKBzlXdQ=="
+    caps: 
+      mon: "allow rwx"
+      mds: "allow *"
+  - name: client.cle
+    caps: 
+      mon: "allow r", osd: "allow *"
 
 - name: create cephx key
   ceph_key:
-    name: "{{ keys_to_create }}"
-    user: client.bootstrap-rgw
-    user_key: /var/lib/ceph/bootstrap-rgw/ceph.keyring
+    name: "{{ item.name }}"
     state: present
-    caps: "{{ caps }}"
+    caps: "{{ item.caps }}"
+  with_items: "{{ keys_to_create }}"
+
 - name: create cephx key but don't import it in Ceph
   ceph_key:
-    name: "{{ keys_to_create }}"
+    name: "{{ item.name }}"
     state: present
-    caps: "{{ caps }}"
+    caps: "{{ item.caps }}"
     import_key: False
+  with_items: "{{ keys_to_create }}"
+
 - name: delete cephx key
   ceph_key:
     name: "my_key"
     state: absent
+
 - name: info cephx key
   ceph_key:
     name: "my_key""
     state: info
+
 - name: info cephx admin key (plain)
   ceph_key:
     name: client.admin
     output_format: plain
     state: info
   register: client_admin_key
+
 - name: list cephx keys
   ceph_key:
     state: list
