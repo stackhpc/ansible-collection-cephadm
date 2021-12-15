@@ -1,0 +1,10 @@
+---
+- name: Ensure Ceph cephx keys are defined
+  cephadm_key:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default(omit) }}"
+    caps: "{{ item.caps }}"
+    secret: "{{ item.key | default(omit) }}"
+  with_items: "{{ cephadm_keys }}"
+  delegate_to: "{{ groups['mons'][0] }}"
+  run_once: true
