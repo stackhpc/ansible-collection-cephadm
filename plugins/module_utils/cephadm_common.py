@@ -27,7 +27,7 @@ def generate_ceph_cmd(sub_cmd, args):
     cmd = [
         'cephadm',
         '--timeout',
-        '30',
+        '60',
         'shell',
         '--',
         'ceph',
