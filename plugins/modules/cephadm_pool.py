@@ -200,6 +200,44 @@ def disable_application_pool(name,
 
     return cmd
 
+def get_pool_ec_overwrites(name, output_format='json'):
+    '''
+    Get EC overwrites on a given pool
+    '''
+
+    args = ['get', name, 'allow_ec_overwrites',
+            '-f', output_format]
+
+    cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
+                            args=args)
+
+    return cmd
+
+def enable_ec_overwrites(name):
+    '''
+    Enable EC overwrites on a given pool
+    '''
+
+    args = ['set', name, 'allow_ec_overwrites',
+            'true']
+
+    cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
+                            args=args)
+
+    return cmd
+
+def disable_ec_overwrites(name):
+    '''
+    Disable EC overwrites on a given pool
+    '''
+
+    args = ['set', name, 'allow_ec_overwrites',
+            'false']
+
+    cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
+                            args=args)
+
+    return cmd
 
 def get_pool_details(module,
                      name,
@@ -406,6 +444,7 @@ def run_module():
         rule_name=dict(type='str', required=False, default=None),
         expected_num_objects=dict(type='str', required=False, default="0"),
         application=dict(type='str', required=False, default=None),
+        allow_ec_overwrites=dict(type='bool', required=False, default=False)
     )
 
     module = AnsibleModule(
@@ -424,6 +463,7 @@ def run_module():
     pg_autoscale_mode = module.params.get('pg_autoscale_mode')
     target_size_ratio = module.params.get('target_size_ratio')
     application = module.params.get('application')
+    allow_ec_overwrites = module.params.get('allow_ec_overwrites')
 
     if (module.params.get('pg_autoscale_mode').lower() in
             ['true', 'on', 'yes']):
@@ -462,7 +502,8 @@ def run_module():
         'crush_rule': {'value': rule_name, 'cli_set_opt': 'crush_rule'},
         'expected_num_objects': {'value': expected_num_objects},
         'size': {'value': size, 'cli_set_opt': 'size'},
-        'min_size': {'value': min_size}
+        'min_size': {'value': min_size},
+        'allow_ec_overwrites': {'value': allow_ec_overwrites}
     }
 
     if module.check_mode:
@@ -488,6 +529,18 @@ def run_module():
             user_pool_config['pg_placement_num'] = {'value': str(running_pool_details[2]['pg_placement_num']), 'cli_set_opt': 'pgp_num'}  # noqa: E501
             delta = compare_pool_config(user_pool_config,
                                         running_pool_details[2])
+
+            if user_pool_config['type']['value'] == 'erasure':
+                rc, cmd, ec_overwrites, err = exec_command(module, get_pool_ec_overwrites(name))
+                running_pool_ec_overwrites = json.loads(ec_overwrites.strip()).get('allow_ec_overwrites')
+                if running_pool_ec_overwrites != user_pool_config['allow_ec_overwrites']['value']:
+                    if user_pool_config['allow_ec_overwrites']['value']:
+                        rc, cmd, out, err = exec_command(module, enable_ec_overwrites(name))
+                    else:
+                        rc, cmd, out, err = exec_command(module, disable_ec_overwrites(name))
+                    if rc == 0:
+                        changed = True
+
             if len(delta) > 0:
                 keys = list(delta.keys())
                 details = running_pool_details[2]
@@ -505,6 +558,7 @@ def run_module():
                                                     delta)
                     if rc == 0:
                         changed = True
+
             else:
                 out = "Pool {} already exists and there is nothing to update.".format(name)  # noqa: E501
         else:
@@ -518,6 +572,10 @@ def run_module():
             if user_pool_config['min_size']['value']:
                 # not implemented yet
                 pass
+            if user_pool_config['allow_ec_overwrites']['value']:
+                rc, _, _, _ = exec_command(module,
+                                           enable_ec_overwrites(name))
+
             changed = True
 
     elif state == "list":
