@@ -1,6 +1,6 @@
-# keys
+# crush_rules
 
-This role creates/deletes Ceph keys (cephx).
+This role creates/deletes Ceph crush rules.
 
 ## Prerequisites
 
@@ -13,27 +13,33 @@ This role creates/deletes Ceph keys (cephx).
 
 This role assumes the existence of the following groups:
 
-* `ceph`
 * `mons`
-* `mgrs`
-* `osds`
-
-Optional groups (those services will be deployed when group exists)::
-
-* `rgws`
 
 All Ceph hosts must be in the `ceph` group.
 
 ## Role variables
 
-* `cephadm_keys`: A list of pools to define
+* `cephadm_crush_rules`: A list of pools to define
    Example:
    ```
-          cephadm_keys:
-            - name: client.user1
-            - name: client.user2
-              state: absent 
+          cephadm_crush_rules:
+            - name: replicated_hdd
+              bucket_root: default
+              bucket_type: host
+              device_class: hdd
+              rule_type: replicated
+              state: present
+            - name: replicated_ssd
+              bucket_root: default
+              bucket_type: host
+              device_class: ssd
+              rule_type: replicated
+              state: present
+            - name: ec_ssd
+              rule_type: erasure
+              profile: ec_4_2_ssd
+              state: present 
    ```
 
-Check the `cephadm_key` module docs for supported key options.
+Check the `cephadm_crush_rule` module docs for supported key options.
 
