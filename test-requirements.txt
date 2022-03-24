@@ -1,2 +1,3 @@
 ansible>=2.9
 ansible-lint<6
+flake8<5
