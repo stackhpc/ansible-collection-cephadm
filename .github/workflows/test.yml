@@ -25,4 +25,4 @@ jobs:
       - name: Linting code
         run: |
           ansible-lint -v --force-color
-          flake8
+          flake8 -v
