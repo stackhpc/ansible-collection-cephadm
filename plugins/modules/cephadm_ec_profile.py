@@ -20,9 +20,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common import generate_ceph_cmd, \
-                                                                                     exec_command, \
-                                                                                     exit_module
+from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common \
+    import generate_ceph_cmd, exec_command, exit_module
+
 import datetime
 import json
 
@@ -157,7 +157,6 @@ def run_module():
 
     # Gather module parameters in variables
     name = module.params.get('name')
-    cluster = module.params.get('cluster')
     state = module.params.get('state')
     stripe_unit = module.params.get('stripe_unit')
     k = module.params.get('k')
@@ -187,7 +186,7 @@ def run_module():
             if current_profile['k'] != k or \
                current_profile['m'] != m or \
                current_profile.get('stripe_unit', stripe_unit) != stripe_unit or \
-               current_profile.get('crush-device-class', crush_device_class) != crush_device_class:
+               current_profile.get('crush-device-class', crush_device_class) != crush_device_class:  # noqa: E501
                 rc, cmd, out, err = exec_command(module,
                                                  create_profile(module,
                                                                 name,

@@ -20,16 +20,14 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common import generate_ceph_cmd, \
-                                                                                     exec_command, \
-                                                                                     exit_module
+from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common \
+    import fatal, generate_ceph_cmd
 import datetime
 import json
 import os
 import struct
 import time
 import base64
-import socket
 
 DOCUMENTATION = r'''
 ---
@@ -62,9 +60,11 @@ options:
               return a json output.
               If 'info' is used, the module will return in a json format the
               description of a given keyring.
-              If 'generate_secret' is used, the module will simply output a cephx keyring.
+              If 'generate_secret' is used, the module will simply output a
+              cephx keyring.
         required: false
-        choices: ['present', 'update', 'absent', 'list', 'info', 'generate_secret']
+        choices: ['present', 'update', 'absent', 'list', 'info',
+                  'generate_secret']
         default: present
     caps:
         description:
@@ -80,8 +80,8 @@ options:
     import_key:
         description:
             - Whether or not to import the created keyring into Ceph.
-              This can be useful for someone that only wants to generate keyrings
-              but not add them into Ceph.
+              This can be useful for someone that only wants to generate
+              keyrings but not add them into Ceph.
         required: false
         default: True
     output_format:
@@ -96,11 +96,11 @@ EXAMPLES = '''
 keys_to_create:
   - name: client.key
     secret: "AQAin8tUUK84ExAA/QgBtI7gEMWdmnvKBzlXdQ=="
-    caps: 
+    caps:
       mon: "allow rwx"
       mds: "allow *"
   - name: client.cle
-    caps: 
+    caps:
       mon: "allow r", osd: "allow *"
 
 - name: create cephx key
@@ -248,7 +248,7 @@ def delete_key(name):
     ]
 
     cmd.append(generate_ceph_cmd(sub_cmd=['auth'],
-                                      args=args))
+                                 args=args))
 
     return cmd
 
@@ -424,7 +424,7 @@ def run_module():
                 result["stdout"] = "{0} already exists in {1} you must provide secret *and* caps when import_key is {2}".format(name, dest, import_key)  # noqa: E501
                 result["rc"] = 0
                 module.exit_json(**result)
-        if (key_exist == 0 and (secret != _secret or caps != _caps)) or key_exist != 0:
+        if (key_exist == 0 and (secret != _secret or caps != _caps)) or key_exist != 0:  # noqa: E501
             rc, cmd, out, err = exec_commands(module, create_key(
                 module, result, name, secret, caps, import_key, file_path))  # noqa: E501
             if rc != 0:

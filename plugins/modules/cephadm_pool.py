@@ -20,13 +20,11 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common import generate_ceph_cmd, \
-                                                                                     exec_command, \
-                                                                                     exit_module
+from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common \
+    import generate_ceph_cmd, exec_command, exit_module, pre_generate_ceph_cmd
 
 import datetime
 import json
-import os
 
 DOCUMENTATION = r'''
 module: cephadm_pool
@@ -43,8 +41,8 @@ options:
         required: true
     state:
         description:
-            - If 'present' is used, the module creates a pool if it doesn't exist
-              or update it if it already exists.
+            - If 'present' is used, the module creates a pool if it doesn't
+              exist or update it if it already exists.
               If 'absent' is used, the module will simply delete the pool.
               If 'list' is used, the module will return all details about the
               existing pools. (json formatted).
@@ -132,6 +130,7 @@ pools:
 
 RETURN = r'''#  '''
 
+
 def check_pool_exist(name,
                      output_format='json'):
     '''
@@ -142,7 +141,6 @@ def check_pool_exist(name,
 
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
                             args=args)
-                            
 
     return cmd
 
@@ -201,6 +199,7 @@ def disable_application_pool(name,
 
     return cmd
 
+
 def get_pool_ec_overwrites(name, output_format='json'):
     '''
     Get EC overwrites on a given pool
@@ -213,6 +212,7 @@ def get_pool_ec_overwrites(name, output_format='json'):
                             args=args)
 
     return cmd
+
 
 def enable_ec_overwrites(name):
     '''
@@ -227,6 +227,7 @@ def enable_ec_overwrites(name):
 
     return cmd
 
+
 def disable_ec_overwrites(name):
     '''
     Disable EC overwrites on a given pool
@@ -239,6 +240,7 @@ def disable_ec_overwrites(name):
                             args=args)
 
     return cmd
+
 
 def get_pool_details(module,
                      name,
@@ -258,7 +260,8 @@ def get_pool_details(module,
         out = [p for p in json.loads(out.strip()) if p['pool_name'] == name][0]
 
     _rc, _cmd, application_pool, _err = exec_command(module,
-                                                     get_application_pool(name))
+                                                     get_application_pool(name)
+                                                     )
 
     # This is a trick because "target_size_ratio" isn't present at the same
     # level in the dict
@@ -532,13 +535,13 @@ def run_module():
                                         running_pool_details[2])
 
             if user_pool_config['type']['value'] == 'erasure':
-                rc, cmd, ec_overwrites, err = exec_command(module, get_pool_ec_overwrites(name))
-                running_pool_ec_overwrites = json.loads(ec_overwrites.strip()).get('allow_ec_overwrites')
-                if running_pool_ec_overwrites != user_pool_config['allow_ec_overwrites']['value']:
+                rc, cmd, ec_overwrites, err = exec_command(module, get_pool_ec_overwrites(name))  # noqa: E501
+                running_pool_ec_overwrites = json.loads(ec_overwrites.strip()).get('allow_ec_overwrites')  # noqa: E501
+                if running_pool_ec_overwrites != user_pool_config['allow_ec_overwrites']['value']:  # noqa: E501
                     if user_pool_config['allow_ec_overwrites']['value']:
-                        rc, cmd, out, err = exec_command(module, enable_ec_overwrites(name))
+                        rc, cmd, out, err = exec_command(module, enable_ec_overwrites(name))  # noqa: E501
                     else:
-                        rc, cmd, out, err = exec_command(module, disable_ec_overwrites(name))
+                        rc, cmd, out, err = exec_command(module, disable_ec_overwrites(name))  # noqa: E501
                     if rc == 0:
                         changed = True
 

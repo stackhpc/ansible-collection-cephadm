@@ -20,9 +20,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common import generate_ceph_cmd, \
-                                                                                     exec_command, \
-                                                                                     exit_module
+from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common \
+    import generate_ceph_cmd, exec_command, exit_module
+
 import datetime
 import json
 
