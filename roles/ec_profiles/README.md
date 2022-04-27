@@ -1,6 +1,6 @@
-# keys
+# ec_profiles
 
-This role creates/deletes Ceph keys (cephx).
+This role creates/deletes Ceph EC profiles.
 
 ## Prerequisites
 
@@ -13,27 +13,15 @@ This role creates/deletes Ceph keys (cephx).
 
 This role assumes the existence of the following groups:
 
-* `ceph`
 * `mons`
-* `mgrs`
-* `osds`
-
-Optional groups (those services will be deployed when group exists)::
-
-* `rgws`
-
-All Ceph hosts must be in the `ceph` group.
 
 ## Role variables
 
-* `cephadm_keys`: A list of pools to define
+* `cephadm_ec_profiles`: A list of pools to define
    Example:
    ```
-          cephadm_keys:
-            - name: client.user1
-            - name: client.user2
-              state: absent 
+          cephadm_ec_profiles:
    ```
 
-Check the `cephadm_key` module docs for supported key options.
+Check the `cephadm_ec_profile` module docs for supported key options.
 

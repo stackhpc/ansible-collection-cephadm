@@ -35,7 +35,7 @@ module: cephadm_key
 
 author: Sebastien Han <seb@redhat.com>
         Michal Nasiadka <michal@stackhpc.com>
-version_added: "1.6.0"
+version_added: "1.4.0"
 short_description: Manage Cephx key(s)
 
 description:
@@ -125,7 +125,7 @@ keys_to_create:
 
 - name: info cephx key
   ceph_key:
-    name: "my_key""
+    name: "my_key"
     state: info
 
 - name: info cephx admin key (plain)
@@ -221,14 +221,13 @@ def create_key(module, result, name, secret, caps, import_key, dest):  # noqa: E
     if not secret:
         secret = generate_secret()
 
-    args = ['get-or-create', name]
-    args.extend(generate_caps(None, caps))
-    args.extend(['-o', dest])
-
     cmd_list.append(generate_ceph_authtool_cmd(
         name, secret, caps, dest))
 
     if import_key:
+        args = ['get-or-create', name]
+        args.extend(generate_caps(None, caps))
+        args.extend(['-o', dest])
         cmd_list.append(generate_ceph_cmd(sub_cmd=['auth'],
                                           args=args))
 

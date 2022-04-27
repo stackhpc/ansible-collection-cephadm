@@ -15,8 +15,6 @@ This role assumes the existence of the following groups:
 
 * `mons`
 
-All Ceph hosts must be in the `ceph` group.
-
 ## Role variables
 
 * `cephadm_keys`: A list of keys to define

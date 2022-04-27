@@ -13,14 +13,7 @@ This role creates/deletes Ceph pools.
 
 This role assumes the existence of the following groups:
 
-* `ceph`
 * `mons`
-* `mgrs`
-* `osds`
-
-Optional groups (those services will be deployed when group exists)::
-
-* `rgws`
 
 All Ceph hosts must be in the `ceph` group.
 
@@ -31,7 +24,11 @@ All Ceph hosts must be in the `ceph` group.
    ```
           cephadm_pools:
             - name: pool1
+              size: 3
+              application: rbd
             - name: pool2
+              size: 2
+              application: rbd
               state: absent 
    ```
 

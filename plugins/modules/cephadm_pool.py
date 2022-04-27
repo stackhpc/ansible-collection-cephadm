@@ -31,7 +31,7 @@ module: cephadm_pool
 author: Guillaume Abrioux <gabrioux@redhat.com>
         Michal Nasiadka <michal@stackhpc.com>
 short_description: Manage Ceph Pools
-version_added: "1.6.0"
+version_added: "1.4.0"
 description:
     - Manage Ceph pool(s) creation, deletion and updates.
 options:

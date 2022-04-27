@@ -33,7 +33,7 @@ module: cephadm_ec_profile
 
 short_description: Manage Ceph Erasure Code profile
 
-version_added: "1.6.0"
+version_added: "1.4.0"
 
 description:
     - Manage Ceph Erasure Code profile
@@ -56,12 +56,12 @@ options:
     k:
         description:
             - Number of data-chunks the object will be split in
-        required: true
+        required: false
     m:
         description:
             - Compute coding chunks for each object and store them on different
               OSDs.
-        required: true
+        required: false
     crush_root:
         description:
             - The name of the crush bucket used for the first step of the CRUSH

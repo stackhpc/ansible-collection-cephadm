@@ -31,7 +31,7 @@ DOCUMENTATION = r'''
 ---
 module: cephadm_crush_rule
 short_description: Manage Ceph Crush Replicated/Erasure Rule
-version_added: "1.6.0"
+version_added: "1.4.0"
 description:
     - Manage Ceph Crush rule(s) creation, deletion and updates.
 options:
