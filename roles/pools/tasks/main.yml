@@ -1,0 +1,19 @@
+---
+- name: Ensure Ceph pools are defined
+  cephadm_pool:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default(omit) }}"
+    pg_num: "{{ item.pg_num | default(omit) }}"
+    pgp_num: "{{ item.pgp_num | default(omit) }}"
+    size: "{{ item.size | default(omit) }}"
+    min_size: "{{ item.min_size | default(omit) }}"
+    pool_type: "{{ item.pool_type | default('replicated') }}"
+    rule_name: "{{ item.rule_name | default(omit) }}"
+    erasure_profile: "{{ item.erasure_profile | default(omit) }}"
+    pg_autoscale_mode: "{{ item.pg_autoscale_mode | default(omit) }}"
+    target_size_ratio: "{{ item.target_size_ratio | default(omit) }}"
+    application: "{{ item.application | default(omit) }}"
+    allow_ec_overwrites: "{{ item.allow_ec_overwrites | default(omit) }}"
+  with_items: "{{ cephadm_pools }}"
+  delegate_to: "{{ groups['mons'][0] }}"
+  run_once: true

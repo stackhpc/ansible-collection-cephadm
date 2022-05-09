@@ -1,0 +1,13 @@
+---
+- name: Ensure Ceph CRUSH rules are defined
+  cephadm_crush_rule:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default(omit) }}"
+    rule_type: "{{ item.rule_type | default(omit) }}"
+    bucket_root: "{{ item.bucket_root | default(omit) }}"
+    bucket_type: "{{ item.bucket_type | default(omit) }}"
+    device_class: "{{ item.device_class | default(omit) }}"
+    profile: "{{ item.profile | default(omit) }}"
+  with_items: "{{ cephadm_crush_rules }}"
+  delegate_to: "{{ groups['mons'][0] }}"
+  run_once: true
