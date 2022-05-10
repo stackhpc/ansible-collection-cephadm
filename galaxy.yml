@@ -1,6 +1,6 @@
 namespace: "stackhpc"
 name: "cephadm"
-version: "1.5.1"
+version: "1.6.0"
 readme: "README.md"
 authors:
   - "Michal Nasiadka"
