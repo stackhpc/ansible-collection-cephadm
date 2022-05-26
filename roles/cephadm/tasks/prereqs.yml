@@ -56,3 +56,9 @@
     state: present
     key: "{{ content }}"
   become: true
+
+- name: Ensure the Logrotate package is installed
+  package:
+    name: logrotate
+    state: present
+  become: True
