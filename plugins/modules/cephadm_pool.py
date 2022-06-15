@@ -21,7 +21,7 @@ __metaclass__ = type
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common \
-    import generate_ceph_cmd, exec_command, exit_module, pre_generate_ceph_cmd
+    import generate_ceph_cmd, exec_command, exit_module
 
 import datetime
 import json
@@ -142,18 +142,6 @@ def check_pool_exist(name,
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
                             args=args)
 
-    return cmd
-
-
-def generate_get_config_cmd(param):
-    _cmd = pre_generate_ceph_cmd()
-    args = [
-        'config',
-        'get',
-        'mon.*',
-        param
-    ]
-    cmd = _cmd + args
     return cmd
 
 
