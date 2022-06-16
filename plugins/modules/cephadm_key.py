@@ -197,6 +197,8 @@ def generate_ceph_authtool_cmd(name, secret, caps, dest):  # noqa: E501
         '--timeout',
         '30',
         'shell',
+        '--mount',
+        '/etc/ceph:/etc/ceph',
         '--',
         'ceph-authtool',
         '--create-keyring',
