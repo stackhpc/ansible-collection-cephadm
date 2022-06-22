@@ -1,0 +1,12 @@
+---
+name: Publish Ansible Collection
+'on':
+  push:
+    tags:
+      - "v?[0-9]+.[0-9]+.[0-9]+"
+  workflow_dispatch:
+jobs:
+  publish_collection:
+    uses: stackhpc/.github/.github/workflows/publish-collection.yml@main
+    secrets:
+      GALAXY_API_KEY: ${{ secrets.GALAXY_API_KEY }}
