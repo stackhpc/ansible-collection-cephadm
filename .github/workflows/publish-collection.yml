@@ -7,4 +7,6 @@ name: Publish Ansible Collection
   workflow_dispatch:
 jobs:
   publish_collection:
-    uses: stackhpc/.github/.github/workflows/publish_collection.yml@main
+    uses: stackhpc/.github/.github/workflows/publish-collection.yml@main
+    secrets:
+      GALAXY_API_KEY: ${{ secrets.GALAXY_API_KEY }}
