@@ -7,7 +7,7 @@
 
 - name: Ensure Ceph repositories are defined
   apt_repository:
-    repo: "deb https://download.ceph.com/debian-{{ item }}/ {{ ansible_distribution_release }} main"
+    repo: "deb https://download.ceph.com/debian-{{ item }}/ {{ ansible_facts.distribution_release }} main"
     state: "{{ 'present' if item == cephadm_ceph_release else 'absent' }}"
   when: not cephadm_custom_repos | bool
   become: true
