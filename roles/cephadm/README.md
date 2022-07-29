@@ -41,6 +41,9 @@ All Ceph hosts must be in the `ceph` group.
     * `cephadm_ssh_public_key`: Location where ssh public key used by cephadm will be saved (default: /etc/ceph/cephadm.pub)
     * `cephadm_ssh_private_key`: Location where ssh private key used by cephadm will be saved (default: /etc/ceph/cephadm.id)
     * `cephadm_ssh_user`: Pre-existing user name that should be used for bootstrapping the cluster. User must have passwordless sudo enabled. Since 1.4.0 (default: `ansible_user`)
+    * `cephadm_bootstrap_additional_parameters`: additional arguments to pass to `cephadm bootstrap`
+    * `cephadm_ansible_distribution_release`: overide `ansible_distribution_release` for package repository
+    * `cephadm_bootstrap_configs: []`: array of `ceph config` commands to run after bootstrap (eg: `set mon mon_allow_pool_delete True`)
   * MONs and MGRs
     * `cephadm_mon_count`: Number of MONs to deploy (default: equals to number of hosts in `mons` Ansible group)
     * `cephadm_mgr_count`: Number of MGRs to deploy (default: equals to number of hosts in `mgrs` Ansible group)

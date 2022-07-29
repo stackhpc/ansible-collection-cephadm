@@ -13,3 +13,5 @@
   when: cephadm_bootstrap | bool
 
 - include_tasks: "osds.yml"
+
+- include_tasks: "config.yml"

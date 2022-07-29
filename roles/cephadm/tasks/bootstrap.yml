@@ -19,7 +19,9 @@
            {{ firewalld }}
            --ssh-private-key={{ cephadm_ssh_private_key }}
            --ssh-public-key={{ cephadm_ssh_public_key }}
+           {% if cephadm_ssh_user | length > 0 %}
            --ssh-user "{{ cephadm_ssh_user }}"
+           {% endif %}
            {% if cephadm_registry_url | length > 0 %}
            --registry-url={{ cephadm_registry_url }}
            --registry-username={{ cephadm_registry_username }}
@@ -30,6 +32,7 @@
            --fsid={{ cephadm_fsid }}
            {% endif %}
            --mon-ip={{ mon_ip }}
+           {{ cephadm_bootstrap_additional_parameters }}
     become: true
     when: not cephadm_check_ceph_conf.stat.exists
 

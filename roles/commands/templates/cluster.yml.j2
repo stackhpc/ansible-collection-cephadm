@@ -1,0 +1,46 @@
+{% for host in groups['ceph'] %}
+---
+service_type: host
+hostname: {{ hostvars[host]['ansible_hostname'] }}
+addr: {{ hostvars[host]['ansible_'~cephadm_admin_interface]['ipv4']['address'] }}
+labels:
+{% if host in groups['mons'] %}
+- _admin
+- mon
+{% endif %}
+{% if host in groups['mgrs'] %}
+- mgr
+{% endif %}
+{% if host in groups['osds'] %}
+- osd
+{% endif %}
+{% if host in groups.get('rgws', []) %}
+- rgw
+{% endif %}
+{% endfor %}
+---
+service_type: mon
+placement:
+  count: {{ cephadm_mon_count }}
+  label: "mon"
+---
+service_type: mgr
+placement:
+  count: {{ cephadm_mgr_count }}
+  label: "mgr"
+---
+service_type: crash
+placement:
+  host_pattern: "*"
+{% if groups.get('rgws', []) | length > 0 %}
+{% for service in cephadm_radosgw_services %}
+---
+service_type: rgw
+service_id: {{ service.id }}
+placement:
+  label: "rgw"
+{% if service.port is defined %}
+rgw_frontend_port: {{ service.port }}
+{% endif %}
+{% endfor %}
+{% endif %}

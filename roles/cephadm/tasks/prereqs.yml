@@ -55,6 +55,7 @@
     user: "{{ cephadm_ssh_user }}"
     state: present
     key: "{{ content }}"
+  when: "cephadm_ssh_user | length > 0"
   become: true
 
 - name: Ensure the Logrotate package is installed
