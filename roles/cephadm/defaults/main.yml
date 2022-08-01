@@ -23,7 +23,7 @@ cephadm_ssh_public_key: "/etc/ceph/cephadm.pub"
 cephadm_ssh_private_key: "/etc/ceph/cephadm.id"
 cephadm_ssh_user: "{{ ansible_user }}"
 cephadm_bootstrap_additional_parameters: ""
-cephadm_ansible_distribution_release: "{{ ansible_distribution_release }}"
+cephadm_apt_repo_dist: "{{ ansible_distribution_release }}"
 cephadm_bootstrap_configs: []
 # MONs and MGRs
 cephadm_mon_count: "{{ groups.get('mons', []) | length }}"
