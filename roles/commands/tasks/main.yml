@@ -1,0 +1,11 @@
+---
+- name: Execute custom commands
+  command:
+    cmd: "cephadm shell -- ceph {{ item }}"
+  register: cephadm_commands_result
+  with_items: "{{ cephadm_commands }}"
+  become: true
+  when: cephadm_commands | length > 0
+
+  delegate_to: "{{ groups['mons'][0] }}"
+  run_once: True
