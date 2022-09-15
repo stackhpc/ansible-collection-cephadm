@@ -1,4 +1,11 @@
 ---
+# Remove any old Ceph keys added to the main keyring.
+- name: Clean up old key
+  apt_key:
+    id: E84AC2C0460F3994
+    state: absent
+  become: true
+
 - name: Ensure keys directory exists
   file:
     path: "{{ cephadm_apt_key_path | dirname }}"
