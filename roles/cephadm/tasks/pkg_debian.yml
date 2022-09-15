@@ -1,13 +1,27 @@
 ---
-- name: Add Ceph signing keys
-  apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: E84AC2C0460F3994
+- name: Ensure keys directory exists
+  file:
+    path: "{{ cephadm_apt_key_path | dirname }}"
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+  when: not cephadm_custom_repos | bool
+  become: true
+
+- name: Ensure keys exist
+  get_url:
+    url: "{{ cephadm_apt_key_url }}"
+    dest: "{{ cephadm_apt_key_path }}"
+    owner: root
+    group: root
+    mode: 0644
+  when: not cephadm_custom_repos | bool
   become: true
 
 - name: Ensure Ceph repositories are defined
   apt_repository:
-    repo: "deb https://download.ceph.com/debian-{{ item }}/ {{ cephadm_apt_repo_dist }} main"
+    repo: "deb [signed-by={{ cephadm_apt_key_path }}] https://download.ceph.com/debian-{{ item }}/ {{ cephadm_apt_repo_dist }} main"
     state: "{{ 'present' if item == cephadm_ceph_release else 'absent' }}"
   when: not cephadm_custom_repos | bool
   become: true
