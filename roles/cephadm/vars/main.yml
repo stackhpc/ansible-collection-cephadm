@@ -5,3 +5,5 @@ cephadm_rpm_repos:
 cephadm_ceph_releases:
   - "octopus"
   - "pacific"
+cephadm_apt_key_url: "https://download.ceph.com/keys/release.asc"
+cephadm_apt_key_path: "/usr/local/share/keyrings/ceph.asc"
