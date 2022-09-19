@@ -3,7 +3,9 @@
   block:
   - name: Add OSDs individually
     command:
-      cmd: "cephadm daemon add osd {{ ansible_facts.hostname }}:{{ item }}"
+      cmd: >
+           cephadm shell --
+           ceph orch daemon add osd {{ ansible_facts.hostname }}:{{ item }}
     become: true
     when: cephadm_osd_devices | length > 0
     with_items: "{{ cephadm_osd_devices }}"
