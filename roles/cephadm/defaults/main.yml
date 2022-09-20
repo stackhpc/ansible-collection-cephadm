@@ -15,6 +15,7 @@ cephadm_registry_url: ""
 cephadm_registry_username: ""
 cephadm_registry_password: ""
 # Bootstrap settings
+cephadm_bootstrap_host: "{{ groups['mons'][0] }}"
 cephadm_enable_dashboard: False
 cephadm_enable_firewalld: False
 cephadm_enable_monitoring: False

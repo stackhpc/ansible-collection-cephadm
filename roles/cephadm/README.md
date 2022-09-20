@@ -33,6 +33,7 @@ All Ceph hosts must be in the `ceph` group.
   * `cephadm_custom_repos`: If enabled - the role won't define yum/apt repositories (default: False)
   * `cephadm_package_update`: If enabled - cephadm package will be updated to latest version (default: False)
   * Bootstrap settings
+    * `cephadm_bootstrap_host`: The host on which to bootstrap Ceph (default: `groups['mons'][0]`)
     * `cephadm_enable_dashboard`: If enabled - dashboard service on MGR will be enabled (default: False)
     * `cephadm_enable_firewalld`: If enabled - firewalld will be installed and rules will be applied (default: False)
     * `cephadm_enable_monitoring`: If enabled - cephadm monitoring stack will be deployed i.e. prometheus/node-exporters/grafana (default: False)

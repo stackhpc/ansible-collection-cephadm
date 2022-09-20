@@ -1,15 +1,27 @@
 ---
 - include_tasks: "destroy.yml"
-  when: cephadm_recreate | bool
+  when:
+    - cephadm_recreate | bool
 
 - include_tasks: "prechecks.yml"
   when: not cephadm_skip_prechecks | bool
 
 - include_tasks: "pkg_{{ ansible_facts.os_family | lower }}.yml"
 
-- include_tasks: "prereqs.yml"
+- include_tasks: "prereqs_bootstrap.yml"
+  when:
+    - inventory_hostname == cephadm_bootstrap_host
+
+- import_tasks: "prereqs.yml"
 
 - include_tasks: "bootstrap.yml"
-  when: cephadm_bootstrap | bool
+  when:
+    - cephadm_bootstrap | bool
+    - inventory_hostname == cephadm_bootstrap_host
 
-- include_tasks: "osds.yml"
+- import_tasks: "osds.yml"
+
+- include_tasks: "osds_spec.yml"
+  when:
+    - cephadm_osd_spec | length > 0
+    - inventory_hostname == cephadm_bootstrap_host

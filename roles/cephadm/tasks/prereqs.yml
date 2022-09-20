@@ -1,60 +1,9 @@
 ---
-- name: Prepare cephadm bootstrap dependencies
-  block:
-  - name: Ensure /etc/ceph directory exists
-    file:
-      path: /etc/ceph
-      state: directory
-      owner: root
-      group: root
-      mode: 0755
-    become: true
-
-  - name: Check if /etc/ceph/ceph.conf exists
-    stat:
-      path: /etc/ceph/ceph.conf
-    register: cephadm_check_ceph_conf
-
-  - name: Check if cephadm ssh key exists
-    stat:
-      path: "{{ cephadm_ssh_private_key }}"
-    register: cephadm_check_ceph_id
-
-  - name: Generate ssh key for cephadm
-    openssh_keypair:
-      path: "{{ cephadm_ssh_private_key }}"
-      size: 4096
-      comment: "ceph-{{ cephadm_fsid }}"
-    when: not cephadm_check_ceph_id.stat.exists
-    register: cephadm_ssh_key
-    become: true
-
-  - name: Save public key
-    copy:
-      content: "{{ cephadm_ssh_key.public_key | default }}"
-      dest: "{{ cephadm_ssh_public_key }}"
-      owner: root
-      group: root
-      mode: 0644
-    become: true
-    when: not cephadm_check_ceph_id.stat.exists
-
-  - name: Slurp public key if already exist
-    slurp:
-      src: "{{ cephadm_ssh_public_key }}"
-    register: cephadm_ssh_public_key_slurp
-    when: cephadm_check_ceph_id.stat.exists
-
-  delegate_to: "{{ groups['mons'][0] }}"
-  run_once: True
-
 - name: Copy cephadm public key to all hosts
-  vars:
-    content: "{{ cephadm_ssh_public_key_slurp.content | b64decode if cephadm_check_ceph_id.stat.exists else cephadm_ssh_key.public_key }}"
   authorized_key:
     user: "{{ cephadm_ssh_user }}"
     state: present
-    key: "{{ content }}"
+    key: "{{ hostvars[cephadm_bootstrap_host].cephadm_ssh_public_key_content }}"
   when: "cephadm_ssh_user | length > 0"
   become: true
 
