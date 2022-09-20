@@ -7,7 +7,7 @@
          ceph orch daemon add osd {{ ansible_facts.hostname }}:{{ item }}
   become: true
   register: osd_add_result
-  changed_when: osd_add_result.stdout != "Created no osd(s) on host " + ansible_facts.hostname  + "; already created?"
+  changed_when: not osd_add_result.stdout.startswith("Created no osd(s) on host")
   delegate_to: "{{ omit if 'mons' in group_names else groups['mons'][0] }}"
   when: cephadm_osd_devices | length > 0
   with_items: "{{ cephadm_osd_devices }}"
