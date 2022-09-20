@@ -4,16 +4,17 @@
     cmd: "cephadm shell -- ceph fsid"
   become: true
   register: cephadm_destroy_fsid
-  delegate_to: "{{ groups['mons'][0] }}"
-  run_once: True
   changed_when: false
   failed_when: false
+  when: inventory_hostname == cephadm_bootstrap_host
 
 - name: Destroy cluster
+  vars:
+    fsid_result: "{{ hostvars[cephadm_bootstrap_host].cephadm_destroy_fsid }}"
   command:
-    cmd: "cephadm rm-cluster --fsid {{ cephadm_destroy_fsid.stdout }} --force"
+    cmd: "cephadm rm-cluster --fsid {{ fsid_result.stdout }} --force"
   become: true
-  when: cephadm_destroy_fsid.rc != 1
+  when: fsid_result.rc != 1
 
 - name: Remove ssh keys
   file:

@@ -1,83 +1,78 @@
 ---
 - name: Bootstrap cephadm
-  block:
-  - name: Bootstrap cephadm
-    vars:
-      mon_ip: "{{ hostvars[inventory_hostname].ansible_facts[cephadm_public_interface].ipv4.address }}"
-      monitoring_stack: "{{ '--skip-monitoring-stack' if not (cephadm_enable_monitoring | bool) else '' }}"
-      dashboard: "{{ '--skip-dashboard' if not cephadm_enable_dashboard | bool else '' }}"
-      firewalld: "{{ '--skip-firewalld' if not cephadm_enable_firewalld | bool else '' }}"
-    command:
-      cmd: >
-           cephadm
-           {% if cephadm_image | length > 0 %}
-           --image={{ cephadm_image }}
-           {% endif %}
-           bootstrap
-           {{ monitoring_stack }}
-           {{ dashboard }}
-           {{ firewalld }}
-           --ssh-private-key={{ cephadm_ssh_private_key }}
-           --ssh-public-key={{ cephadm_ssh_public_key }}
-           {% if cephadm_ssh_user | length > 0 %}
-           --ssh-user "{{ cephadm_ssh_user }}"
-           {% endif %}
-           {% if cephadm_registry_url | length > 0 %}
-           --registry-url={{ cephadm_registry_url }}
-           --registry-username={{ cephadm_registry_username }}
-           --registry-password={{ cephadm_registry_password }}
-           {% endif %}
-           --skip-pull
-           {% if cephadm_fsid | length > 0 %}
-           --fsid={{ cephadm_fsid }}
-           {% endif %}
-           --mon-ip={{ mon_ip }}
-           {{ cephadm_bootstrap_additional_parameters }}
-    become: true
-    when: not cephadm_check_ceph_conf.stat.exists
+  vars:
+    mon_ip: "{{ hostvars[inventory_hostname].ansible_facts[cephadm_public_interface].ipv4.address }}"
+    monitoring_stack: "{{ '--skip-monitoring-stack' if not (cephadm_enable_monitoring | bool) else '' }}"
+    dashboard: "{{ '--skip-dashboard' if not cephadm_enable_dashboard | bool else '' }}"
+    firewalld: "{{ '--skip-firewalld' if not cephadm_enable_firewalld | bool else '' }}"
+  command:
+    cmd: >
+         cephadm
+         {% if cephadm_image | length > 0 %}
+         --image={{ cephadm_image }}
+         {% endif %}
+         bootstrap
+         {{ monitoring_stack }}
+         {{ dashboard }}
+         {{ firewalld }}
+         --ssh-private-key={{ cephadm_ssh_private_key }}
+         --ssh-public-key={{ cephadm_ssh_public_key }}
+         {% if cephadm_ssh_user | length > 0 %}
+         --ssh-user "{{ cephadm_ssh_user }}"
+         {% endif %}
+         {% if cephadm_registry_url | length > 0 %}
+         --registry-url={{ cephadm_registry_url }}
+         --registry-username={{ cephadm_registry_username }}
+         --registry-password={{ cephadm_registry_password }}
+         {% endif %}
+         --skip-pull
+         {% if cephadm_fsid | length > 0 %}
+         --fsid={{ cephadm_fsid }}
+         {% endif %}
+         --mon-ip={{ mon_ip }}
+         {{ cephadm_bootstrap_additional_parameters }}
+  become: true
+  when: not cephadm_check_ceph_conf.stat.exists
 
-  - name: Set public network
-    command:
-      cmd: "cephadm shell -- ceph config set global public_network {{ cephadm_public_network }}"
-    become: true
+- name: Set public network
+  command:
+    cmd: "cephadm shell -- ceph config set global public_network {{ cephadm_public_network }}"
+  become: true
 
-  - name: Set cluster network
-    command:
-      cmd: "cephadm shell -- ceph config set global cluster_network {{ cephadm_cluster_network }}"
-    when: cephadm_cluster_network | length > 0
-    become: true
+- name: Set cluster network
+  command:
+    cmd: "cephadm shell -- ceph config set global cluster_network {{ cephadm_cluster_network }}"
+  when: cephadm_cluster_network | length > 0
+  become: true
 
-  - name: Get cluster fsid
-    command:
-      cmd: "cephadm shell -- ceph fsid"
-    when: cephadm_fsid | length == 0
-    become: true
-    register: cephadm_fsid_current
+- name: Get cluster fsid
+  command:
+    cmd: "cephadm shell -- ceph fsid"
+  when: cephadm_fsid | length == 0
+  become: true
+  register: cephadm_fsid_current
 
-  - name: Template out cluster.yml
-    vars:
-      fsid: "{{ cephadm_fsid if cephadm_fsid | length > 0 else cephadm_fsid_current.stdout }}"
-    template:
-      src: "templates/cluster.yml.j2"
-      dest: "/var/run/ceph/{{ fsid }}/cephadm_cluster.yml"
-      owner: root
-      group: root
-      mode: 0644
-    become: true
-    run_once: True
-
-  - name: Apply spec
-    command:
-      cmd: >
-           cephadm shell --
-           ceph orch apply -i /var/run/ceph/cephadm_cluster.yml
-    become: true
-
-  - name: Install ceph cli on mon hosts
-    command:
-      cmd: "cephadm install ceph"
-    become: true
-    when: cephadm_install_ceph_cli
-
-  delegate_to: "{{ groups['mons'][0] }}"
+- name: Template out cluster.yml
+  vars:
+    fsid: "{{ cephadm_fsid if cephadm_fsid | length > 0 else cephadm_fsid_current.stdout }}"
+  template:
+    src: "templates/cluster.yml.j2"
+    dest: "/var/run/ceph/{{ fsid }}/cephadm_cluster.yml"
+    owner: root
+    group: root
+    mode: 0644
+  become: true
   run_once: True
+
+- name: Apply spec
+  command:
+    cmd: >
+         cephadm shell --
+         ceph orch apply -i /var/run/ceph/cephadm_cluster.yml
+  become: true
+
+- name: Install ceph cli on mon hosts
+  command:
+    cmd: "cephadm install ceph"
+  become: true
+  when: cephadm_install_ceph_cli
