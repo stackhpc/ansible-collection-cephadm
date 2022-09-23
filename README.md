@@ -6,7 +6,7 @@ This repo contains `stackhpc.cephadm` Ansible Collection. The collection include
 
 ## Tested with Ansible
 
-Tested with the current Ansible 2.9 releases.
+Tested with the current Ansible 2.9 and 2.10 releases.
 
 ## Included content
 
