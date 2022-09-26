@@ -5,29 +5,29 @@ hostname: {{ hostvars[host].ansible_facts.hostname }}
 addr: {{ hostvars[host].ansible_facts[cephadm_admin_interface]['ipv4']['address'] }}
 labels:
 {% if host in groups['mons'] %}
-- _admin
-- mon
+  - _admin
+  - mon
 {% endif %}
 {% if host in groups['mgrs'] %}
-- mgr
+  - mgr
 {% endif %}
 {% if host in groups['osds'] %}
-- osd
+  - osd
 {% endif %}
 {% if host in groups.get('rgws', []) %}
-- rgw
+  - rgw
 {% endif %}
 {% endfor %}
 ---
 service_type: mon
 placement:
   count: {{ cephadm_mon_count }}
-  label: "mon"
+  label: mon
 ---
 service_type: mgr
 placement:
   count: {{ cephadm_mgr_count }}
-  label: "mgr"
+  label: mgr
 ---
 service_type: crash
 placement:
@@ -38,9 +38,10 @@ placement:
 service_type: rgw
 service_id: {{ service.id }}
 placement:
-  label: "rgw"
+  label: rgw
 {% if service.port is defined %}
-rgw_frontend_port: {{ service.port }}
+spec:
+  rgw_frontend_port: {{ service.port }}
 {% endif %}
 {% endfor %}
 {% endif %}
