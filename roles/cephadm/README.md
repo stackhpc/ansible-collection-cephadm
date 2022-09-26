@@ -68,6 +68,16 @@ All Ceph hosts must be in the `ceph` group.
             db_devices:
               model: Dell Express Flash PM1725b 1.6TB SFF
       ```
+  * RGWs
+    * `cephadm_radosgw_services`: List of Rados Gateways services to deploy. `id` is an arbitrary name for the service,
+    `port` is a TCP port that RGW service should listen on.
+      Example:
+      ```
+          cephadm_radosgw_services:
+            - id: myrgw
+              port: 8000
+      ```
+    Note that adding RGW or other services to an existing deployment requires setting `cephadm_bootstrap` variable to *True*.
 
 * Registry
     * `cephadm_registry_url`: (default: not used)
