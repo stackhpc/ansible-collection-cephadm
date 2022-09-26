@@ -39,6 +39,9 @@ service_type: rgw
 service_id: {{ service.id }}
 placement:
   label: rgw
+{% if service.count_per_host is defined %}
+  count_per_host: {{ service.count_per_host }}
+{% endif %}
 {% if service.port is defined %}
 spec:
   rgw_frontend_port: {{ service.port }}

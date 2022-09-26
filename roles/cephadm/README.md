@@ -70,12 +70,13 @@ All Ceph hosts must be in the `ceph` group.
       ```
   * RGWs
     * `cephadm_radosgw_services`: List of Rados Gateways services to deploy. `id` is an arbitrary name for the service,
-    `port` is a TCP port that RGW service should listen on.
+    `port` is a TCP port that RGW service should listen on. `count_per_host` is desired number of RGW services per host.
       Example:
       ```
           cephadm_radosgw_services:
             - id: myrgw
               port: 8000
+              count_per_host: 2
       ```
     Note that adding RGW or other services to an existing deployment requires setting `cephadm_bootstrap` variable to *True*.
 
