@@ -42,9 +42,9 @@ placement:
 {% if service.count_per_host is defined %}
   count_per_host: {{ service.count_per_host }}
 {% endif %}
-{% if service.port is defined %}
+{% if service.spec is defined %}
 spec:
-  rgw_frontend_port: {{ service.port }}
+  {{ service.spec | to_nice_yaml }}
 {% endif %}
 {% endfor %}
 {% endif %}
