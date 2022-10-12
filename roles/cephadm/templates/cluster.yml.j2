@@ -17,6 +17,9 @@ labels:
 {% if host in groups.get('rgws', []) %}
   - rgw
 {% endif %}
+{% if hostvars[host].cephadm_host_labels | length > 0 %}
+{{ hostvars[host].cephadm_host_labels }}
+{% endif %}
 {% endfor %}
 ---
 service_type: mon
