@@ -26,3 +26,39 @@ jobs:
         run: |
           ansible-lint -v --force-color
           flake8 -v
+
+  integration:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ansible:
+          - "2.10"
+          - "2.11"
+          - "2.12"
+          - "2.13"
+    steps:
+      # Checks-out the repository under $GITHUB_WORKSPACE, so it's accessible to the job
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          pipx uninstall ansible-core
+          python3 -m pip install --upgrade pip
+          ansible_version=${{ matrix.ansible }}
+          if [[ "${{ matrix.ansible }}" = "2.9" ]]; then
+              ansible_package=ansible
+          elif [[ "${{ matrix.ansible }}" = "2.10" ]]; then
+              ansible_package=ansible
+              ansible_version=3
+          else
+              ansible_package=ansible-core
+          fi
+          python3 -m pip install $ansible_package==$ansible_version.*
+          ansible-galaxy install -r requirements.yml
+          ansible-galaxy collection build
+          ansible-galaxy collection install *.tar.gz
+      # TODO: Use ansible-test to run these.
+      - name: Running integration tests
+        run: |
+          ansible-playbook -i tests/inventory -v tests/*.yml -e ansible_python_interpreter=$(which python3)

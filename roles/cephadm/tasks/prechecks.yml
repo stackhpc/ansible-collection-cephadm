@@ -5,3 +5,13 @@
 - name: Set cephadm_bootstrap
   set_fact:
     cephadm_bootstrap: "{{ ansible_facts.services | dict2items | selectattr('key', 'match', '^ceph.*') | list | length == 0 }}"
+
+- name: Validate if required variables are not empty
+  fail:
+    msg: "{{ item.name }} is not set"
+  when:
+    - vars[item.name] | length == 0
+    - item.when 
+  loop:
+    - { "name": "cephadm_public_interface", "when": true }
+    - { "name": "cephadm_public_network", "when": true }

@@ -1,0 +1,8 @@
+[mons]
+localhost ansible_connection=local
+[mgrs:children]
+mons
+[osds:children]
+mons
+[rgws:children]
+mons

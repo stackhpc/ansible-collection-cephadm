@@ -1,0 +1,14 @@
+---
+- name: Test cephadm role
+  gather_facts: True
+  hosts: mons
+  vars:
+    cephadm_public_interface: "eth0"
+    cephadm_public_network: "{{ ansible_facts.eth0.ipv4.address + '/' + ansible_facts.eth0.ipv4.prefix }}"
+  tasks:
+    - include_role:
+        name: cephadm
+
+    # Idempotence test
+    - include_role:
+        name: cephadm
