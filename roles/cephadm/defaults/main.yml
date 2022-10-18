@@ -19,6 +19,7 @@ cephadm_bootstrap_host: "{{ groups['mons'][0] }}"
 cephadm_enable_dashboard: False
 cephadm_enable_firewalld: False
 cephadm_enable_monitoring: False
+cephadm_host_labels: []
 cephadm_install_ceph_cli: False
 cephadm_ssh_public_key: "/etc/ceph/cephadm.pub"
 cephadm_ssh_private_key: "/etc/ceph/cephadm.id"
