@@ -40,3 +40,5 @@ cephadm_osd_devices: []
 cephadm_osd_spec: []
 # RADOSGW
 cephadm_radosgw_services: []
+# Ingress
+cephadm_ingress_services: []

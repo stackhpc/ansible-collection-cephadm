@@ -18,6 +18,9 @@ labels:
 {% if host in groups.get('rgws', []) %}
   - rgw
 {% endif %}
+{% if host in groups.get('ingress', []) %}
+  - ingress
+{% endif %}
 {% if hostvars[host].cephadm_host_labels | length > 0 %}
 {{ hostvars[host].cephadm_host_labels }}
 {% endif %}
@@ -50,5 +53,15 @@ placement:
 spec:
   {{ service.spec | to_nice_yaml }}
 {% endif %}
+{% endfor %}
+{% if groups.get('ingress', []) | length > 0 %}
+{% for service in cephadm_ingress_services %}
+---
+service_type: ingress
+service_id: {{ service.id }}
+placement:
+  label: ingress
+spec:
+  {{ service.spec | to_nice_yaml }}
 {% endfor %}
 {% endif %}
