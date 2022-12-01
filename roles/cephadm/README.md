@@ -83,6 +83,20 @@ All Ceph hosts must be in the `ceph` group.
                 rgw_zone: myzone
                 rgw_frontend_port: 1234
       ```
+  * Ingress
+    * `cephadm_ingress_services`: List of ingress services to deploy. `id` should match name (not id) of the RGW service to
+      which ingress will point to. `spec` is a service specification required by Cephadm to deploy the ingress (haproxy +
+      keepalived pair).
+      Example:
+      ```
+          cephadm_ingress_services:
+            - id: rgw.myrgw
+              spec:
+                frontend_port: 443
+                monitor_port: 1967
+                virtual_ip: 10.66.0.1/24
+                ssl_cert: {example_certificate_chain}
+      ```
       Note that adding RGW or other services to an existing deployment requires setting `cephadm_bootstrap` variable to *True*.
 
 * Registry
