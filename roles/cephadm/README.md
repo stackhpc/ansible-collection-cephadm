@@ -84,8 +84,9 @@ All Ceph hosts must be in the `ceph` group.
                 rgw_frontend_port: 1234
       ```
   * Ingress
-    * `cephadm_ingress_services`: List of ingress services to deploy. `id` should match the RGW service to which ingress
-      will point to. `spec` is a service specification required by Cephadm to deploy the ingress (haproxy + keepalived pair).
+    * `cephadm_ingress_services`: List of ingress services to deploy. `id` should match name (not id) of the RGW service to
+      which ingress will point to. `spec` is a service specification required by Cephadm to deploy the ingress (haproxy +
+      keepalived pair).
       Example:
       ```
           cephadm_ingress_services:
