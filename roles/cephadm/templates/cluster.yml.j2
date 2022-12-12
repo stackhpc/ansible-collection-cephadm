@@ -54,6 +54,7 @@ spec:
   {{ service.spec | to_nice_yaml }}
 {% endif %}
 {% endfor %}
+{% endif %}
 {% if groups.get('ingress', []) | length > 0 %}
 {% for service in cephadm_ingress_services %}
 ---
