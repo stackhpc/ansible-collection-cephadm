@@ -21,8 +21,8 @@ labels:
 {% if host in groups.get('ingress', []) %}
   - ingress
 {% endif %}
-{% if hostvars[host].cephadm_host_labels | length > 0 %}
-{{ hostvars[host].cephadm_host_labels }}
+{% if hostvars[host].get('cephadm_host_labels', []) | length > 0 %}
+{{ hostvars[host].get('cephadm_host_labels', []) }}
 {% endif %}
 {% endfor %}
 ---
