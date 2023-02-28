@@ -6,6 +6,8 @@
     stripe_unit: "{{ item.stripe_unit | default(omit) }}"
     k: "{{ item.k }}"
     m: "{{ item.m }}"
+    plugin: "{{ item.plugin | default(omit) }}"
+    directory: "{{ item.directory | default(omit) }}"
     crush_root: "{{ item.crush_root | default(omit) }}"
     crush_device_class: "{{ item.crush_device_class | default(omit) }}"
   with_items: "{{ cephadm_ec_profiles }}"
