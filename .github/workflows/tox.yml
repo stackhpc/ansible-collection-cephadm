@@ -1,0 +1,26 @@
+name: tox-ansible
+
+on:
+  - pull_request
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.8', '3.9', '3.10']
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - uses: actions/checkout@v2
+    - name: Install tox-gh
+      run: python3 -m pip install tox-gh tox-ansible
+    - name: Setup test suite
+      run: tox --notest
+    - name: Run test suite
+      run: tox --skip-pkg-install

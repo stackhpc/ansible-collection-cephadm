@@ -1,0 +1,12 @@
+.eggs
+.cache
+.python-version
+.idea
+*.pyc
+*.dist-info
+.coverage
+coverage.xml
+*.egg-info
+/.tox
+/dist
+/.*_cache
