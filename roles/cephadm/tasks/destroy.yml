@@ -14,6 +14,7 @@
   command:
     cmd: "cephadm rm-cluster --fsid {{ fsid_result.stdout }} --force"
   become: true
+  changed_when: true
   when: fsid_result.rc != 1
 
 - name: Remove ssh keys

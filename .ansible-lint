@@ -1,3 +1,9 @@
 ---
-skip_list:
-  - no-changed-when
+profile: shared
+
+exclude_paths:
+  - changelogs/
+  - .github/
+
+warn_list:
+  - meta-runtime[unsupported-version]

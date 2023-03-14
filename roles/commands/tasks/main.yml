@@ -5,7 +5,8 @@
   register: cephadm_commands_result
   with_items: "{{ cephadm_commands }}"
   become: true
+  changed_when: true
   when: cephadm_commands | length > 0
 
   delegate_to: "{{ groups['mons'][0] }}"
-  run_once: True
+  run_once: true

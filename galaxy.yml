@@ -11,4 +11,6 @@ license:
   - "Apache-2.0"
 tags:
   - cephadm
+  - infrastructure
+description: "Ansible roles to create and manage cephadm-based Ceph deployments"
 repository: "https://github.com/stackhpc/ansible-collection-cephadm"

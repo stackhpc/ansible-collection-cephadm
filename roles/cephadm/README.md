@@ -29,17 +29,17 @@ All Ceph hosts must be in the `ceph` group.
 * General
   * `cephadm_ceph_release`: Ceph release to deploy (default: pacific)
   * `cephadm_fsid`: FSID to use for cluster (default: empty - cephadm will generate FSID)
-  * `cephadm_recreate`: If existing cluster should be destroyed and recreated (default: False)
-  * `cephadm_custom_repos`: If enabled - the role won't define yum/apt repositories (default: False)
-  * `cephadm_package_update`: If enabled - cephadm package will be updated to latest version (default: False)
+  * `cephadm_recreate`: If existing cluster should be destroyed and recreated (default: false)
+  * `cephadm_custom_repos`: If enabled - the role won't define yum/apt repositories (default: false)
+  * `cephadm_package_update`: If enabled - cephadm package will be updated to latest version (default: false)
   * `cephadm_host_labels`: If set (list format) - those additional labels will be applied to host definitions (default: [] - empty list)
   * Bootstrap settings
     * `cephadm_bootstrap_host`: The host on which to bootstrap Ceph (default: `groups['mons'][0]`)
-    * `cephadm_enable_dashboard`: If enabled - dashboard service on MGR will be enabled (default: False)
-    * `cephadm_enable_firewalld`: If enabled - firewalld will be installed and rules will be applied (default: False)
-    * `cephadm_enable_monitoring`: If enabled - cephadm monitoring stack will be deployed i.e. prometheus/node-exporters/grafana (default: False)
+    * `cephadm_enable_dashboard`: If enabled - dashboard service on MGR will be enabled (default: false)
+    * `cephadm_enable_firewalld`: If enabled - firewalld will be installed and rules will be applied (default: false)
+    * `cephadm_enable_monitoring`: If enabled - cephadm monitoring stack will be deployed i.e. prometheus/node-exporters/grafana (default: false)
     * `cephadm_image`: If set - cephadm will use this image
-    * `cephadm_install_ceph_cli`: If enabled - ceph cli will be installed on the hosts (default: False)
+    * `cephadm_install_ceph_cli`: If enabled - ceph cli will be installed on the hosts (default: false)
     * `cephadm_ssh_public_key`: Location where ssh public key used by cephadm will be saved (default: /etc/ceph/cephadm.pub)
     * `cephadm_ssh_private_key`: Location where ssh private key used by cephadm will be saved (default: /etc/ceph/cephadm.id)
     * `cephadm_ssh_user`: Pre-existing user name that should be used for bootstrapping the cluster. User must have passwordless sudo enabled. Since 1.4.0 (default: `ansible_user`)
@@ -97,7 +97,7 @@ All Ceph hosts must be in the `ceph` group.
                 virtual_ip: 10.66.0.1/24
                 ssl_cert: {example_certificate_chain}
       ```
-      Note that adding RGW or other services to an existing deployment requires setting `cephadm_bootstrap` variable to *True*.
+      Note that adding RGW or other services to an existing deployment requires setting `cephadm_bootstrap` variable to *true*.
 
 * Registry
     * `cephadm_registry_url`: (default: not used)

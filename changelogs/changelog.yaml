@@ -1,0 +1,9 @@
+ancestor: null
+releases:
+  1.13.0:
+    release_date: '2023-02-28'
+    changes:
+      release_summary: |
+        Minor release adding support for choosing plugin in EC profiles
+      minor_changes:
+        - Add support for choosing plugin in EC profiles
