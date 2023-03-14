@@ -27,6 +27,10 @@ collections:
 
 See [Ansible Using collections](https://docs.ansible.com/ansible/latest/user_guide/collections_using.html) for more details.
 
+## Release notes handling
+
+See [antsibull-changelog docs](https://github.com/ansible-community/antsibull-changelog/blob/main/docs/changelogs.rst) for instructions how to deal with release notes.
+
 ## More information
 
 - [Ansible Collection overview](https://github.com/ansible-collections/overview)

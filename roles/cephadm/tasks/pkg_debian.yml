@@ -11,7 +11,7 @@
     path: "{{ cephadm_apt_key_path | dirname }}"
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
     state: directory
   when: not cephadm_custom_repos | bool
   become: true
@@ -22,7 +22,7 @@
     dest: "{{ cephadm_apt_key_path }}"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   when: not cephadm_custom_repos | bool
   become: true
 
@@ -40,5 +40,5 @@
   apt:
     name: "cephadm"
     state: "{{ 'latest' if cephadm_package_update | bool else 'present' }}"
-    update_cache: yes
+    update_cache: true
   become: true

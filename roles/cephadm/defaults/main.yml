@@ -1,13 +1,13 @@
 ---
 cephadm_ceph_release: pacific
-cephadm_skip_prechecks: False
+cephadm_skip_prechecks: false
 # FSID
 cephadm_fsid: ""
 # Recreate cluster
-cephadm_recreate: False
+cephadm_recreate: false
 # Packages
-cephadm_custom_repos: False
-cephadm_package_update: False
+cephadm_custom_repos: false
+cephadm_package_update: false
 # Image
 cephadm_image: ""
 # Registry
@@ -16,11 +16,11 @@ cephadm_registry_username: ""
 cephadm_registry_password: ""
 # Bootstrap settings
 cephadm_bootstrap_host: "{{ groups['mons'][0] }}"
-cephadm_enable_dashboard: False
-cephadm_enable_firewalld: False
-cephadm_enable_monitoring: False
+cephadm_enable_dashboard: false
+cephadm_enable_firewalld: false
+cephadm_enable_monitoring: false
 cephadm_host_labels: []
-cephadm_install_ceph_cli: False
+cephadm_install_ceph_cli: false
 cephadm_ssh_public_key: "/etc/ceph/cephadm.pub"
 cephadm_ssh_private_key: "/etc/ceph/cephadm.id"
 cephadm_ssh_user: "{{ ansible_user }}"

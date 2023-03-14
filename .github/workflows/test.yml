@@ -1,4 +1,4 @@
-
+---
 name: Tests
 
 # Controls when the action will run.
@@ -25,4 +25,5 @@ jobs:
       - name: Linting code
         run: |
           ansible-lint -v --force-color
+          antsibull-changelog lint
           flake8 -v

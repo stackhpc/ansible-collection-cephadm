@@ -32,24 +32,28 @@
          --mon-ip={{ mon_ip }}
          {{ cephadm_bootstrap_additional_parameters }}
   become: true
+  changed_when: true
   when: not cephadm_check_ceph_conf.stat.exists
 
 - name: Set public network
   command:
-    cmd: "cephadm shell -- ceph config set global public_network {{ cephadm_public_network }}"
+    cmd: "cephadm shell -- ceph config set mon public_network {{ cephadm_public_network }}"
   become: true
+  changed_when: true
 
 - name: Set cluster network
   command:
-    cmd: "cephadm shell -- ceph config set global cluster_network {{ cephadm_cluster_network }}"
+    cmd: "cephadm shell -- ceph config set mon cluster_network {{ cephadm_cluster_network }}"
   when: cephadm_cluster_network | length > 0
   become: true
+  changed_when: true
 
 - name: Get cluster fsid
   command:
     cmd: "cephadm shell -- ceph fsid"
   when: cephadm_fsid | length == 0
   become: true
+  changed_when: false
   register: cephadm_fsid_current
 
 - name: Template out cluster.yml
@@ -60,19 +64,21 @@
     dest: "/var/run/ceph/{{ fsid }}/cephadm_cluster.yml"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   become: true
-  run_once: True
+  run_once: true
 
 - name: Apply spec
   command:
     cmd: >
          cephadm shell --
          ceph orch apply -i /var/run/ceph/cephadm_cluster.yml
+  changed_when: true
   become: true
 
 - name: Install ceph cli on mon hosts
   command:
     cmd: "cephadm install ceph"
   become: true
+  changed_when: true
   when: cephadm_install_ceph_cli

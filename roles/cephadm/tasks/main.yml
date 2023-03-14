@@ -1,27 +1,35 @@
 ---
-- include_tasks: "destroy.yml"
+- name: "Destroy cephadm deployment"
+  include_tasks: "destroy.yml"
   when:
     - cephadm_recreate | bool
 
-- include_tasks: "prechecks.yml"
+- name: "Run prechecks"
+  include_tasks: "prechecks.yml"
   when: not cephadm_skip_prechecks | bool
 
-- include_tasks: "pkg_{{ ansible_facts.os_family | lower }}.yml"
+- name: "Install packages"
+  include_tasks: "pkg_{{ ansible_facts.os_family | lower }}.yml"
 
-- include_tasks: "prereqs_bootstrap.yml"
+- name: "Bootstrap prereqs"
+  include_tasks: "prereqs_bootstrap.yml"
   when:
     - inventory_hostname == cephadm_bootstrap_host
 
-- import_tasks: "prereqs.yml"
+- name: "Prereq tasks"
+  import_tasks: "prereqs.yml"
 
-- include_tasks: "bootstrap.yml"
+- name: "Bootstrap"
+  include_tasks: "bootstrap.yml"
   when:
     - cephadm_bootstrap | bool
     - inventory_hostname == cephadm_bootstrap_host
 
-- import_tasks: "osds.yml"
+- name: "Add osds individually"
+  import_tasks: "osds.yml"
 
-- include_tasks: "osds_spec.yml"
+- name: "Ensure osd spec is defined"
+  include_tasks: "osds_spec.yml"
   when:
     - cephadm_osd_spec | length > 0
     - inventory_hostname == cephadm_bootstrap_host

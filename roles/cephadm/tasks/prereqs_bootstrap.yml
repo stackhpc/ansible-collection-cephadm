@@ -5,7 +5,7 @@
     state: directory
     owner: root
     group: root
-    mode: 0755
+    mode: "0o755"
   become: true
 
 - name: Check if /etc/ceph/ceph.conf exists
@@ -33,7 +33,7 @@
     dest: "{{ cephadm_ssh_public_key }}"
     owner: root
     group: root
-    mode: 0644
+    mode: "0o644"
   become: true
   when: not cephadm_check_ceph_id.stat.exists
 
@@ -45,4 +45,5 @@
 
 - name: Set a fact about the SSH public key
   set_fact:
-    cephadm_ssh_public_key_content: "{{ cephadm_ssh_public_key_slurp.content | b64decode if cephadm_check_ceph_id.stat.exists else cephadm_ssh_key.public_key }}"
+    cephadm_ssh_public_key_content: >-
+      {{ cephadm_ssh_public_key_slurp.content | b64decode if cephadm_check_ceph_id.stat.exists else cephadm_ssh_key.public_key }}

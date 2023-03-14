@@ -15,7 +15,7 @@
     dest: "/var/run/ceph/{{ fsid }}/osd_spec.yml"
     owner: root
     group: root
-    mode: 0644
+    mode: "0o644"
   become: true
 
 - name: Apply OSDs spec
@@ -24,3 +24,4 @@
          cephadm shell --
          ceph orch apply -i /var/run/ceph/osd_spec.yml
   become: true
+  changed_when: true
