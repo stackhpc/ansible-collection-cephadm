@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 # Copyright 2020, Red Hat, Inc.
 # Copyright 2021, StackHPC, Ltd.
@@ -19,13 +19,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common \
-    import generate_ceph_cmd, exec_command, exit_module
-
-import datetime
-import json
-
 
 DOCUMENTATION = r'''
 ---
@@ -34,11 +27,15 @@ short_description: Manage Ceph Crush Replicated/Erasure Rule
 version_added: "1.4.0"
 description:
     - Manage Ceph Crush rule(s) creation, deletion and updates.
+author:
+    - Dimitri Savineau <dsavinea@redhat.com>
+    - Michal Nasiadka <michal@stackhpc.com>
 options:
     name:
         description:
             - name of the Ceph Crush rule.
         required: true
+        type: str
     state:
         description:
             If 'present' is used, the module creates a rule if it doesn't
@@ -49,33 +46,35 @@ options:
         required: false
         choices: ['present', 'absent', 'info']
         default: present
+        type: str
     rule_type:
         description:
             - The ceph CRUSH rule type.
         required: false
         choices: ['replicated', 'erasure']
-        required: false
+        type: str
     bucket_root:
         description:
             - The ceph bucket root for replicated rule.
         required: false
+        type: str
     bucket_type:
         description:
             - The ceph bucket type for replicated rule.
         required: false
         choices: ['osd', 'host', 'chassis', 'rack', 'row', 'pdu', 'pod',
                  'room', 'datacenter', 'zone', 'region', 'root']
+        type: str
     device_class:
         description:
             - The ceph device class for replicated rule.
         required: false
+        type: str
     profile:
         description:
             - The ceph erasure profile for erasure rule.
         required: false
-author:
-    - Dimitri Savineau <dsavinea@redhat.com>
-      Michal Nasiadka <michal@stackhpc.com>
+        type: str
 '''
 
 EXAMPLES = '''
@@ -105,6 +104,14 @@ EXAMPLES = '''
 '''
 
 RETURN = '''#  '''
+
+
+from ansible.module_utils.basic import AnsibleModule
+from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common \
+    import generate_ceph_cmd, exec_command, exit_module
+
+import datetime
+import json
 
 
 def create_rule(module, container_image=None):
@@ -211,7 +218,7 @@ def main():
         else:
             rule = json.loads(out)
             if (rule['type'] == 1 and rule_type == 'erasure') or (rule['type'] == 3 and rule_type == 'replicated'):  # noqa: E501
-                module.fail_json(msg="Can not convert crush rule {} to {}".format(name, rule_type), changed=False, rc=1)  # noqa: E501
+                module.fail_json(msg="Can not convert crush rule {0} to {1}".format(str(name), str(rule_type)), changed=False, rc=1)  # noqa: E501
 
     elif state == "absent":
         rc, cmd, out, err = exec_command(module, get_rule(module))  # noqa: E501
@@ -220,7 +227,7 @@ def main():
             changed = True
         else:
             rc = 0
-            out = "Crush Rule {} doesn't exist".format(name)
+            out = "Crush Rule {0} doesn't exist".format(name)
 
     elif state == "info":
         rc, cmd, out, err = exec_command(module, get_rule(module))  # noqa: E501

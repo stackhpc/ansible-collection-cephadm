@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 # Copyright 2020, Red Hat, Inc.
 # Copyright 2021, StackHPC, Ltd.
@@ -19,13 +19,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common \
-    import generate_ceph_cmd, exec_command, exit_module
-
-import datetime
-import json
-
 
 DOCUMENTATION = '''
 ---
@@ -42,49 +35,52 @@ options:
         description:
             - name of the profile.
         required: true
+        type: str
     state:
         description:
             If 'present' is used, the module creates a profile.
             If 'absent' is used, the module will delete the profile.
         required: false
-        choices: ['present', 'absent', 'info']
+        choices: ['present', 'absent']
         default: present
+        type: str
     stripe_unit:
         description:
             - The amount of data in a data chunk, per stripe.
         required: false
+        type: str
     k:
         description:
             - Number of data-chunks the object will be split in
         required: false
+        type: str
     m:
         description:
             - Compute coding chunks for each object and store them on different
               OSDs.
         required: false
+        type: str
     plugin:
         description:
             - Use the erasure code plugin to compute coding chunks and recover
               missing chunks.
         required: false
+        type: str
     directory:
         description:
             - Set the directory name from which the erasure code plugin is
               loaded.
         required: false
-    crush_root:
-        description:
-            - The name of the crush bucket used for the first step of the CRUSH
-              rule.
-        required: false
+        type: str
     crush_device_class:
         description:
             - Restrict placement to devices of a specific class (hdd/ssd)
         required: false
+        type: str
 
 author:
     - Guillaume Abrioux <gabrioux@redhat.com>
-      Michal Nasiadka <michal@stackhpc.com>
+    - Michal Nasiadka <michal@stackhpc.com>
 '''
 
 EXAMPLES = '''
@@ -99,6 +95,14 @@ EXAMPLES = '''
     name: foo
     state: absent
 '''
+
+from ansible.module_utils.basic import AnsibleModule
+from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common \
+    import generate_ceph_cmd, exec_command, exit_module
+
+import datetime
+import json
+
 
 RETURN = '''#  '''
 
@@ -121,15 +125,15 @@ def create_profile(module, name, k, m, stripe_unit, crush_device_class, director
     Create a profile
     '''
 
-    args = ['set', name, 'k={}'.format(k), 'm={}'.format(m)]
+    args = ['set', name, 'k={0}'.format(k), 'm={0}'.format(m)]
     if stripe_unit:
-        args.append('stripe_unit={}'.format(stripe_unit))
+        args.append('stripe_unit={0}'.format(stripe_unit))
     if crush_device_class:
-        args.append('crush-device-class={}'.format(crush_device_class))
+        args.append('crush-device-class={0}'.format(crush_device_class))
     if directory:
-        args.append('directory={}'.format(plugin))
+        args.append('directory={0}'.format(plugin))
     if plugin:
-        args.append('plugin={}'.format(plugin))
+        args.append('plugin={0}'.format(plugin))
     if force:
         args.append('--force')
 
@@ -234,11 +238,11 @@ def run_module():
     elif state == "absent":
         rc, cmd, out, err = exec_command(module, delete_profile(module, name))  # noqa: E501
         if not err:
-            out = 'Profile {} removed.'.format(name)
+            out = 'Profile {0} removed.'.format(name)
             changed = True
         else:
             rc = 0
-            out = "Skipping, the profile {} doesn't exist".format(name)
+            out = "Skipping, the profile {0} doesn't exist".format(name)
 
     exit_module(module=module, out=out, rc=rc, cmd=cmd, err=err, startd=startd, changed=changed)  # noqa: E501
 

@@ -1,4 +1,3 @@
 ansible>=2.9
 ansible-lint<7
 antsibull-changelog
-flake8<5
