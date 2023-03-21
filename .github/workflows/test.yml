@@ -27,7 +27,7 @@ jobs:
           ansible-lint -v --force-color
           antsibull-changelog lint
 
-  ansible-test-sanity:
+  ansible-test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -53,8 +53,26 @@ jobs:
         run: |
           ansible-test sanity --verbose --docker --junit
 
+      - name: Run ansible-test units
+        working-directory: ansible_collections/stackhpc/cephadm
+        run: |
+          ansible-test units --verbose --docker --coverage
+          ansible-test coverage xml
+          ansible-test coverage html
+
+      - name: Print coverage report
+        working-directory: ansible_collections/stackhpc/cephadm
+        run: |
+          ansible-test coverage report
+
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v3
         if: success() || failure() # always run even if the previous step fails
         with:
-          report_paths: '**/tests/output/junit/*.xml'
+          report_paths: '**/tests/output/*/*.xml'
+
+      - name: Upload HTML report 
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-html
+          path: ansible_collections/stackhpc/cephadm/tests/output/reports/coverage/

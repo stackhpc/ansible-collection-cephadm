@@ -1,3 +1,8 @@
 ansible>=2.9
 ansible-lint<7
 antsibull-changelog
+coverage<=6.5.0
+mock
+pytest
+pytest-forked
+pytest-xdist
