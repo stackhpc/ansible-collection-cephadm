@@ -1,2 +1,10 @@
+# antsibull-changelog cache
 /changelogs/.plugin-cache.yaml
+
+# ansible-test output
 /tests/output
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
