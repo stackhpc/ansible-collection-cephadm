@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 # Copyright 2018, Red Hat, Inc.
 # Copyright 2021, StackHPC, Ltd.
@@ -19,16 +19,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common \
-    import fatal, generate_ceph_cmd
-import datetime
-import json
-import os
-import struct
-import time
-import base64
-
 DOCUMENTATION = r'''
 ---
 module: cephadm_key
@@ -46,7 +36,8 @@ options:
     name:
         description:
             - name of the CephX key
-        required: true
+        required: false
+        type: str
     state:
         description:
             - If 'present' is used, the module creates a keyring
@@ -64,19 +55,27 @@ options:
               cephx keyring.
         required: false
         choices: ['present', 'update', 'absent', 'list', 'info',
-                  'generate_secret']
+                  'fetch_initial_keys', 'generate_secret']
         default: present
+        type: str
     caps:
         description:
             - CephX key capabilities
-        default: None
+        default: {}
         required: false
+        type: dict
     secret:
         description:
             - keyring's secret value
         required: false
-        default: None
-
+        default: ''
+        type: str
+    dest:
+        description:
+            - destination directory to save key
+        required: false
+        default: "/etc/ceph/"
+        type: str
     import_key:
         description:
             - Whether or not to import the created keyring into Ceph.
@@ -84,25 +83,66 @@ options:
               keyrings but not add them into Ceph.
         required: false
         default: True
+        type: bool
     output_format:
         description:
             - The key output format when retrieving the information of an
               entity.
         required: false
+        choices: ['json', 'plain', 'xml', 'yaml']
         default: json
+        type: str
+    attributes:
+        aliases:
+            - attr
+        description:
+            - File attributes
+        required: false
+        type: str
+    group:
+        description:
+            - Group name for file ownership
+        required: false
+        type: str
+    mode:
+        description:
+            - File permission mode
+        required: false
+        type: raw
+    owner:
+        description:
+            - File owner
+        required: false
+        type: str
+    selevel:
+        description:
+            - SELinux level
+        required: false
+        type: str
+    serole:
+        description:
+            - SELinux role
+        required: false
+        type: str
+    setype:
+        description:
+            - SELinux type
+        required: false
+        type: str
+    seuser:
+        description:
+            - SELinux user
+        required: false
+        type: str
+    unsafe_writes:
+        description:
+            - Enable unsafe writes
+        required: false
+        default: false
+        type: bool
 '''
 
 EXAMPLES = '''
-keys_to_create:
-  - name: client.key
-    secret: "AQAin8tUUK84ExAA/QgBtI7gEMWdmnvKBzlXdQ=="
-    caps:
-      mon: "allow rwx"
-      mds: "allow *"
-  - name: client.cle
-    caps:
-      mon: "allow r", osd: "allow *"
-
 - name: create cephx key
   ceph_key:
     name: "{{ item.name }}"
@@ -141,6 +181,16 @@ keys_to_create:
 '''
 
 RETURN = r''' # '''
+
+from ansible.module_utils.basic import AnsibleModule
+from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common \
+    import fatal, generate_ceph_cmd
+import datetime
+import json
+import os
+import struct
+import time
+import base64
 
 
 def str_to_bool(val):
@@ -329,8 +379,8 @@ def run_module():
         name=dict(type='str', required=False),
         state=dict(type='str', required=False, default='present', choices=['present', 'update', 'absent',  # noqa: E501
                                                                            'list', 'info', 'fetch_initial_keys', 'generate_secret']),  # noqa: E501
-        caps=dict(type='dict', required=False, default=None),
-        secret=dict(type='str', required=False, default=None, no_log=True),
+        caps=dict(type='dict', required=False, default={}),
+        secret=dict(type='str', required=False, default='', no_log=True),
         import_key=dict(type='bool', required=False, default=True),
         dest=dict(type='str', required=False, default='/etc/ceph/'),
         output_format=dict(type='str', required=False, default='json', choices=['json', 'plain', 'xml', 'yaml'])  # noqa: E501

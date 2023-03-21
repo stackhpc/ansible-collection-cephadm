@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 # Copyright 2020, Red Hat, Inc.
 # Copyright 2021, StackHPC, Ltd.
 # NOTE: Files adapted from github.com/ceph/ceph-ansible
@@ -15,6 +13,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
 
 import datetime
 
@@ -75,4 +76,4 @@ def fatal(message, module):
     if module:
         module.fail_json(msg=message, rc=1)
     else:
-        raise(Exception(message))
+        raise Exception(message)

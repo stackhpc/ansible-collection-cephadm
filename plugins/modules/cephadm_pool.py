@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 # Copyright 2020, Red Hat, Inc.
 # Copyright 2021, StackHPC, Ltd.
@@ -19,17 +19,11 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common \
-    import generate_ceph_cmd, exec_command, exit_module
-
-import datetime
-import json
-
 DOCUMENTATION = r'''
 module: cephadm_pool
-author: Guillaume Abrioux <gabrioux@redhat.com>
-        Michal Nasiadka <michal@stackhpc.com>
+author:
+    - Guillaume Abrioux <gabrioux@redhat.com>
+    - Michal Nasiadka <michal@stackhpc.com>
 short_description: Manage Ceph Pools
 version_added: "1.4.0"
 description:
@@ -39,6 +33,7 @@ options:
         description:
             - name of the Ceph pool
         required: true
+        type: str
     state:
         description:
             - If 'present' is used, the module creates a pool if it doesn't
@@ -49,71 +44,85 @@ options:
         required: false
         choices: ['present', 'absent', 'list']
         default: present
+        type: str
+    details:
+        description:
+            - show details when state is list
+        required: false
+        type: bool
     size:
         description:
             - set the replica size of the pool.
         required: false
-        default: 3
+        type: str
     min_size:
         description:
             - set the min_size parameter of the pool.
         required: false
         default: default to `osd_pool_default_min_size` (ceph)
+        type: str
     pg_num:
         description:
             - set the pg_num of the pool.
         required: false
         default: default to `osd_pool_default_pg_num` (ceph)
+        type: str
     pgp_num:
         description:
             - set the pgp_num of the pool.
         required: false
         default: default to `osd_pool_default_pgp_num` (ceph)
+        type: str
     pg_autoscale_mode:
         description:
             - set the pg autoscaler on the pool.
         required: false
         default: 'on'
+        type: str
     target_size_ratio:
         description:
             - set the target_size_ratio on the pool
         required: false
-        default: None
+        type: str
     pool_type:
         description:
             - set the pool type, either 'replicated' or 'erasure'
         required: false
         default: replicated
+        choices: ['replicated', 'erasure']
+        type: str
     erasure_profile:
         description:
             - When pool_type = 'erasure', set the erasure profile of the pool
         required: false
         default: default
+        type: str
     rule_name:
         description:
             - Set the crush rule name assigned to the pool
         required: false
-        default: replicated_rule␣when␣pool_type␣is␣erasure␣else␣none
+        type: str
     expected_num_objects:
         description:
             - Set the expected_num_objects parameter of the pool.
         required: false
-        default: 0
+        default: "0"
+        type: str
     application:
         description:
             - Set the pool application on the pool.
         required: false
         default: None
+        type: str
+    allow_ec_overwrites:
+        description:
+            - Set the allow_ec_overwrites paramter of the pool.
+        required: false
+        default: false
+        type: bool
 '''
 
 EXAMPLES = r'''
-pools:
-  - name: foo
-    size: 3
-    application: rbd
-    pool_type: 'replicated'
-    pg_autoscale_mode: 'on
-
 - hosts: all
   become: true
   tasks:
@@ -129,6 +138,13 @@ pools:
 '''
 
 RETURN = r'''#  '''
+
+from ansible.module_utils.basic import AnsibleModule
+from ansible_collections.stackhpc.cephadm.plugins.module_utils.cephadm_common \
+    import generate_ceph_cmd, exec_command, exit_module
+
+import datetime
+import json
 
 
 def check_pool_exist(name,
@@ -412,7 +428,7 @@ def update_pool(module, name, delta):
             if rc != 0:
                 return rc, cmd, out, err
 
-        report = report + "\n" + "{} has been updated: {} is now {}".format(name, key, delta[key]['value'])  # noqa: E501
+        report = report + "\n" + "{0} has been updated: {1} is now {2}".format(name, key, delta[key]['value'])  # noqa: E501
 
     out = report
     return rc, cmd, out, err
@@ -431,7 +447,7 @@ def run_module():
         pg_autoscale_mode=dict(type='str', required=False, default='on'),
         target_size_ratio=dict(type='str', required=False, default=None),
         pool_type=dict(type='str', required=False, default='replicated',
-                       choices=['replicated', 'erasure', '1', '3']),
+                       choices=['replicated', 'erasure']),
         erasure_profile=dict(type='str', required=False, default='default'),
         rule_name=dict(type='str', required=False, default=None),
         expected_num_objects=dict(type='str', required=False, default="0"),
@@ -543,7 +559,7 @@ def run_module():
                     delta.pop('pgp_num', None)
 
                 if len(delta) == 0:
-                    out = "Skipping pool {}.\nUpdating either 'size' on an erasure-coded pool or 'pg_num'/'pgp_num' on a pg autoscaled pool is incompatible".format(name)  # noqa: E501
+                    out = "Skipping pool {0}.\nUpdating either 'size' on an erasure-coded pool or 'pg_num'/'pgp_num' on a pg autoscaled pool is incompatible".format(name)  # noqa: E501
                 else:
                     rc, cmd, out, err = update_pool(module,
                                                     name,
@@ -552,7 +568,7 @@ def run_module():
                         changed = True
 
             else:
-                out = "Pool {} already exists and there is nothing to update.".format(name)  # noqa: E501
+                out = "Pool {0} already exists and there is nothing to update.".format(name)  # noqa: E501
         else:
             rc, cmd, out, err = exec_command(module,
                                              create_pool(name,
@@ -586,7 +602,7 @@ def run_module():
             changed = True
         else:
             rc = 0
-            out = "Skipped, since pool {} doesn't exist".format(name)
+            out = "Skipped, since pool {0} doesn't exist".format(name)
 
     exit_module(module=module, out=out, rc=rc, cmd=cmd, err=err, startd=startd,
                 changed=changed)
