@@ -21,9 +21,9 @@
          --ssh-user "{{ cephadm_ssh_user }}"
          {% endif %}
          {% if cephadm_registry_url | length > 0 %}
-         --registry-url={{ cephadm_registry_url }}
-         --registry-username={{ cephadm_registry_username }}
-         --registry-password={{ cephadm_registry_password }}
+         --registry-url "{{ cephadm_registry_url }}"
+         --registry-username "{{ cephadm_registry_username }}"
+         --registry-password "{{ cephadm_registry_password }}"
          {% endif %}
          --skip-pull
          {% if cephadm_fsid | length > 0 %}
