@@ -9,7 +9,7 @@
   command:
     cmd: >
          cephadm shell --
-         ceph orch daemon add osd {{ ansible_facts.hostname }}:{{ item }}
+         ceph orch daemon add osd {{ ansible_facts.nodename }}:{{ item }}
   become: true
   register: osd_add_result
   changed_when: not osd_add_result.stdout.startswith("Created no osd(s) on host")
