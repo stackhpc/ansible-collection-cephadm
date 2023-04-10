@@ -1,7 +1,7 @@
 ---
 - name: Execute custom commands
   command:
-    cmd: "cephadm shell -- ceph {{ item }}"
+    cmd: "cephadm shell -- {{ cephadm_command }} {{ item }}"
   register: cephadm_commands_result
   with_items: "{{ cephadm_commands }}"
   become: true
