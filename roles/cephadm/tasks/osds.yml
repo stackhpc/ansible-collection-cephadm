@@ -11,3 +11,7 @@
   delegate_to: "{{ omit if 'mons' in group_names else groups['mons'][0] }}"
   when: cephadm_osd_devices | length > 0
   with_items: "{{ cephadm_osd_devices }}"
+  vars:
+    # NOTE: Without this, the delegate hosts's ansible_host variable will not
+    # be respected.
+    ansible_host: "{{ hostvars[inventory_hostname].ansible_host if 'mons' in group_names else hostvars[groups['mons'][0]].ansible_host }}"
