@@ -29,6 +29,7 @@
 - name: Install cephadm package
   dnf:
     name: "cephadm"
+    install_weak_deps: false
     state: "{{ 'latest' if cephadm_package_update | bool else 'present' }}"
     update_cache: true
   become: true
