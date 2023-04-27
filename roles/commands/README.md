@@ -19,7 +19,14 @@ with at least one host in it - see the `cephadm` role for more details.
 
 ## Role variables
 
-* `cephadm_commands`: A list of commands to pass to `cephadm shell -- ceph`
+
+* `cephadm_command`: The command to use with the list of commands to execute - defaults to `ceph`, but can be any command found in the `quay.io/ceph/ceph:<tag>` image.
+   Example:
+   ```
+          cephadm_command: radosgw-admin
+   ```
+
+* `cephadm_commands`: A list of commands to pass to `cephadm shell -- {{ cephadm_command }}`
    Example:
    ```
           cephadm_commands:
