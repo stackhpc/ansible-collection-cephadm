@@ -18,7 +18,7 @@
     file: "ceph"
     name: "ceph-{{ item.0 + '-' + item.1 if item.0 == 'noarch' else item.1 }}"
     description: "Ceph {{ item.1 }} repo {{ item.0 }}"
-    baseurl: "https://download.ceph.com/rpm-{{ item.1 }}/el8/{{ item.0 }}"
+    baseurl: "https://download.ceph.com/rpm-{{ item.1 }}/el{{ ansible_facts.distribution_major_version }}/{{ item.0 }}"
     gpgcheck: true
     gpgkey: "https://download.ceph.com/keys/release.asc"
     state: "{{ 'present' if item.1 == cephadm_ceph_release else 'absent' }}"
