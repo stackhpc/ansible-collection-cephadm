@@ -1,4 +1,9 @@
 ---
+# We need to register this as a variable, otherwise it will not be interpreted
+# correctly when setting ansible_host in the next task.
+- name: Set a fact about the Ansible host
+  set_fact:
+    mon_ansible_host: "{{ hostvars[inventory_hostname].ansible_host }}"
 
 - name: Add OSDs individually
   command:
@@ -14,4 +19,4 @@
   vars:
     # NOTE: Without this, the delegate hosts's ansible_host variable will not
     # be respected.
-    ansible_host: "{{ hostvars[inventory_hostname].ansible_host if 'mons' in group_names else hostvars[groups['mons'][0]].ansible_host }}"
+    ansible_host: "{{ mon_ansible_host if 'mons' in group_names else hostvars[groups['mons'][0]].ansible_host }}"
