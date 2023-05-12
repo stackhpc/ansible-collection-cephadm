@@ -30,7 +30,7 @@ All Ceph hosts must be in the `ceph` group.
   * `cephadm_ceph_release`: Ceph release to deploy (default: pacific)
   * `cephadm_fsid`: FSID to use for cluster (default: empty - cephadm will generate FSID)
   * `cephadm_recreate`: If existing cluster should be destroyed and recreated (default: false)
-  * `cephadm_custom_repos`: If enabled - the role won't define yum/apt repositories (default: false)
+  * `cephadm_custom_repos`: If enabled - the role won't define yum/apt repositories. If using Ubuntu 22.04 this should be set to true. (default: false)
   * `cephadm_package_update`: If enabled - cephadm package will be updated to latest version (default: false)
   * `cephadm_host_labels`: If set (list format) - those additional labels will be applied to host definitions (default: [] - empty list)
   * Bootstrap settings
