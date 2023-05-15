@@ -30,9 +30,7 @@
   apt_repository:
     repo: "deb [signed-by={{ cephadm_apt_key_path }}] https://download.ceph.com/debian-{{ item }}/ {{ cephadm_apt_repo_dist }} main"
     state: "{{ 'present' if item == cephadm_ceph_release else 'absent' }}"
-# there are not yet official repos for Ubuntu 22.04 so we use canonical repo
-# see https://docs.ceph.com/en/latest/cephadm/install/#cephadm-install-distros
-  when: not cephadm_custom_repos | bool and item != "quincy"
+  when: not cephadm_custom_repos | bool
   become: true
   loop: "{{ cephadm_ceph_releases }}"
 
