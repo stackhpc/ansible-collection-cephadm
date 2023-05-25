@@ -48,6 +48,20 @@
   become: true
   changed_when: true
 
+- name: Set HAProxy image
+  command:
+    cmd: "cephadm shell -- ceph config set mgr mgr/cephadm/container_image_haproxy {{ cephadm_haproxy_image }}"
+  when: cephadm_haproxy_image | length > 0
+  become: true
+  changed_when: true
+
+- name: Set Keepalived image
+  command:
+    cmd: "cephadm shell -- ceph config set mgr mgr/cephadm/container_image_keepalived {{ cephadm_keepalived_image }}"
+  when: cephadm_keepalived_image | length > 0
+  become: true
+  changed_when: true
+
 - name: Get cluster fsid
   command:
     cmd: "cephadm shell -- ceph fsid"
