@@ -10,7 +10,13 @@ Tested with the current Ansible 2.9 and 2.10 releases.
 
 ## Included content
 
-cephadm role for deployment/bootstrapping
+Roles:
+* [cephadm](roles/cephadm/README.md) for deployment/bootstrapping
+* [commands](roles/commands/README.md) for running arbitrary commands
+* [crush_rules](roles/crush_rules/README.md) for defining CRUSH rules
+* [ec_profiles](roles/ec_profiles/README.md) for defining EC profiles
+* [keys](roles/keys/README.md) for defining auth keys
+* [pools](roles/pools/README.md) for defining pools
 
 ## Using this collection
 
