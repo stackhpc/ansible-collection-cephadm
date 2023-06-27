@@ -3,7 +3,7 @@
 service_type: host
 hostname: {{ hostvars[host].ansible_facts.hostname }}
 {% set cephadm_admin_interface = hostvars[host]['cephadm_admin_interface'] %}
-addr: {{ hostvars[host]['ansible_facts'][cephadm_admin_interface]['ipv4']['address'] }}
+addr:  {{ hostvars[host]['ansible_all_ipv4_addresses'] | ipaddr( cephadm_public_network ) | first }} 
 labels:
 {% if host in groups['mons'] %}
   - _admin
