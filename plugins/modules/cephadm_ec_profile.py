@@ -164,7 +164,7 @@ def run_module():
         stripe_unit=dict(type='str', required=False),
         k=dict(type='str', required=False),
         m=dict(type='str', required=False),
-        crush_device_class=dict(type='str', required=False, default=''),
+        crush_device_class=dict(type='str', required=False),
         directory=dict(type='str', required=False),
         plugin=dict(type='str', required=False),
     )
