@@ -1,0 +1,13 @@
+plugins/modules/cephadm_pool.py pylint:disallowed-name
+plugins/modules/cephadm_crush_rule.py validate-modules:missing-gplv3-license
+plugins/modules/cephadm_crush_rule.py validate-modules:parameter-state-invalid-choice
+plugins/modules/cephadm_crush_rule.py validate-modules:invalid-documentation
+plugins/modules/cephadm_ec_profile.py validate-modules:invalid-documentation
+plugins/modules/cephadm_ec_profile.py validate-modules:missing-gplv3-license
+plugins/modules/cephadm_key.py validate-modules:invalid-documentation
+plugins/modules/cephadm_key.py validate-modules:missing-gplv3-license
+plugins/modules/cephadm_key.py validate-modules:parameter-state-invalid-choice
+plugins/modules/cephadm_pool.py validate-modules:missing-gplv3-license
+plugins/modules/cephadm_pool.py validate-modules:parameter-state-invalid-choice
+plugins/modules/cephadm_pool.py validate-modules:invalid-documentation
+plugins/modules/cephadm_pool.py validate-modules:doc-default-does-not-match-spec
