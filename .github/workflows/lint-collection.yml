@@ -1,0 +1,7 @@
+---
+name: Ansible collection linters
+'on':
+  pull_request:
+jobs:
+  lint:
+    uses: stackhpc/.github/.github/workflows/lint-collection.yml@main
