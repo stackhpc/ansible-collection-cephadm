@@ -8,8 +8,10 @@ cephadm_recreate: false
 # Packages
 cephadm_custom_repos: false
 cephadm_package_update: false
-# Image
+# Images
 cephadm_image: ""
+cephadm_haproxy_image: ""
+cephadm_keepalived_image: ""
 # Registry
 cephadm_registry_url: ""
 cephadm_registry_username: ""
