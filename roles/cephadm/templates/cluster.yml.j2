@@ -49,6 +49,15 @@ placement:
 {% if service.count_per_host is defined %}
   count_per_host: {{ service.count_per_host }}
 {% endif %}
+{% if service.networks is defined %}
+{% if service.networks is string %}
+networks:
+  - "{{ service.networks }}"
+{% else %}
+networks:
+  {{ service.networks | to_nice_yaml }}
+{% endif %}
+{% endif %}
 {% if service.spec is defined %}
 spec:
   {{ service.spec | to_nice_yaml }}
