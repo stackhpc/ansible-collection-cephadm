@@ -1,6 +1,6 @@
 ---
 - name: Copy cephadm public key to all hosts
-  authorized_key:
+  ansible.posix.authorized_key:
     user: "{{ cephadm_ssh_user }}"
     state: present
     key: "{{ hostvars[cephadm_bootstrap_host].cephadm_ssh_public_key_content }}"
