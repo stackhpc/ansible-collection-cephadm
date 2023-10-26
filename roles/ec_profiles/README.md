@@ -28,4 +28,4 @@ This role assumes the existence of the following groups:
 
    ```
 
-Check Erasure Code profiles [docs](https://docs.ceph.com/en/pacific/rados/operations/erasure-code-profile/#osd-erasure-code-profile-set) for supported key options.
+Check Erasure Code profiles [docs](https://docs.ceph.com/en/quincy/rados/operations/erasure-code-profile/#osd-erasure-code-profile-set) for supported key options.
