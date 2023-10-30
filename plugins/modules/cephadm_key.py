@@ -155,7 +155,7 @@ EXAMPLES = '''
     name: "{{ item.name }}"
     state: present
     caps: "{{ item.caps }}"
-    import_key: False
+    import_key: false
   with_items: "{{ keys_to_create }}"
 
 - name: delete cephx key

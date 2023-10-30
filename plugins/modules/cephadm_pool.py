@@ -123,10 +123,11 @@ options:
 '''
 
 EXAMPLES = r'''
-- hosts: all
+- name: Ensure pools are defined
+  hosts: all
   become: true
   tasks:
-    - name: create a pool
+    - name: Create a pool
       ceph_pool:
         name: "{{ item.name }}"
         state: present
