@@ -27,7 +27,7 @@ All Ceph hosts must be in the `ceph` group.
 ## Role variables
 
 * General
-  * `cephadm_ceph_release`: Ceph release to deploy (default: pacific)
+  * `cephadm_ceph_release`: Ceph release to deploy (default: quincy)
   * `cephadm_fsid`: FSID to use for cluster (default: empty - cephadm will generate FSID)
   * `cephadm_recreate`: If existing cluster should be destroyed and recreated (default: false)
   * `cephadm_custom_repos`: If enabled - the role won't define yum/apt repositories. If using Ubuntu 22.04 this should be set to true. (default: false)
