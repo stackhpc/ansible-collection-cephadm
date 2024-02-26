@@ -11,5 +11,5 @@
     crush_root: "{{ item.crush_root | default(omit) }}"
     crush_device_class: "{{ item.crush_device_class | default(omit) }}"
   with_items: "{{ cephadm_ec_profiles }}"
-  delegate_to: "{{ groups['mons'][0] }}"
+  delegate_to: "{{ cephadm_bootstrap_host }}"
   run_once: true
