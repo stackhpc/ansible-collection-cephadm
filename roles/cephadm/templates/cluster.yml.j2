@@ -59,8 +59,7 @@ networks:
 {% endif %}
 {% endif %}
 {% if service.spec is defined %}
-spec:
-  {{ service.spec | to_nice_yaml }}
+{{ {"spec": service.spec} | to_nice_yaml(indent=2) }}
 {% endif %}
 {% endfor %}
 {% endif %}
@@ -72,6 +71,6 @@ service_id: {{ service.id }}
 placement:
   label: ingress
 spec:
-  {{ service.spec | to_nice_yaml }}
+{{ {"spec": service.spec} | to_nice_yaml(indent=2) }}
 {% endfor %}
 {% endif %}
