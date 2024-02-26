@@ -56,9 +56,9 @@ jobs:
       - name: Run ansible-test units
         working-directory: ansible_collections/stackhpc/cephadm
         run: |
-          ansible-test units --verbose --docker --coverage
-          ansible-test coverage xml
-          ansible-test coverage html
+          ansible-test units --verbose --docker --coverage --requirements
+          ansible-test coverage xml --requirements
+          ansible-test coverage html --requirements
 
       - name: Print coverage report
         working-directory: ansible_collections/stackhpc/cephadm
