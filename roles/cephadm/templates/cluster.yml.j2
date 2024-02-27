@@ -70,7 +70,6 @@ service_type: ingress
 service_id: {{ service.id }}
 placement:
   label: ingress
-spec:
 {{ {"spec": service.spec} | to_nice_yaml(indent=2) }}
 {% endfor %}
 {% endif %}
