@@ -1,0 +1,24 @@
+name: AutoTagBot
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      # This would not be necessary, as AutoTagBot skips already tagged versions
+      # It is however desirable to not trigger this workflow if not required
+      - galaxy.yml
+
+jobs:
+  auto-tag-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Release new versions using AutoTagBot
+        uses: snapserv/action-autotagbot@master
+        with:
+          api_token: '${{ secrets.GITHUB_TOKEN }}'
+          source_file: 'galaxy.yml'
+          version_pattern: '"version"\s*:\s*"(?<version>[0-9.]+)"'
