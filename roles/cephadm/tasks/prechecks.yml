@@ -5,3 +5,7 @@
 - name: Set cephadm_bootstrap
   set_fact:
     cephadm_bootstrap: "{{ ansible_facts.services | dict2items | selectattr('key', 'match', '^ceph.*') | list | length == 0 }}"
+
+- name: Check if specified container engine is installed
+  command: "which {{ cephadm_container_engine }}"
+  changed_when: false
