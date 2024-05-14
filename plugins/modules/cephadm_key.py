@@ -40,7 +40,7 @@ options:
         type: str
     state:
         description:
-            - If 'present' is used, the module ensures a keyring
+            - If 'present' is used, the module ensures a keyring exists
               with the associated capabilities.
               If 'absent' is used, the module will simply delete the keyring.
               If 'list' is used, the module will list all the keys and will
