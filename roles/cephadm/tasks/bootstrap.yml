@@ -1,7 +1,7 @@
 ---
 - name: Bootstrap cephadm
   vars:
-    mon_ip: "{{ hostvars[inventory_hostname].ansible_facts[cephadm_public_interface].ipv4.address }}"
+    mon_ip: "{{ hostvars[inventory_hostname].ansible_facts[cephadm_public_interface | replace('-', '_')].ipv4.address }}"
     monitoring_stack: "{{ '--skip-monitoring-stack' if not (cephadm_enable_monitoring | bool) else '' }}"
     dashboard: "{{ '--skip-dashboard' if not cephadm_enable_dashboard | bool else '' }}"
     firewalld: "{{ '--skip-firewalld' if not cephadm_enable_firewalld | bool else '' }}"
