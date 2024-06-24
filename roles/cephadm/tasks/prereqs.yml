@@ -32,3 +32,22 @@
     - cephadm_registry_username | length > 0
     - cephadm_container_engine == 'docker'
   become: true
+
+- name: Pull ceph image with Podman
+  containers.podman.podman_image:
+    name: "{{ cephadm_image }}"
+    state: present
+  when:
+    - cephadm_image | length > 0
+    - cephadm_container_engine == 'podman'
+  become: true
+
+- name: Pull ceph image with Docker
+  docker_image:
+    source: pull
+    name: "{{ cephadm_image }}"
+    state: present
+  when:
+    - cephadm_image | length > 0
+    - cephadm_container_engine == 'docker'
+  become: true
