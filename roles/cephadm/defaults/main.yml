@@ -44,3 +44,5 @@ cephadm_osd_spec: []
 cephadm_radosgw_services: []
 # Ingress
 cephadm_ingress_services: []
+# Container Engine
+cephadm_container_engine: "docker"

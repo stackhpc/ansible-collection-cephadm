@@ -14,9 +14,21 @@
   become: true
 
 - name: Log into Docker registry
+  containers.podman.podman_login:
+    registry: "{{ cephadm_registry_url }}"
+    username: "{{ cephadm_registry_username }}"
+    password: "{{ cephadm_registry_password }}"
+  when:
+    - cephadm_registry_username | length > 0
+    - cephadm_container_engine == 'podman'
+  become: true
+
+- name: Log into Docker registry
   docker_login:
     registry: "{{ cephadm_registry_url }}"
     username: "{{ cephadm_registry_username }}"
     password: "{{ cephadm_registry_password }}"
-  when: cephadm_registry_username | length > 0
+  when:
+    - cephadm_registry_username | length > 0
+    - cephadm_container_engine == 'docker'
   become: true
