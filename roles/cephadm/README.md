@@ -27,7 +27,7 @@ All Ceph hosts must be in the `ceph` group.
 ## Role variables
 
 * General
-  * `cephadm_ceph_release`: Ceph release to deploy (default: quincy)
+  * `cephadm_ceph_release`: Ceph release to deploy (default: reef)
   * `cephadm_container_engine`: Whether to use docker_login or podman_login (default: docker)
   * `cephadm_fsid`: FSID to use for cluster (default: empty - cephadm will generate FSID)
   * `cephadm_recreate`: If existing cluster should be destroyed and recreated (default: false)
