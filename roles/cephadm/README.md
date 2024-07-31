@@ -31,7 +31,7 @@ All Ceph hosts must be in the `ceph` group.
   * `cephadm_container_engine`: Whether to use docker_login or podman_login (default: docker)
   * `cephadm_fsid`: FSID to use for cluster (default: empty - cephadm will generate FSID)
   * `cephadm_recreate`: If existing cluster should be destroyed and recreated (default: false)
-  * `cephadm_custom_repos`: If enabled - the role won't define yum/apt repositories. If using Ubuntu 22.04 this should be set to true. (default: false)
+  * `cephadm_custom_repos`: Boolean: disables configuring offical Ceph YUM/APT repositories - `cephadm_ceph_release` is ignored. Can serve as a workaround for a lack of supported OS distro + Ceph release combination upstream. (default: false)
   * `cephadm_package_update`: If enabled - cephadm package will be updated to latest version (default: false)
   * `cephadm_host_labels`: If set (list format) - those additional labels will be applied to host definitions (default: [] - empty list)
   * Bootstrap settings
