@@ -8,5 +8,5 @@
   changed_when: true
   when: cephadm_commands | length > 0
 
-  delegate_to: "{{ groups['mons'][0] }}"
+  delegate_to: "{{ cephadm_bootstrap_host }}"
   run_once: true

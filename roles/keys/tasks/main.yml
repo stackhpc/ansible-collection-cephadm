@@ -6,5 +6,5 @@
     caps: "{{ item.caps }}"
     secret: "{{ item.key | default(omit) }}"
   with_items: "{{ cephadm_keys }}"
-  delegate_to: "{{ groups['mons'][0] }}"
+  delegate_to: "{{ cephadm_bootstrap_host }}"
   run_once: true
