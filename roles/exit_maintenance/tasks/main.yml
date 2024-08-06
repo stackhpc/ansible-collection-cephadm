@@ -1,0 +1,25 @@
+---
+- name: Assert that execution is serialised
+  ansible.builtin.assert:
+    that:
+      - ansible_play_batch | length == 1
+    fail_msg: >-
+      Hosts must be removed from maintenance one at a time.
+
+- name: List hosts
+  ansible.builtin.import_role:
+    name: stackhpc.cephadm.commands
+  vars:
+    cephadm_commands:
+      - "orch host ls --format json-pretty"
+
+# Exiting maintenance fails if the host is not in maintenance or offline.
+- name: Exit maintenance
+  ansible.builtin.include_tasks: exit.yml
+  when: cephadm_host_status.status | lower in ["maintenance", "offline"]
+  vars:
+    cephadm_host_status: >-
+      {{ cephadm_commands_result.results[0].stdout |
+         from_json |
+         selectattr('hostname', 'equalto', ansible_facts.nodename) |
+         first }}

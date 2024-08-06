@@ -1,0 +1,39 @@
+---
+- name: Check if host can enter maintenance mode
+  ansible.builtin.import_role:
+    name: stackhpc.cephadm.commands
+  vars:
+    cephadm_commands:
+      - "orch host ok-to-stop {{ ansible_facts.nodename }}"
+
+# Annoyingly, 'ceph orch host ok-to-stop' does not exit non-zero when
+# it is not OK to stop, so we need to check for specific messages.
+- name: Assert that it is safe to stop host
+  ansible.builtin.assert:
+    that:
+      # This one is seen for monitors
+      - "'It is NOT safe' not in cephadm_commands_result.results[0].stderr"
+      # This one is seen for OSDs
+      - "'unsafe to stop' not in cephadm_commands_result.results[0].stderr"
+    fail_msg: "{{ cephadm_commands_result.results[0].stderr }}"
+
+- name: Fail over Ceph manager
+  when: '"Cannot stop active Mgr daemon" in cephadm_commands_result.results[0].stderr'
+  block:
+    - name: Extract full name of active Ceph manager
+      ansible.builtin.set_fact:
+        active_ceph_mgr: "{{ cephadm_commands_result.results[0].stderr | split | last | replace(\"'\", '') }}"
+
+    - name: Ensure active manager has been switched to another node
+      ansible.builtin.import_role:
+        name: stackhpc.cephadm.commands
+      vars:
+        cephadm_commands:
+          - "mgr fail {{ active_ceph_mgr }}"
+
+- name: Ensure host is in maintenance mode
+  ansible.builtin.import_role:
+    name: stackhpc.cephadm.commands
+  vars:
+    cephadm_commands:
+      - "orch host maintenance enter {{ ansible_facts.nodename }}"
