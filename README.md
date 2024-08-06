@@ -15,6 +15,8 @@ Roles:
 * [commands](roles/commands/README.md) for running arbitrary commands
 * [crush_rules](roles/crush_rules/README.md) for defining CRUSH rules
 * [ec_profiles](roles/ec_profiles/README.md) for defining EC profiles
+* [enter_maintenance](roles/enter_maintenance/README.md) for placing hosts into maintenance
+* [exit_maintenance](roles/exit_maintenance/README.md) for removing hosts from maintenance
 * [keys](roles/keys/README.md) for defining auth keys
 * [pools](roles/pools/README.md) for defining pools
 
