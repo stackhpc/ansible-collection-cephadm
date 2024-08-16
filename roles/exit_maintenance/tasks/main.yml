@@ -7,7 +7,7 @@
       Hosts must be removed from maintenance one at a time.
 
 - name: List hosts
-  ansible.builtin.import_role:
+  ansible.builtin.include_role:
     name: stackhpc.cephadm.commands
   vars:
     cephadm_commands:

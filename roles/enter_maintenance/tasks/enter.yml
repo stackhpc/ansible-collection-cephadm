@@ -1,6 +1,6 @@
 ---
 - name: Check if host can enter maintenance mode
-  ansible.builtin.import_role:
+  ansible.builtin.include_role:
     name: stackhpc.cephadm.commands
   vars:
     cephadm_commands:
@@ -18,7 +18,7 @@
     fail_msg: "{{ cephadm_commands_result.results[0].stderr }}"
 
 - name: Fail over Ceph manager
-  ansible.builtin.import_role:
+  ansible.builtin.include_role:
     name: stackhpc.cephadm.commands
   vars:
     cephadm_commands:
@@ -26,7 +26,7 @@
   when: '"Cannot stop active Mgr daemon" in cephadm_commands_result.results[0].stderr'
 
 - name: Ensure host is in maintenance mode
-  ansible.builtin.import_role:
+  ansible.builtin.include_role:
     name: stackhpc.cephadm.commands
   vars:
     cephadm_commands:

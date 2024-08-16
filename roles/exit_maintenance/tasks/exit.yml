@@ -1,6 +1,6 @@
 ---
 - name: Ensure host has exited maintenance mode
-  ansible.builtin.import_role:
+  ansible.builtin.include_role:
     name: stackhpc.cephadm.commands
   vars:
     cephadm_commands:
