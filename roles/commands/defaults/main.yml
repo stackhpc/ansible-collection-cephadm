@@ -1,3 +1,6 @@
 ---
 cephadm_command: ceph
 cephadm_commands: []
+cephadm_commands_until: true
+cephadm_commands_retries: 0
+cephadm_commands_delay: 0

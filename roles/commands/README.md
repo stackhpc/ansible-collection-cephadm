@@ -33,3 +33,9 @@ with at least one host in it - see the `cephadm` role for more details.
             - "fs new cephfs cephfs_metadata cephfs_data"
             - "orch apply mds cephfs --placement 3"
    ```
+
+* `cephadm_commands_until` A expression to evaluate to allow retrying commands. May reference the registered result variable, `cephadm_commands_result`. Default is `true` (do not use retries).
+
+* `cephadm_commands_retries`: Number of retries to use with `cephadm_commands_until`. Default is 0.
+
+* `cephadm_commands_delay`: Delay between retries with `cephadm_commands_until`. Default is 0.
