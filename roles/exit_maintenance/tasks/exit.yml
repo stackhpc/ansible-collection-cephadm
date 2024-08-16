@@ -4,4 +4,4 @@
     name: stackhpc.cephadm.commands
   vars:
     cephadm_commands:
-      - "orch host maintenance exit {{ ansible_facts.nodename }}"
+      - "orch host maintenance exit {{ cephadm_hostname }}"

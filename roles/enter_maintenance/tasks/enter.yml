@@ -4,7 +4,7 @@
     name: stackhpc.cephadm.commands
   vars:
     cephadm_commands:
-      - "orch host ok-to-stop {{ ansible_facts.nodename }}"
+      - "orch host ok-to-stop {{ cephadm_hostname }}"
 
 # Annoyingly, 'ceph orch host ok-to-stop' does not exit non-zero when
 # it is not OK to stop, so we need to check for specific messages.
@@ -30,4 +30,4 @@
     name: stackhpc.cephadm.commands
   vars:
     cephadm_commands:
-      - "orch host maintenance enter {{ ansible_facts.nodename }}"
+      - "orch host maintenance enter {{ cephadm_hostname }}"

@@ -17,7 +17,7 @@
 # Entering maintenance fails if the host is already in maintenance.
 - name: Enter maintenance
   ansible.builtin.include_tasks: enter.yml
-  when: ansible_facts.nodename not in cephadm_hosts_in_maintenance
+  when: cephadm_hostname not in cephadm_hosts_in_maintenance
   vars:
     cephadm_hosts_in_maintenance: >-
       {{ cephadm_commands_result.results[0].stdout |
