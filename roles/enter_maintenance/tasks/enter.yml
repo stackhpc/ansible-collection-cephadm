@@ -18,18 +18,12 @@
     fail_msg: "{{ cephadm_commands_result.results[0].stderr }}"
 
 - name: Fail over Ceph manager
+  ansible.builtin.import_role:
+    name: stackhpc.cephadm.commands
+  vars:
+    cephadm_commands:
+      - "mgr fail"
   when: '"Cannot stop active Mgr daemon" in cephadm_commands_result.results[0].stderr'
-  block:
-    - name: Extract full name of active Ceph manager
-      ansible.builtin.set_fact:
-        active_ceph_mgr: "{{ cephadm_commands_result.results[0].stderr | split | last | replace(\"'\", '') }}"
-
-    - name: Ensure active manager has been switched to another node
-      ansible.builtin.import_role:
-        name: stackhpc.cephadm.commands
-      vars:
-        cephadm_commands:
-          - "mgr fail {{ active_ceph_mgr }}"
 
 - name: Ensure host is in maintenance mode
   ansible.builtin.import_role:
