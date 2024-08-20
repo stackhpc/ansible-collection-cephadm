@@ -1,0 +1,7 @@
+---
+- name: Ensure host has exited maintenance mode
+  ansible.builtin.include_role:
+    name: stackhpc.cephadm.commands
+  vars:
+    cephadm_commands:
+      - "orch host maintenance exit {{ cephadm_hostname }}"

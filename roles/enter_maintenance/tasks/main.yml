@@ -1,0 +1,26 @@
+---
+- name: Assert that execution is serialised
+  ansible.builtin.assert:
+    that:
+      - ansible_play_batch | length == 1
+    fail_msg: >-
+      Hosts must be placed into maintenance one at a time in order to first check
+      whether it is safe to stop them.
+
+- name: List hosts in maintenance
+  ansible.builtin.include_role:
+    name: stackhpc.cephadm.commands
+  vars:
+    cephadm_commands:
+      - "orch host ls --format json-pretty --host_status maintenance"
+
+# Entering maintenance fails if the host is already in maintenance.
+- name: Enter maintenance
+  ansible.builtin.include_tasks: enter.yml
+  when: cephadm_hostname not in cephadm_hosts_in_maintenance
+  vars:
+    cephadm_hosts_in_maintenance: >-
+      {{ cephadm_commands_result.results[0].stdout |
+         from_json |
+         map(attribute='hostname') |
+         list }}

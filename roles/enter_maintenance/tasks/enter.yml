@@ -1,0 +1,68 @@
+---
+- name: Check if host can enter maintenance mode
+  ansible.builtin.include_role:
+    name: stackhpc.cephadm.commands
+  vars:
+    cephadm_commands:
+      - "orch host ok-to-stop {{ cephadm_hostname }}"
+
+# Annoyingly, 'ceph orch host ok-to-stop' does not exit non-zero when
+# it is not OK to stop, so we need to check for specific messages.
+- name: Assert that it is safe to stop host
+  ansible.builtin.assert:
+    that:
+      # This one is seen for monitors
+      - "'It is NOT safe' not in cephadm_commands_result.results[0].stderr"
+      # This one is seen for OSDs
+      - "'unsafe to stop' not in cephadm_commands_result.results[0].stderr"
+    fail_msg: "{{ cephadm_commands_result.results[0].stderr }}"
+
+- name: Fail over Ceph manager
+  ansible.builtin.include_role:
+    name: stackhpc.cephadm.commands
+  vars:
+    cephadm_commands:
+      - "mgr fail"
+  when: '"Cannot stop active Mgr daemon" in cephadm_commands_result.results[0].stderr'
+
+# RADOS Gateway services prevent a host from entering maintenance.
+# Remove the rgw label from the host and wait for Ceph orchestrator to remove
+# the service from the host.
+- name: Stop RADOS Gateway service
+  when: "'rgws' in group_names"
+  block:
+    - name: Ensure rgw label has been removed from node
+      ansible.builtin.include_role:
+        name: stackhpc.cephadm.commands
+      vars:
+        cephadm_commands:
+          - "orch host label rm {{ cephadm_hostname }} rgw"
+
+    - name: Wait for RADOS Gateway service to stop
+      ansible.builtin.include_role:
+        name: stackhpc.cephadm.commands
+      vars:
+        cephadm_commands:
+          - "orch ls rgw --format json-pretty"
+        cephadm_commands_until: >-
+          {{ (cephadm_commands_result.stdout | from_json)[0].status.running ==
+             (cephadm_commands_result.stdout | from_json)[0].status.size }}
+        cephadm_commands_retries: 30
+        cephadm_commands_delay: 10
+
+- name: Ensure host is in maintenance mode
+  block:
+    - name: Ensure host is in maintenance mode
+      ansible.builtin.include_role:
+        name: stackhpc.cephadm.commands
+      vars:
+        cephadm_commands:
+          - "orch host maintenance enter {{ cephadm_hostname }}"
+  always:
+    - name: Ensure rgw label has been added to node
+      ansible.builtin.include_role:
+        name: stackhpc.cephadm.commands
+      vars:
+        cephadm_commands:
+          - "orch host label add {{ cephadm_hostname }} rgw"
+      when: "'rgws' in group_names"
