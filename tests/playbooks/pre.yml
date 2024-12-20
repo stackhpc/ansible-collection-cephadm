@@ -1,0 +1,17 @@
+---
+- hosts: all
+  any_errors_fatal: true
+  vars:
+    logs_dir: "/tmp/logs"
+  tasks:
+    - name: Ensure logs dir
+      file:
+        path: "{{ logs_dir }}"
+        state: "directory"
+
+    - name: Install Python
+      become: true
+      package:
+        name:
+          - python3-pip
+          - python3-setuptools
