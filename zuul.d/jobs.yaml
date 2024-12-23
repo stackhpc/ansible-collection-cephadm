@@ -1,0 +1,6 @@
+---
+- job:
+    name: cephadm-jammy-singlenode
+    parent: cephadm-base
+    nodeset: cephadm-jammy-single
+    voting: false
