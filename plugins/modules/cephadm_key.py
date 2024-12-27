@@ -69,31 +69,31 @@ options:
 
 EXAMPLES = '''
 - name: create cephx key
-  ceph_key:
+  cephadm_key:
     name: "{{ item.name }}"
     state: present
     caps: "{{ item.caps }}"
   with_items: "{{ keys_to_create }}"
 
 - name: delete cephx key
-  ceph_key:
+  cephadm_key:
     name: "my_key"
     state: absent
 
 - name: info cephx key
-  ceph_key:
+  cephadm_key:
     name: "my_key"
     state: info
 
 - name: info cephx admin key (plain)
-  ceph_key:
+  cephadm_key:
     name: client.admin
     output_format: plain
     state: info
   register: client_admin_key
 
 - name: list cephx keys
-  ceph_key:
+  cephadm_key:
     state: list
 '''
 
