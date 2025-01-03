@@ -17,3 +17,4 @@
   with_items: "{{ cephadm_pools }}"
   delegate_to: "{{ groups['mons'][0] }}"
   run_once: true
+  become: true
