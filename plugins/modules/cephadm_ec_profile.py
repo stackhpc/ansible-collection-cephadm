@@ -77,6 +77,11 @@ options:
             - Restrict placement to devices of a specific class (hdd/ssd)
         required: false
         type: str
+    crush_failure_domain:
+        description:
+            - Set the failure domain for the CRUSH rule (e.g., 'rack', 'host', 'osd')
+        required: false
+        type: str
 
 author:
     - Guillaume Abrioux <gabrioux@redhat.com>
@@ -94,6 +99,13 @@ EXAMPLES = '''
   cephadm_ec_profile:
     name: foo
     state: absent
+
+- name: create an erasure code profile with custom failure domain
+  cephadm_ec_profile:
+    name: foo-osd
+    k: 4
+    m: 2
+    crush_failure_domain: osd
 '''
 
 from ansible.module_utils.basic import AnsibleModule
@@ -120,7 +132,7 @@ def get_profile(module, name):
     return cmd
 
 
-def create_profile(module, name, k, m, stripe_unit, crush_device_class, directory, plugin, force=False):  # noqa: E501
+def create_profile(module, name, k, m, stripe_unit, crush_device_class, crush_failure_domain, directory, plugin, force=False):  # noqa: E501
     '''
     Create a profile
     '''
@@ -130,6 +142,8 @@ def create_profile(module, name, k, m, stripe_unit, crush_device_class, director
         args.append('stripe_unit={0}'.format(stripe_unit))
     if crush_device_class:
         args.append('crush-device-class={0}'.format(crush_device_class))
+    if crush_failure_domain:
+        args.append('crush-failure-domain={0}'.format(crush_failure_domain))
     if directory:
         args.append('directory={0}'.format(plugin))
     if plugin:
@@ -165,6 +179,7 @@ def run_module():
         k=dict(type='str', required=False),
         m=dict(type='str', required=False),
         crush_device_class=dict(type='str', required=False),
+        crush_failure_domain=dict(type='str', required=False),
         directory=dict(type='str', required=False),
         plugin=dict(type='str', required=False),
     )
@@ -182,6 +197,7 @@ def run_module():
     k = module.params.get('k')
     m = module.params.get('m')
     crush_device_class = module.params.get('crush_device_class')
+    crush_failure_domain = module.params.get('crush_failure_domain')
     directory = module.params.get('directory')
     plugin = module.params.get('plugin')
 
@@ -209,6 +225,7 @@ def run_module():
                current_profile['m'] != m or \
                current_profile.get('stripe_unit', stripe_unit) != stripe_unit or \
                current_profile.get('crush-device-class', crush_device_class) != crush_device_class or \
+               current_profile.get('crush-failure-domain', crush_failure_domain) != crush_failure_domain or \
                current_profile.get('directory', directory) != directory or \
                current_profile.get('plugin', plugin) != plugin:  # noqa: E501
                 rc, cmd, out, err = exec_command(module,
@@ -218,6 +235,7 @@ def run_module():
                                                                 m,
                                                                 stripe_unit,
                                                                 crush_device_class,  # noqa: E501
+                                                                crush_failure_domain,
                                                                 directory,
                                                                 plugin,
                                                                 force=True))  # noqa: E501
@@ -230,6 +248,7 @@ def run_module():
                                                                     m,
                                                                     stripe_unit,  # noqa: E501
                                                                     crush_device_class,  # noqa: E501
+                                                                    crush_failure_domain,
                                                                     directory,
                                                                     plugin))
             if rc == 0:

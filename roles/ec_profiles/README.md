@@ -25,6 +25,10 @@ This role assumes the existence of the following groups:
               m: 2
             - name: delete_me
               state: absent
+            - name: foo-osd
+              k: 4
+              m: 2
+              crush_failure_domain: osd
 
    ```
 

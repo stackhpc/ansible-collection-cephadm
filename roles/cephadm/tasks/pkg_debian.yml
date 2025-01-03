@@ -40,3 +40,20 @@
     state: "{{ 'latest' if cephadm_package_update | bool else 'present' }}"
     update_cache: true
   become: true
+  timeout: 600
+  ignore_errors: true
+  register: cephadm_install
+  retries: 3
+  delay: 20
+
+# NOTE(Alex-Welsh): The cephadm install task sometimes hangs indefinitely after
+# the package is installed. This is a workaround to ensure the playbook
+# completes properly.
+- name: Ensure Cephadm package has installed properly
+  apt:
+    name: "cephadm"
+    state: "{{ 'latest' if cephadm_package_update | bool else 'present' }}"
+    update_cache: true
+  become: true
+  timeout: 60
+  when: cephadm_install is failed

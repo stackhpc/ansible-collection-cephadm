@@ -69,31 +69,31 @@ options:
 
 EXAMPLES = '''
 - name: create cephx key
-  ceph_key:
+  cephadm_key:
     name: "{{ item.name }}"
     state: present
     caps: "{{ item.caps }}"
   with_items: "{{ keys_to_create }}"
 
 - name: delete cephx key
-  ceph_key:
+  cephadm_key:
     name: "my_key"
     state: absent
 
 - name: info cephx key
-  ceph_key:
+  cephadm_key:
     name: "my_key"
     state: info
 
 - name: info cephx admin key (plain)
-  ceph_key:
+  cephadm_key:
     name: client.admin
     output_format: plain
     state: info
   register: client_admin_key
 
 - name: list cephx keys
-  ceph_key:
+  cephadm_key:
     state: list
 '''
 
@@ -320,17 +320,17 @@ def run_module():
             else:
                 rc, cmd, out, err = exec_commands(module, update_key(name, caps))  # noqa: E501
                 if rc != 0:
-                    result["stdout"] = "Couldn't update caps for {0}".format(name)
+                    result["msg"] = "Couldn't update caps for {0}".format(name)
                     result["stderr"] = err
-                    module.exit_json(**result)
+                    module.fail_json(**result)
                 changed = True
 
         else:
             rc, cmd, out, err = exec_commands(module, create_key(name, caps))  # noqa: E501
             if rc != 0:
-                result["stdout"] = "Couldn't create {0}".format(name)
+                result["msg"] = "Couldn't create {0}".format(name)
                 result["stderr"] = err
-                module.exit_json(**result)
+                module.fail_json(**result)
             changed = True
 
     elif state == "absent":
