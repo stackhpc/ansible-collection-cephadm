@@ -72,7 +72,7 @@ jobs:
           report_paths: '**/tests/output/*/*.xml'
 
       - name: Upload HTML report 
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-html
           path: ansible_collections/stackhpc/cephadm/tests/output/reports/coverage/
