@@ -1,0 +1,8 @@
+---
+- project:
+    check:
+      jobs:
+        - cephadm-jammy-singlenode
+    gate:
+      jobs:
+        - cephadm-jammy-singlenode
