@@ -1,2 +1,2 @@
 cephadm_bootstrap_host: "{{ groups['mons'][0] }}"
-cephadm_service_specs: []
+cephadm_service_spec: []
