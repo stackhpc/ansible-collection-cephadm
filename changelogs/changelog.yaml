@@ -26,3 +26,10 @@ releases:
 
         '
     release_date: '2024-07-28'
+  1.19.1:
+    changes:
+      bugfixes:
+      - pools - cephadm_pool tasks now correctly run with sudo
+    fragments:
+    - sudo-fix.yml
+    release_date: '2025-01-13'

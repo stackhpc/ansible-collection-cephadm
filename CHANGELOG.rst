@@ -4,6 +4,14 @@ stackhpc.cephadm Release Notes
 
 .. contents:: Topics
 
+v1.19.1
+=======
+
+Bugfixes
+--------
+
+- pools - cephadm_pool tasks now correctly run with sudo
+
 v1.16.0
 =======
 

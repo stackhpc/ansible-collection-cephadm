@@ -1,2 +1,0 @@
-bugfixes:
-  - pools - cephadm_pool tasks now correctly run with sudo
