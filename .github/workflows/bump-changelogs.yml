@@ -1,0 +1,10 @@
+name: Update changelogs on galaxy version bump
+on:
+  push:
+    paths:
+      - galaxy.yml
+    branches:
+      - antsibull_changelogs # change before merge
+jobs:
+  bump-changelogs:
+    uses: stackhpc/.github/.github/workflows/antsibull-release.yml@update_changelogs # todo: change to main once merged
