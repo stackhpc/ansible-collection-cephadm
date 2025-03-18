@@ -6,7 +6,11 @@ cephadm_fsid: ""
 # Recreate cluster
 cephadm_recreate: false
 # Packages
-cephadm_custom_repos: false
+# NOTE(seunghun1ee): Set cephadm_custom_repos to true by default when host OS
+# is Ubuntu Noble.
+# This is because Ceph images for Noble are coming from Ubuntu repository
+# https://packages.ubuntu.com/noble-updates/cephadm
+cephadm_custom_repos: "{{ ansible_facts.distribution_release == 'noble' }}"
 cephadm_package_update: false
 # Images
 cephadm_image: ""
