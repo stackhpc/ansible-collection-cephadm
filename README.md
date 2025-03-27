@@ -19,6 +19,7 @@ Roles:
 * [exit_maintenance](roles/exit_maintenance/README.md) for removing hosts from maintenance
 * [keys](roles/keys/README.md) for defining auth keys
 * [pools](roles/pools/README.md) for defining pools
+* [service_spec](roles/service_spec/README.md) for arbitrary service definition
 
 ## Using this collection
 
