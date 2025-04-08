@@ -20,3 +20,6 @@
     # NOTE: Without this, the delegate hosts's ansible_host variable will not
     # be respected.
     ansible_host: "{{ mon_ansible_host if 'mons' in group_names else hostvars[groups['mons'][0]].ansible_host }}"
+  until: osd_add_result.rc == 0
+  retries: 3
+  delay: 10
