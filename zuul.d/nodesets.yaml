@@ -1,0 +1,6 @@
+---
+- nodeset:
+    name: cephadm-jammy-single
+    nodes:
+      - name: primary
+        label: ubuntu-jammy
