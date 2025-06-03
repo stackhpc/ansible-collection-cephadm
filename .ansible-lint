@@ -5,6 +5,12 @@ exclude_paths:
   - changelogs/
   - .github/
 
+mock_roles:
+  - ensure-docker
+  - ensure-pip
+  - ensure-podman
+  - ensure-output-dirs
+
 skip_list:
   - var-naming[no-role-prefix]
 
