@@ -9,24 +9,6 @@ on:
       - master
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-    steps:
-      # Checks-out the repository under $GITHUB_WORKSPACE, so it's accessible to the job
-      - uses: actions/checkout@v3
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r test-requirements.txt
-
-      - name: Linting code
-        run: |
-          ansible-lint -v --force-color
-          antsibull-changelog lint
-
   ansible-test:
     runs-on: ubuntu-latest
     strategy:

@@ -3,6 +3,7 @@
 
 # ansible-test output
 /tests/output
+/.ansible
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
