@@ -1,0 +1,13 @@
+---
+- name: Prepare environment
+  hosts: all
+  any_errors_fatal: true
+  vars:
+    logs_dir: "/tmp/logs"
+  roles:
+    - ensure-output-dirs
+    - ensure-pip
+    - role: "ensure-docker"
+      when: cephadm_container_engine == "docker"
+    - role: "ensure-podman"
+      when: cephadm_container_engine == "podman"

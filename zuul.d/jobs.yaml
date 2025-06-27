@@ -1,0 +1,16 @@
+---
+- job:
+    name: cephadm-jammy-singlenode-docker-reef
+    parent: cephadm-base
+    nodeset: cephadm-jammy-single
+    vars:
+      cephadm_ceph_release: reef
+      cephadm_container_engine: docker
+
+- job:
+    name: cephadm-jammy-singlenode-podman-reef
+    parent: cephadm-base
+    nodeset: cephadm-jammy-single
+    vars:
+      cephadm_ceph_release: reef
+      cephadm_container_engine: podman
