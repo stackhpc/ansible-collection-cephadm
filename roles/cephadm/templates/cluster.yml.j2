@@ -22,7 +22,9 @@ labels:
   - ingress
 {% endif %}
 {% if hostvars[host].get('cephadm_host_labels', []) | length > 0 %}
-{{ hostvars[host].get('cephadm_host_labels', []) }}
+{% for label in hostvars[host].cephadm_host_labels %}
+  - {{ label }}
+{% endfor %}
 {% endif %}
 {% endfor %}
 ---
