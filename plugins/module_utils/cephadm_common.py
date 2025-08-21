@@ -20,20 +20,31 @@ __metaclass__ = type
 import datetime
 
 
-def generate_ceph_cmd(sub_cmd, args):
+def generate_ceph_cmd(sub_cmd, args, key_entry=None):
     '''
     Generate 'ceph' command line to execute
     '''
+    cmd = []
 
-    cmd = [
-        'cephadm',
-        '--timeout',
-        '60',
-        'shell',
-        '--',
-        'ceph',
-    ]
-    cmd.extend(sub_cmd + args)
+    if key_entry:
+        cmd = [
+            'cephadm',
+            'shell',
+            '--',
+            'bash',
+            '-c',
+            f'echo -e "{key_entry}" | ceph {" ".join(sub_cmd)} {" ".join(args)}'
+        ]
+    else:
+        cmd = [
+            'cephadm',
+            '--timeout',
+            '60',
+            'shell',
+            '--',
+            'ceph',
+        ]
+        cmd.extend(sub_cmd + args)
 
     return cmd
 
