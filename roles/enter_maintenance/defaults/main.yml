@@ -1,2 +1,2 @@
 ---
-cephadm_hostname: "{{ ansible_facts.nodename }}"
+cephadm_hostname: "{{ ansible_facts.hostname }}"
