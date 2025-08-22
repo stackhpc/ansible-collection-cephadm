@@ -1,0 +1,11 @@
+---
+- name: Prepare logs
+  hosts: all
+  vars:
+    zuul_output_dir: "{{ ansible_user_dir }}/zuul-output"
+  tasks:
+    - name: Print all facts
+      copy:
+        content: "{{ hostvars[inventory_hostname] | to_nice_json }}"
+        dest: "{{ zuul_output_dir }}/facts.json"
+        mode: "0600"

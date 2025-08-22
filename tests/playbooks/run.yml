@@ -1,0 +1,18 @@
+---
+- name: Install catatonit package for Podman
+  hosts: all
+  any_errors_fatal: true
+  tasks:
+    - name: Install catatonit package for Podman
+      package:
+        name: catatonit
+        state: present
+      become: true
+
+- name: Run tests
+  hosts: all
+  any_errors_fatal: true
+  roles:
+    - role: cephadm
+      vars:
+        cephadm_public_interface: "{{ ansible_default_ipv4.interface }}"
