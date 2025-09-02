@@ -43,6 +43,7 @@
     cmd: "cephadm shell -- ceph config set mon public_network {{ cephadm_public_network }}"
   become: true
   changed_when: true
+  when: cephadm_public_network | length > 0
 
 - name: Set cluster network
   command:
@@ -67,7 +68,7 @@
 
 - name: Get cluster fsid
   command:
-    cmd: "cephadm shell -- ceph fsid"
+    cmd: "cephadm ls --no-detail"
   when: cephadm_fsid | length == 0
   become: true
   changed_when: false
@@ -75,7 +76,8 @@
 
 - name: Template out cluster.yml
   vars:
-    fsid: "{{ cephadm_fsid if cephadm_fsid | length > 0 else cephadm_fsid_current.stdout }}"
+    current_fsid: "{{ cephadm_fsid_current.stdout | from_json | selectattr('name', 'search', 'mon') | map(attribute='fsid') | first }}"
+    fsid: "{{ cephadm_fsid if cephadm_fsid | length > 0 else current_fsid }}"
   template:
     src: "templates/cluster.yml.j2"
     dest: "/var/run/ceph/{{ fsid }}/cephadm_cluster.yml"
