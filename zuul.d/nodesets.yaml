@@ -1,0 +1,19 @@
+---
+- nodeset:
+    name: cephadm-jammy-single
+    nodes:
+      - name: primary
+        label: ubuntu-jammy
+    groups:
+      - name: ceph
+        nodes:
+          - primary
+      - name: mons
+        nodes:
+          - primary
+      - name: mgrs
+        nodes:
+          - primary
+      - name: osds
+        nodes:
+          - primary

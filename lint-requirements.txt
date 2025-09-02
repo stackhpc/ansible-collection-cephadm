@@ -1,0 +1,3 @@
+ansible
+ansible-lint<26
+antsibull-changelog
