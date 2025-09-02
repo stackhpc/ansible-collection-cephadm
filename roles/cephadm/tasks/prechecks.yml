@@ -1,4 +1,19 @@
 ---
+- name: Assert that required Ansible groups exist
+  ansible.builtin.assert:
+    that: "'{{ item }}' in group_names"
+    msg: "Ansible '{{ item }}' group does not exist - please create one"
+  loop:
+    - ceph
+    - mons
+    - mgrs
+    - osds
+
+- name: Assert that cephadm_public_interface is set
+  ansible.builtin.assert:
+    that: cephadm_public_interface | length > 0
+    msg: "Ansible Cephadm interface variable 'cephadm_public_interface' is not set"
+
 - name: Populate service facts
   service_facts:
 
