@@ -1,11 +1,17 @@
 ---
+# Note: Bootstrapping Reef on Noble is currently not supported, similar to Squid on Jammy.
+
 - project:
     check:
       jobs:
         - cephadm-jammy-multinode-docker-reef
         - cephadm-jammy-multinode-podman-reef
+        - cephadm-noble-multinode-docker-squid
+        - cephadm-noble-multinode-podman-squid
         - tox-linters
     gate:
       jobs:
         - cephadm-jammy-multinode-docker-reef
         - cephadm-jammy-multinode-podman-reef
+        - cephadm-noble-multinode-docker-squid
+        - cephadm-noble-multinode-podman-squid

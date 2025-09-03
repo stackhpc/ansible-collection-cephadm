@@ -27,7 +27,7 @@
         label: ubuntu-jammy
       - name: ceph-3
         label: ubuntu-jammy
-    groups:
+    groups: &multinode_groups
       - name: ceph
         nodes: &multinode_nodes
           - ceph-1
@@ -39,3 +39,25 @@
         nodes: *multinode_nodes
       - name: osds
         nodes: *multinode_nodes
+
+- nodeset:
+    name: cephadm-noble-multinode
+    nodes:
+      - name: ceph-1
+        label: ubuntu-noble
+      - name: ceph-2
+        label: ubuntu-noble
+      - name: ceph-3
+        label: ubuntu-noble
+    groups: *multinode_groups
+
+- nodeset:
+    name: cephadm-rocky9-multinode
+    nodes:
+      - name: ceph-1
+        label: rocky-9
+      - name: ceph-2
+        label: rocky-9
+      - name: ceph-3
+        label: rocky-9
+    groups: *multinode_groups
