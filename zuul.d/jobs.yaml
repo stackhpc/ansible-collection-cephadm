@@ -14,3 +14,19 @@
     vars:
       cephadm_ceph_release: reef
       cephadm_container_engine: podman
+
+- job:
+    name: cephadm-jammy-multinode-docker-reef
+    parent: cephadm-base
+    nodeset: cephadm-jammy-multinode
+    vars:
+      cephadm_ceph_release: reef
+      cephadm_container_engine: docker
+
+- job:
+    name: cephadm-jammy-multinode-podman-reef
+    parent: cephadm-base
+    nodeset: cephadm-jammy-multinode
+    vars:
+      cephadm_ceph_release: reef
+      cephadm_container_engine: podman

@@ -2,10 +2,10 @@
 - project:
     check:
       jobs:
-        - cephadm-jammy-singlenode-docker-reef
-        - cephadm-jammy-singlenode-podman-reef
+        - cephadm-jammy-multinode-docker-reef
+        - cephadm-jammy-multinode-podman-reef
         - tox-linters
     gate:
       jobs:
-        - cephadm-jammy-singlenode-docker-reef
-        - cephadm-jammy-singlenode-podman-reef
+        - cephadm-jammy-multinode-docker-reef
+        - cephadm-jammy-multinode-podman-reef

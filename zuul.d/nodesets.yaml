@@ -17,3 +17,25 @@
       - name: osds
         nodes:
           - primary
+
+- nodeset:
+    name: cephadm-jammy-multinode
+    nodes:
+      - name: ceph-1
+        label: ubuntu-jammy
+      - name: ceph-2
+        label: ubuntu-jammy
+      - name: ceph-3
+        label: ubuntu-jammy
+    groups:
+      - name: ceph
+        nodes: &multinode_nodes
+          - ceph-1
+          - ceph-2
+          - ceph-3
+      - name: mons
+        nodes: *multinode_nodes
+      - name: mgrs
+        nodes: *multinode_nodes
+      - name: osds
+        nodes: *multinode_nodes
