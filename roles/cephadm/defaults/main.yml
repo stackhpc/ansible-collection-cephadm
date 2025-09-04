@@ -1,5 +1,5 @@
 ---
-cephadm_ceph_release: reef
+cephadm_ceph_release: squid
 cephadm_skip_prechecks: false
 # FSID
 cephadm_fsid: ""
