@@ -37,4 +37,5 @@ releases:
     changes:
       bugfixes:
       - prechecks - fix groups existing assertion
+      - prechecks - change groups existence check to run once
     release_date: '2025-10-09'
