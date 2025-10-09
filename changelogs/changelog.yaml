@@ -37,4 +37,4 @@ releases:
     changes:
       bugfixes:
       - prechecks - fix groups existing assertion
-    release date: '2025-10-09'
+    release_date: '2025-10-09'
