@@ -1,7 +1,7 @@
 ---
 - name: Assert that required Ansible groups exist
   ansible.builtin.assert:
-    that: "'{{ item }}' in group_names"
+    that: "'{{ item }}' in groups"
     msg: "Ansible '{{ item }}' group does not exist - please create one"
   loop:
     - ceph

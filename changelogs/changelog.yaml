@@ -33,3 +33,8 @@ releases:
     fragments:
     - sudo-fix.yml
     release_date: '2025-01-08'
+  1.19.2:
+    changes:
+      bugfixes:
+      - prechecks - fix groups existing assertion
+    release date: '2025-10-09'
