@@ -149,6 +149,7 @@ import json
 
 
 def check_pool_exist(name,
+                     image=None, fsid=None, hostname=None,
                      output_format='json'):
     '''
     Check if a given pool exists
@@ -157,13 +158,15 @@ def check_pool_exist(name,
     args = ['stats', name, '-f', output_format]
 
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
+                            image=image, fsid=fsid, hostname=hostname,
                             args=args)
 
     return cmd
 
 
 def get_application_pool(name,
-                         output_format='json'):
+                        image=None, fsid=None, hostname=None,
+                        output_format='json'):
     '''
     Get application type enabled on a given pool
     '''
@@ -171,13 +174,15 @@ def get_application_pool(name,
     args = ['application', 'get', name, '-f', output_format]
 
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
+                            image=image, fsid=fsid, hostname=hostname,
                             args=args)
 
     return cmd
 
 
 def enable_application_pool(name,
-                            application):
+                            application,
+                            image=None, fsid=None, hostname=None):
     '''
     Enable application on a given pool
     '''
@@ -185,13 +190,15 @@ def enable_application_pool(name,
     args = ['application', 'enable', name, application]
 
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
+                            image=image, fsid=fsid, hostname=hostname,
                             args=args)
 
     return cmd
 
 
 def disable_application_pool(name,
-                             application):
+                             application,
+                             image=None, fsid=None, hostname=None):
     '''
     Disable application on a given pool
     '''
@@ -200,12 +207,13 @@ def disable_application_pool(name,
             application, '--yes-i-really-mean-it']
 
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
+                            image=image, fsid=fsid, hostname=hostname,
                             args=args)
 
     return cmd
 
 
-def get_pool_ec_overwrites(name, output_format='json'):
+def get_pool_ec_overwrites(name, image=None, fsid=None, hostname=None, output_format='json'):
     '''
     Get EC overwrites on a given pool
     '''
@@ -214,12 +222,13 @@ def get_pool_ec_overwrites(name, output_format='json'):
             '-f', output_format]
 
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
+                            image=image, fsid=fsid, hostname=hostname,
                             args=args)
 
     return cmd
 
 
-def enable_ec_overwrites(name):
+def enable_ec_overwrites(name, image=None, fsid=None, hostname=None):
     '''
     Enable EC overwrites on a given pool
     '''
@@ -228,12 +237,13 @@ def enable_ec_overwrites(name):
             'true']
 
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
+                            image=image, fsid=fsid, hostname=hostname,
                             args=args)
 
     return cmd
 
 
-def disable_ec_overwrites(name):
+def disable_ec_overwrites(name, image=None, fsid=None, hostname=None):
     '''
     Disable EC overwrites on a given pool
     '''
@@ -242,6 +252,7 @@ def disable_ec_overwrites(name):
             'false']
 
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
+                            image=image, fsid=fsid, hostname=hostname,
                             args=args)
 
     return cmd
@@ -249,6 +260,7 @@ def disable_ec_overwrites(name):
 
 def get_pool_details(module,
                      name,
+                     image=None, fsid=None, hostname=None,
                      output_format='json'):
     '''
     Get details about a given pool
@@ -257,6 +269,7 @@ def get_pool_details(module,
     args = ['ls', 'detail', '-f', output_format]
 
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
+                            image=image, fsid=fsid, hostname=hostname,
                             args=args)
 
     rc, cmd, out, err = exec_command(module, cmd)
@@ -265,7 +278,8 @@ def get_pool_details(module,
         out = [p for p in json.loads(out.strip()) if p['pool_name'] == name][0]
 
     _rc, _cmd, application_pool, _err = exec_command(module,
-                                                     get_application_pool(name)
+                                                     get_application_pool(name,
+                                                        image=image, fsid=fsid, hostname=hostname),
                                                      )
 
     # This is a trick because "target_size_ratio" isn't present at the same
@@ -322,6 +336,7 @@ def compare_pool_config(user_pool_config, running_pool_details):
 
 
 def list_pools(details,
+               image=None, fsid=None, hostname=None,
                output_format='json'):
     '''
     List existing pools
@@ -335,13 +350,15 @@ def list_pools(details,
     args.extend(['-f', output_format])
 
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
+                            image=image, fsid=fsid, hostname=hostname,
                             args=args)
 
     return cmd
 
 
 def create_pool(name,
-                user_pool_config):
+                user_pool_config,
+                image=None, fsid=None, hostname=None):
     '''
     Create a new pool
     '''
@@ -381,12 +398,13 @@ def create_pool(name,
                      user_pool_config['pg_autoscale_mode']['value']])
 
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
+                            image=image, fsid=fsid, hostname=hostname,
                             args=args)
 
     return cmd
 
 
-def remove_pool(name):
+def remove_pool(name, image=None, fsid=None, hostname=None):
     '''
     Remove a pool
     '''
@@ -394,12 +412,13 @@ def remove_pool(name):
     args = ['rm', name, name, '--yes-i-really-really-mean-it']
 
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
+                            image=image, fsid=fsid, hostname=hostname,
                             args=args)
 
     return cmd
 
 
-def update_pool(module, name, delta):
+def update_pool(module, name, delta, image=None, fsid=None, hostname=None,):
     '''
     Update an existing pool
     '''
@@ -414,6 +433,7 @@ def update_pool(module, name, delta):
                     delta[key]['value']]
 
             cmd = generate_ceph_cmd(sub_cmd=['osd', 'pool'],
+                                    image=image, fsid=fsid, hostname=hostname,
                                     args=args)
 
             rc, cmd, out, err = exec_command(module, cmd)
@@ -421,11 +441,11 @@ def update_pool(module, name, delta):
                 return rc, cmd, out, err
 
         else:
-            rc, cmd, out, err = exec_command(module, disable_application_pool(name, delta['application']['old_application']))  # noqa: E501
+            rc, cmd, out, err = exec_command(module, disable_application_pool(name, delta['application']['old_application']), image=image, fsid=fsid, hostname=hostname)  # noqa: E501
             if rc != 0:
                 return rc, cmd, out, err
 
-            rc, cmd, out, err = exec_command(module, enable_application_pool(name, delta['application']['new_application']))  # noqa: E501
+            rc, cmd, out, err = exec_command(module, enable_application_pool(name, delta['application']['new_application']), image=image, fsid=fsid, hostname=hostname)  # noqa: E501
             if rc != 0:
                 return rc, cmd, out, err
 
@@ -453,7 +473,10 @@ def run_module():
         rule_name=dict(type='str', required=False, default=None),
         expected_num_objects=dict(type='str', required=False, default="0"),
         application=dict(type='str', required=False, default=None),
-        allow_ec_overwrites=dict(type='bool', required=False, default=False)
+        allow_ec_overwrites=dict(type='bool', required=False, default=False),
+        image=dict(type='str', required=False),
+        fsid=dict(type='str', required=False),
+        hostname=dict(type='str', required=False)
     )
 
     module = AnsibleModule(
@@ -473,6 +496,9 @@ def run_module():
     target_size_ratio = module.params.get('target_size_ratio')
     application = module.params.get('application')
     allow_ec_overwrites = module.params.get('allow_ec_overwrites')
+    image = module.params.get('image')
+    fsid = module.params.get('fsid')
+    hostname = module.params.get('hostname')
 
     if (module.params.get('pg_autoscale_mode').lower() in
             ['true', 'on', 'yes']):
@@ -531,22 +557,22 @@ def run_module():
 
     if state == "present":
         rc, cmd, out, err = exec_command(module,
-                                         check_pool_exist(name))
+                                         check_pool_exist(name, image=image, fsid=fsid, hostname=hostname))
         if rc == 0:
             running_pool_details = get_pool_details(module,
-                                                    name)
+                                                    name, image=image, fsid=fsid, hostname=hostname)
             user_pool_config['pg_placement_num'] = {'value': str(running_pool_details[2]['pg_placement_num']), 'cli_set_opt': 'pgp_num'}  # noqa: E501
             delta = compare_pool_config(user_pool_config,
                                         running_pool_details[2])
 
             if user_pool_config['type']['value'] == 'erasure':
-                rc, cmd, ec_overwrites, err = exec_command(module, get_pool_ec_overwrites(name))  # noqa: E501
+                rc, cmd, ec_overwrites, err = exec_command(module, get_pool_ec_overwrites(name, image=image, fsid=fsid, hostname=hostname))  # noqa: E501
                 running_pool_ec_overwrites = json.loads(ec_overwrites.strip()).get('allow_ec_overwrites')  # noqa: E501
                 if running_pool_ec_overwrites != user_pool_config['allow_ec_overwrites']['value']:  # noqa: E501
                     if user_pool_config['allow_ec_overwrites']['value']:
-                        rc, cmd, out, err = exec_command(module, enable_ec_overwrites(name))  # noqa: E501
+                        rc, cmd, out, err = exec_command(module, enable_ec_overwrites(name, image=image, fsid=fsid, hostname=hostname))  # noqa: E501
                     else:
-                        rc, cmd, out, err = exec_command(module, disable_ec_overwrites(name))  # noqa: E501
+                        rc, cmd, out, err = exec_command(module, disable_ec_overwrites(name, image=image, fsid=fsid, hostname=hostname))  # noqa: E501
                     if rc == 0:
                         changed = True
 
@@ -564,7 +590,7 @@ def run_module():
                 else:
                     rc, cmd, out, err = update_pool(module,
                                                     name,
-                                                    delta)
+                                                    delta, image=image, fsid=fsid, hostname=hostname)
                     if rc == 0:
                         changed = True
 
@@ -573,33 +599,33 @@ def run_module():
         else:
             rc, cmd, out, err = exec_command(module,
                                              create_pool(name,
-                                                         user_pool_config=user_pool_config))  # noqa: E501
+                                                         user_pool_config=user_pool_config), image=image, fsid=fsid, hostname=hostname)  # noqa: E501
             if user_pool_config['application']['value']:
                 rc, _, _, _ = exec_command(module,
                                            enable_application_pool(name,
-                                                                   user_pool_config['application']['value']))  # noqa: E501
+                                                                   user_pool_config['application']['value']), image=image, fsid=fsid, hostname=hostname)  # noqa: E501
             if user_pool_config['min_size']['value']:
                 # not implemented yet
                 pass
             if user_pool_config['allow_ec_overwrites']['value']:
                 rc, _, _, _ = exec_command(module,
-                                           enable_ec_overwrites(name))
+                                           enable_ec_overwrites(name, image=image, fsid=fsid, hostname=hostname))
 
             changed = True
 
     elif state == "list":
         rc, cmd, out, err = exec_command(module,
                                          list_pools(name,
-                                                    details))
+                                                    details, image=image, fsid=fsid, hostname=hostname))
         if rc != 0:
             out = "Couldn't list pool(s) present on the cluster"
 
     elif state == "absent":
         rc, cmd, out, err = exec_command(module,
-                                         check_pool_exist(name))
+                                         check_pool_exist(name, image=image, fsid=fsid, hostname=hostname))
         if rc == 0:
             rc, cmd, out, err = exec_command(module,
-                                             remove_pool(name))
+                                             remove_pool(name, image=image, fsid=fsid, hostname=hostname))
             changed = True
         else:
             rc = 0

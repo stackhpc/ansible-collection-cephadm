@@ -40,28 +40,40 @@
 
 - name: Set public network
   command:
-    cmd: "cephadm shell -- ceph config set mon public_network {{ cephadm_public_network }}"
+    cmd: >
+      cephadm shell {% if cephadm_fsid | length > 0 %} --fsid {{ cephadm_fsid }}
+      --config /var/lib/ceph/{{ cephadm_fsid }}/mon.{{ inventory_hostname }}/config
+      {% endif %} -- ceph config set mon public_network {{ cephadm_public_network }}
   become: true
   changed_when: true
   when: cephadm_public_network | length > 0
 
 - name: Set cluster network
   command:
-    cmd: "cephadm shell -- ceph config set global cluster_network {{ cephadm_cluster_network }}"
+    cmd: >
+      cephadm shell {% if cephadm_fsid | length > 0 %} --fsid {{ cephadm_fsid }}
+      --config /var/lib/ceph/{{ cephadm_fsid }}/mon.{{ inventory_hostname }}/config
+      {% endif %} -- ceph config set global cluster_network {{ cephadm_cluster_network }}
   when: cephadm_cluster_network | length > 0
   become: true
   changed_when: true
 
 - name: Set HAProxy image
   command:
-    cmd: "cephadm shell -- ceph config set mgr mgr/cephadm/container_image_haproxy {{ cephadm_haproxy_image }}"
+    cmd: >
+      cephadm shell {% if cephadm_fsid | length > 0 %} --fsid {{ cephadm_fsid }}
+      --config /var/lib/ceph/{{ cephadm_fsid }}/mon.{{ inventory_hostname }}/config
+      {% endif %} -- ceph config set mgr mgr/cephadm/container_image_haproxy {{ cephadm_haproxy_image }}
   when: cephadm_haproxy_image | length > 0
   become: true
   changed_when: true
 
 - name: Set Keepalived image
   command:
-    cmd: "cephadm shell -- ceph config set mgr mgr/cephadm/container_image_keepalived {{ cephadm_keepalived_image }}"
+    cmd: >
+      cephadm shell {% if cephadm_fsid | length > 0 %} --fsid {{ cephadm_fsid }}
+      --config /var/lib/ceph/{{ cephadm_fsid }}/mon.{{ inventory_hostname }}/config
+      {% endif %} -- ceph config set mgr mgr/cephadm/container_image_keepalived {{ cephadm_keepalived_image }}
   when: cephadm_keepalived_image | length > 0
   become: true
   changed_when: true
@@ -90,7 +102,14 @@
 - name: Apply spec
   command:
     cmd: >
-         cephadm shell --
+         cephadm {% if cephadm_image | length > 0 %}
+         --image {{ cephadm_image }} {% endif %}
+         shell
+         {% if cephadm_fsid | length > 0 %}
+         --fsid {{ cephadm_fsid }}
+         --config
+         /var/lib/ceph/{{ cephadm_fsid }}/mon.{{ inventory_hostname }}/config
+         {% endif %} --
          ceph orch apply -i /var/run/ceph/cephadm_cluster.yml
   changed_when: true
   become: true
