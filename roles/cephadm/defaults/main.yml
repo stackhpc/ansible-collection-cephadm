@@ -50,3 +50,5 @@ cephadm_radosgw_services: []
 cephadm_ingress_services: []
 # Container Engine
 cephadm_container_engine: "docker"
+# Additional container arguments
+cephadm_extra_container_args: []
