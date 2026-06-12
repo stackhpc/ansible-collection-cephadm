@@ -44,3 +44,8 @@ releases:
       minor_changes:
       - Add Tentacle support
     release_date: '2025-11-12'
+  1.22.1:
+    changes:
+      minor_changes:
+      - Override repo for Squid on Rocky 10
+    release_date: '2026-06-12'
