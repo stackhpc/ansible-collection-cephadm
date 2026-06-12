@@ -12,5 +12,5 @@
     crush_device_class: "{{ item.crush_device_class | default(omit) }}"
     crush_failure_domain: "{{ item.crush_failure_domain | default(omit) }}"
   with_items: "{{ cephadm_ec_profiles }}"
-  delegate_to: "{{ groups['mons'][0] }}"
+  delegate_to: "{{ groups[cephadm_ansible_mons_group][0] }}"
   run_once: true

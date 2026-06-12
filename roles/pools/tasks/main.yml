@@ -15,6 +15,6 @@
     application: "{{ item.application | default(omit) }}"
     allow_ec_overwrites: "{{ item.allow_ec_overwrites | default(omit) }}"
   with_items: "{{ cephadm_pools }}"
-  delegate_to: "{{ groups['mons'][0] }}"
+  delegate_to: "{{ groups[cephadm_ansible_mons_group][0] }}"
   run_once: true
   become: true

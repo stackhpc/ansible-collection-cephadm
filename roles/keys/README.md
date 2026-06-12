@@ -15,6 +15,12 @@ This role assumes the existence of the following groups:
 
 * `mons`
 
+#### Custom Inventory
+
+You can override the previous groups with your own.
+
+* `mons` -> `cephadm_ansible_mons_group`
+
 ## Role variables
 
 * `cephadm_keys`: A list of keys to define
@@ -30,7 +36,7 @@ This role assumes the existence of the following groups:
               caps:
                 mon: "allow r"
                 mgr: "allow rw"
-              state: absent 
+              state: absent
    ```
 
 Check the `cephadm_key` module docs for supported key options.

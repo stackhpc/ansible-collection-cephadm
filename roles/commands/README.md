@@ -17,6 +17,12 @@ This role assumes the existence of the following groups:
 
 with at least one host in it - see the `cephadm` role for more details.
 
+#### Custom Inventory
+
+You can override the previous groups with your own.
+
+* `mons` -> `cephadm_ansible_mons_group`
+
 ## Role variables
 
 

@@ -1,2 +1,3 @@
 ---
 cephadm_hostname: "{{ ansible_facts.hostname }}"
+cephadm_ansible_mons_group: mons

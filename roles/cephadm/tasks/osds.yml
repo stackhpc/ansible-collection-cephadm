@@ -13,13 +13,13 @@
   become: true
   register: osd_add_result
   changed_when: not osd_add_result.stdout.startswith("Created no osd(s) on host")
-  delegate_to: "{{ omit if 'mons' in group_names else groups['mons'][0] }}"
+  delegate_to: "{{ omit if cephadm_ansible_mons_group in group_names else groups[cephadm_ansible_mons_group][0] }}"
   when: cephadm_osd_devices | length > 0
   with_items: "{{ cephadm_osd_devices }}"
   vars:
     # NOTE: Without this, the delegate hosts's ansible_host variable will not
     # be respected.
-    ansible_host: "{{ mon_ansible_host if 'mons' in group_names else hostvars[groups['mons'][0]].ansible_host }}"
+    ansible_host: "{{ mon_ansible_host if cephadm_ansible_mons_group in group_names else hostvars[groups[cephadm_ansible_mons_group][0]].ansible_host }}"
   until: osd_add_result.rc == 0
   retries: 3
   delay: 10

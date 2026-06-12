@@ -1,24 +1,24 @@
-{% for host in groups['ceph'] %}
+{% for host in groups[cephadm_ansible_group] %}
 ---
 service_type: host
 hostname: {{ hostvars[host].ansible_facts.nodename }}
 {% set cephadm_admin_interface = hostvars[host].cephadm_admin_interface | default(cephadm_admin_interface) %}
 addr: {{ hostvars[host]['ansible_facts'][cephadm_admin_interface | replace('-', '_')]['ipv4']['address'] }}
 labels:
-{% if host in groups['mons'] %}
+{% if host in groups[cephadm_ansible_mons_group] %}
   - _admin
   - mon
 {% endif %}
-{% if host in groups['mgrs'] %}
+{% if host in groups[cephadm_ansible_mgrs_group] %}
   - mgr
 {% endif %}
-{% if host in groups['osds'] %}
+{% if host in groups[cephadm_ansible_osds_group] %}
   - osd
 {% endif %}
-{% if host in groups.get('rgws', []) %}
+{% if host in groups.get(cephadm_ansible_rgws_group, []) %}
   - rgw
 {% endif %}
-{% if host in groups.get('ingress', []) %}
+{% if host in groups.get(cephadm_ansible_ingress_group, []) %}
   - ingress
 {% endif %}
 {% if hostvars[host].get('cephadm_host_labels', []) | length > 0 %}
@@ -41,7 +41,7 @@ placement:
 service_type: crash
 placement:
   host_pattern: "*"
-{% if groups.get('rgws', []) | length > 0 %}
+{% if groups.get(cephadm_ansible_rgws_group, []) | length > 0 %}
 {% for service in cephadm_radosgw_services %}
 ---
 service_type: rgw
@@ -65,7 +65,7 @@ networks:
 {% endif %}
 {% endfor %}
 {% endif %}
-{% if groups.get('ingress', []) | length > 0 %}
+{% if groups.get(cephadm_ansible_ingress_group, []) | length > 0 %}
 {% for service in cephadm_ingress_services %}
 ---
 service_type: ingress

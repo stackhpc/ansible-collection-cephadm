@@ -1,1 +1,3 @@
+---
 cephadm_keys: []
+cephadm_ansible_mons_group: mons

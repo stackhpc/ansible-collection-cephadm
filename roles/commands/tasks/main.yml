@@ -7,7 +7,7 @@
   become: true
   changed_when: true
   when: cephadm_commands | length > 0
-  delegate_to: "{{ groups['mons'][0] }}"
+  delegate_to: "{{ groups[cephadm_ansible_mons_group][0] }}"
   run_once: true
   until: cephadm_commands_until
   retries: "{{ cephadm_commands_retries }}"
@@ -15,4 +15,4 @@
   vars:
     # NOTE: Without this, the delegate hosts's ansible_host variable will not
     # be respected.
-    ansible_host: "{{ hostvars[groups['mons'][0]].ansible_host | default(inventory_hostname) }}"
+    ansible_host: "{{ hostvars[groups[cephadm_ansible_mons_group][0]].ansible_host | default(inventory_hostname) }}"

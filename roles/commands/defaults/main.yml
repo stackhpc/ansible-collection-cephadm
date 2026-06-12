@@ -1,4 +1,5 @@
 ---
+cephadm_ansible_mons_group: mons
 cephadm_command: ceph
 cephadm_commands: []
 cephadm_commands_until: true

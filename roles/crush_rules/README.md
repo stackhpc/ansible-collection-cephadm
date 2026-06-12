@@ -17,6 +17,12 @@ This role assumes the existence of the following groups:
 
 All Ceph hosts must be in the `ceph` group.
 
+#### Custom Inventory
+
+You can override the previous groups with your own.
+
+* `mons` -> `cephadm_ansible_mons_group`
+
 ## Role variables
 
 * `cephadm_crush_rules`: A list of pools to define
@@ -38,8 +44,7 @@ All Ceph hosts must be in the `ceph` group.
             - name: ec_ssd
               rule_type: erasure
               profile: ec_4_2_ssd
-              state: present 
+              state: present
    ```
 
 Check the `cephadm_crush_rule` module docs for supported key options.
-

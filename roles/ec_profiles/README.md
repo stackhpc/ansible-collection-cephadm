@@ -14,6 +14,12 @@ This role assumes the existence of the following groups:
 
 * `mons`
 
+#### Custom Inventory
+
+You can override the previous groups with your own.
+
+* `mons` -> `cephadm_ansible_mons_group`
+
 ## Role variables
 
 * `cephadm_ec_profiles`: A list of pools to manage.

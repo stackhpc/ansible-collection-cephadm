@@ -26,6 +26,20 @@ Optional groups (those services will be deployed when group exists)::
 
 All Ceph hosts must be in the `ceph` group.
 
+
+#### Custom Inventory
+
+You can override the previous groups with your own.
+
+* `ceph` -> `cephadm_ansible_group`
+* `mons` -> `cephadm_ansible_mons_group`
+* `mgrs` -> `cephadm_ansible_mgrs_group`
+* `osds` -> `cephadm_ansible_osds_group`
+* `rgws` -> `cephadm_ansible_rgws_group`
+* `ingress` -> `cephadm_ansible_ingress_group`
+
+You would also probably need to change `cephadm_bootstrap_host` to pickup the bootstrap host from another group, that isn't the default.
+
 ## Role variables
 
 * General

@@ -17,6 +17,12 @@ This role assumes the existence of the following groups:
 
 All Ceph hosts must be in the `ceph` group.
 
+#### Custom Inventory
+
+You can override the previous groups with your own.
+
+* `mons` -> `cephadm_ansible_mons_group`
+
 ## Role variables
 
 * `cephadm_pools`: A list of pools to define
@@ -29,8 +35,7 @@ All Ceph hosts must be in the `ceph` group.
             - name: pool2
               size: 2
               application: rbd
-              state: absent 
+              state: absent
    ```
 
 Check the `cephadm_pool` module docs for supported pool options.
-

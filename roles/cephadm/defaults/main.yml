@@ -50,3 +50,10 @@ cephadm_radosgw_services: []
 cephadm_ingress_services: []
 # Container Engine
 cephadm_container_engine: "docker"
+# Cephadm Ansible groups
+cephadm_ansible_group: ceph
+cephadm_ansible_mons_group: mons
+cephadm_ansible_mgrs_group: mgrs
+cephadm_ansible_osds_group: osds
+cephadm_ansible_rgws_group: rgws
+cephadm_ansible_ingress_group: ingress

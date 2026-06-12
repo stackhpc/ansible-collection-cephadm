@@ -5,10 +5,10 @@
     that: "'{{ item }}' in groups"
     msg: "Ansible '{{ item }}' group does not exist - please create one"
   loop:
-    - ceph
-    - mons
-    - mgrs
-    - osds
+    - '{{ cephadm_ansible_group }}'
+    - '{{ cephadm_ansible_mons_group }}'
+    - '{{ cephadm_ansible_mgrs_group }}'
+    - '{{ cephadm_ansible_osds_group }}'
 
 - name: Assert that cephadm_public_interface is set
   ansible.builtin.assert:
