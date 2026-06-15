@@ -13,12 +13,15 @@
   when: not cephadm_custom_repos | bool
   become: true
 
+# NOTE(owenjones): el10 doesn't exist for squid, so for now hold back to el9
 - name: Ensure Ceph repositories are defined
   yum_repository:
     file: "ceph"
     name: "ceph-{{ item.0 + '-' + item.1 if item.0 == 'noarch' else item.1 }}"
     description: "Ceph {{ item.1 }} repo {{ item.0 }}"
-    baseurl: "https://download.ceph.com/rpm-{{ item.1 }}/el{{ ansible_facts.distribution_major_version }}/{{ item.0 }}"
+    baseurl: >-
+      https://download.ceph.com/rpm-{{ item.1 }}/el{{ '9' if ansible_facts.distribution_major_version | int == 10
+      and item.1 == 'squid' else ansible_facts.distribution_major_version }}/{{ item.0 }}
     gpgcheck: true
     gpgkey: "https://download.ceph.com/keys/release.asc"
     state: "{{ 'present' if item.1 == cephadm_ceph_release else 'absent' }}"

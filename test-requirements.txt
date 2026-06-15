@@ -1,4 +1,4 @@
-ansible>=2.9
+ansible>=10
 ansible-lint<26
 antsibull-changelog
 mock
