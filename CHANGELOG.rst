@@ -4,6 +4,11 @@ stackhpc.cephadm Release Notes
 
 .. contents:: Topics
 
+v1.22.1
+=======
+
+- Override repo for Squid on Rocky 10
+
 v1.22.0
 =======
 
