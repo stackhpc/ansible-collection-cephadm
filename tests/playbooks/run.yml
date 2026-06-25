@@ -3,6 +3,10 @@
   hosts: all
   any_errors_fatal: true
   tasks:
+    - name: Enable CRB repository
+      become: true
+      command: dnf config-manager --set-enabled crb
+      when: ansible_facts.os_family == 'RedHat'
     - name: Install catatonit package for Podman
       package:
         name: catatonit
