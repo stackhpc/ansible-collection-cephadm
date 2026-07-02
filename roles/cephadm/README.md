@@ -23,6 +23,7 @@ This role assumes the existence of the following groups:
 Optional groups (those services will be deployed when group exists)::
 
 * `rgws`
+* `mds`
 
 All Ceph hosts must be in the `ceph` group.
 
