@@ -12,6 +12,8 @@
         - cephadm-rocky9-multinode-podman-reef
         - cephadm-rocky9-multinode-docker-squid
         - cephadm-rocky9-multinode-podman-squid
+        - cephadm-rocky9-multinode-docker-squid-container-args
+        - cephadm-rocky9-multinode-podman-squid-container-args
         - tox-linters
     gate:
       jobs:
@@ -23,3 +25,5 @@
         - cephadm-rocky9-multinode-podman-reef
         - cephadm-rocky9-multinode-docker-squid
         - cephadm-rocky9-multinode-podman-squid
+        - cephadm-rocky9-multinode-docker-squid-container-args
+        - cephadm-rocky9-multinode-podman-squid-container-args

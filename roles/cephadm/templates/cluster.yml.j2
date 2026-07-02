@@ -32,17 +32,35 @@ service_type: mon
 placement:
   count: {{ cephadm_mon_count }}
   label: mon
+{% if cephadm_extra_container_args | length > 0 %}
+extra_container_args:
+{% for argument in cephadm_extra_container_args %}
+  - "{{ argument | quote }}"
+{% endfor %}
+{% endif %}
 ---
 service_type: mgr
 placement:
   count: {{ cephadm_mgr_count }}
   label: mgr
+{% if cephadm_extra_container_args | length > 0 %}
+extra_container_args:
+{% for argument in cephadm_extra_container_args %}
+  - "{{ argument | quote }}"
+{% endfor %}
+{% endif %}
 ---
 service_type: crash
 placement:
   host_pattern: "*"
 {% if groups.get('rgws', []) | length > 0 %}
 {% for service in cephadm_radosgw_services %}
+{% if cephadm_extra_container_args | length > 0 %}
+extra_container_args:
+{% for argument in cephadm_extra_container_args %}
+  - "{{ argument | quote }}"
+{% endfor %}
+{% endif %}
 ---
 service_type: rgw
 service_id: {{ service.id }}
@@ -67,11 +85,23 @@ networks:
 {% endif %}
 {% if groups.get('ingress', []) | length > 0 %}
 {% for service in cephadm_ingress_services %}
+{% if cephadm_extra_container_args | length > 0 %}
+extra_container_args:
+{% for argument in cephadm_extra_container_args %}
+  - "{{ argument | quote }}"
+{% endfor %}
+{% endif %}
 ---
 service_type: ingress
 service_id: {{ service.id }}
 placement:
   label: ingress
 {{ {"spec": service.spec} | to_nice_yaml(indent=2) }}
+{% endfor %}
+{% endif %}
+{% if cephadm_extra_container_args | length > 0 %}
+extra_container_args:
+{% for argument in cephadm_extra_container_args %}
+  - "{{ argument | quote }}"
 {% endfor %}
 {% endif %}

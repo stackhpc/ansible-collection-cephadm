@@ -141,3 +141,25 @@
     vars:
       cephadm_ceph_release: tentacle
       cephadm_container_engine: podman
+
+# Container args
+
+- job:
+    name: cephadm-rocky9-multinode-docker-squid-container-args
+    parent: .cephadm-rocky9-multinode-template
+    vars:
+      cephadm_ceph_release: squid
+      cephadm_container_engine: docker
+      cephadm_extra_container_args:
+        - "-v"
+        - "/etc/pki/tls/certs/ca-bundle.crt:/etc/pki/tls/certs/ca-bundle.crt:ro"
+
+- job:
+    name: cephadm-rocky9-multinode-podman-squid-container-args
+    parent: .cephadm-rocky9-multinode-template
+    vars:
+      cephadm_ceph_release: squid
+      cephadm_container_engine: podman
+      cephadm_extra_container_args:
+        - "-v"
+        - "/etc/pki/tls/certs/ca-bundle.crt:/etc/pki/tls/certs/ca-bundle.crt:ro"
