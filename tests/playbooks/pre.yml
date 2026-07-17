@@ -2,6 +2,7 @@
 - name: Prepare environment
   hosts: all
   any_errors_fatal: true
+  become: true
   vars:
     logs_dir: "/tmp/logs"
   roles:
