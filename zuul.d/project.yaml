@@ -6,8 +6,6 @@
       jobs:
         - cephadm-noble-multinode-docker-squid
         - cephadm-noble-multinode-podman-squid
-        - cephadm-rocky9-multinode-docker-reef
-        - cephadm-rocky9-multinode-podman-reef
         - cephadm-rocky9-multinode-docker-squid
         - cephadm-rocky9-multinode-podman-squid
         - cephadm-rocky9-multinode-docker-squid-container-args
@@ -21,8 +19,6 @@
       jobs:
         - cephadm-noble-multinode-docker-squid
         - cephadm-noble-multinode-podman-squid
-        - cephadm-rocky9-multinode-docker-reef
-        - cephadm-rocky9-multinode-podman-reef
         - cephadm-rocky9-multinode-docker-squid
         - cephadm-rocky9-multinode-podman-squid
         - cephadm-rocky9-multinode-docker-squid-container-args
