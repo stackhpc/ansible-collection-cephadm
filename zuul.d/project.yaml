@@ -4,8 +4,6 @@
 - project:
     check:
       jobs:
-        - cephadm-jammy-multinode-docker-reef
-        - cephadm-jammy-multinode-podman-reef
         - cephadm-noble-multinode-docker-squid
         - cephadm-noble-multinode-podman-squid
         - cephadm-rocky9-multinode-docker-reef
@@ -17,8 +15,6 @@
         - tox-linters
     gate:
       jobs:
-        - cephadm-jammy-multinode-docker-reef
-        - cephadm-jammy-multinode-podman-reef
         - cephadm-noble-multinode-docker-squid
         - cephadm-noble-multinode-podman-squid
         - cephadm-rocky9-multinode-docker-reef
