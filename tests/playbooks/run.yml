@@ -16,6 +16,18 @@
             state: present
       when: cephadm_container_engine == "podman"
 
+    - name: Ensure time service is installed
+      become: true
+      package:
+        name: chrony
+
+    - name: Start service chronyd
+      become: true
+      ansible.builtin.service:
+        name: chronyd
+        state: started
+      when: ansible_facts.os_family == "RedHat"
+
 - name: Run tests
   hosts: all
   any_errors_fatal: true
