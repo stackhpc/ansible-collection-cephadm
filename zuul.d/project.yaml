@@ -4,26 +4,26 @@
 - project:
     check:
       jobs:
-        - cephadm-jammy-multinode-docker-reef
-        - cephadm-jammy-multinode-podman-reef
         - cephadm-noble-multinode-docker-squid
         - cephadm-noble-multinode-podman-squid
-        - cephadm-rocky9-multinode-docker-reef
-        - cephadm-rocky9-multinode-podman-reef
         - cephadm-rocky9-multinode-docker-squid
         - cephadm-rocky9-multinode-podman-squid
         - cephadm-rocky9-multinode-docker-squid-container-args
         - cephadm-rocky9-multinode-podman-squid-container-args
+        - cephadm-rocky10-multinode-docker-squid
+        - cephadm-rocky10-multinode-podman-squid
+        - cephadm-rocky10-multinode-docker-tentacle
+        - cephadm-rocky10-multinode-podman-tentacle
         - tox-linters
     gate:
       jobs:
-        - cephadm-jammy-multinode-docker-reef
-        - cephadm-jammy-multinode-podman-reef
         - cephadm-noble-multinode-docker-squid
         - cephadm-noble-multinode-podman-squid
-        - cephadm-rocky9-multinode-docker-reef
-        - cephadm-rocky9-multinode-podman-reef
         - cephadm-rocky9-multinode-docker-squid
         - cephadm-rocky9-multinode-podman-squid
         - cephadm-rocky9-multinode-docker-squid-container-args
         - cephadm-rocky9-multinode-podman-squid-container-args
+        - cephadm-rocky10-multinode-docker-squid
+        - cephadm-rocky10-multinode-podman-squid
+        - cephadm-rocky10-multinode-docker-tentacle
+        - cephadm-rocky10-multinode-podman-tentacle
