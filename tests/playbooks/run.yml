@@ -1,5 +1,5 @@
 ---
-- name: Install catatonit package for Podman
+- name: Install catatonit package for Podman & fix the hostname
   hosts: all
   any_errors_fatal: true
   tasks:
@@ -23,3 +23,4 @@
     - role: cephadm
       vars:
         cephadm_public_interface: "{{ ansible_default_ipv4.interface }}"
+        cephadm_bootstrap_additional_parameters: "--allow-fqdn-hostname"
