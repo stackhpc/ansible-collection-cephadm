@@ -1,13 +1,32 @@
 ---
-- name: Install catatonit package for Podman
+- name: Install catatonit package for Podman & fix the hostname
   hosts: all
   any_errors_fatal: true
   tasks:
-    - name: Install catatonit package for Podman
-      package:
-        name: catatonit
-        state: present
+    - block:
+        - name: Enable CRB repository
+          become: true
+          command: dnf config-manager --set-enabled crb
+          when: ansible_facts.os_family == "RedHat"
+
+        - name: Install catatonit package
+          become: true
+          package:
+            name: catatonit
+            state: present
+      when: cephadm_container_engine == "podman"
+
+    - name: Ensure time service is installed
       become: true
+      package:
+        name: chrony
+
+    - name: Start service chronyd
+      become: true
+      ansible.builtin.service:
+        name: chronyd
+        state: started
+      when: ansible_facts.os_family == "RedHat"
 
 - name: Run tests
   hosts: all
@@ -16,3 +35,4 @@
     - role: cephadm
       vars:
         cephadm_public_interface: "{{ ansible_default_ipv4.interface }}"
+        cephadm_bootstrap_additional_parameters: "--allow-fqdn-hostname"
