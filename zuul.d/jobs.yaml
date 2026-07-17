@@ -9,6 +9,14 @@
     parent: cephadm-base
     nodeset: cephadm-rocky9-multinode
 
+# Rocky 10 multinode template
+
+- job:
+    name: .cephadm-rocky10-multinode-template
+    abstract: true
+    parent: cephadm-base
+    nodeset: cephadm-rocky10-multinode
+
 # Ubuntu Jammy signle node template
 
 - job:
@@ -163,3 +171,33 @@
       cephadm_extra_container_args:
         - "-v"
         - "/etc/pki/tls/certs/ca-bundle.crt:/etc/pki/tls/certs/ca-bundle.crt:ro"
+
+# Rocky 10
+
+- job:
+    name: cephadm-rocky10-multinode-docker-squid
+    parent: .cephadm-rocky10-multinode-template
+    vars:
+      cephadm_ceph_release: squid
+      cephadm_container_engine: docker
+
+- job:
+    name: cephadm-rocky10-multinode-podman-squid
+    parent: .cephadm-rocky10-multinode-template
+    vars:
+      cephadm_ceph_release: squid
+      cephadm_container_engine: podman
+
+- job:
+    name: cephadm-rocky10-multinode-docker-tentacle
+    parent: .cephadm-rocky10-multinode-template
+    vars:
+      cephadm_ceph_release: tentacle
+      cephadm_container_engine: docker
+
+- job:
+    name: cephadm-rocky10-multinode-podman-tentacle
+    parent: .cephadm-rocky10-multinode-template
+    vars:
+      cephadm_ceph_release: tentacle
+      cephadm_container_engine: podman
