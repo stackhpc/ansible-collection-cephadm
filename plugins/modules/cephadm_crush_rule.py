@@ -124,6 +124,9 @@ def create_rule(module, container_image=None):
     bucket_root = module.params.get('bucket_root')
     bucket_type = module.params.get('bucket_type')
     device_class = module.params.get('device_class')
+    image = module.params.get('image')
+    fsid = module.params.get('fsid')
+    hostname = module.params.get('hostname')
     profile = module.params.get('profile')
 
     if rule_type == 'replicated':
@@ -135,8 +138,9 @@ def create_rule(module, container_image=None):
         if profile:
             args.append(profile)
 
-    cmd = generate_ceph_cmd(['osd', 'crush', 'rule'],
-                            args)
+    cmd = generate_ceph_cmd(sub_cmd=['osd', 'crush', 'rule'],
+                            image=image, fsid=fsid, hostname=hostname,
+                            args=args)
 
     return cmd
 
@@ -147,11 +151,15 @@ def get_rule(module, container_image=None):
     '''
 
     name = module.params.get('name')
+    image = module.params.get('image')
+    fsid = module.params.get('fsid')
+    hostname = module.params.get('hostname')
 
     args = ['dump', name, '--format=json']
 
-    cmd = generate_ceph_cmd(['osd', 'crush', 'rule'],
-                            args)
+    cmd = generate_ceph_cmd(sub_cmd=['osd', 'crush', 'rule'],
+                            image=image, fsid=fsid, hostname=hostname,
+                            args=args)
 
     return cmd
 
@@ -162,11 +170,15 @@ def remove_rule(module, container_image=None):
     '''
 
     name = module.params.get('name')
+    image = module.params.get('image')
+    fsid = module.params.get('fsid')
+    hostname = module.params.get('hostname')
 
     args = ['rm', name]
 
-    cmd = generate_ceph_cmd(['osd', 'crush', 'rule'],
-                            args)
+    cmd = generate_ceph_cmd(sub_cmd=['osd', 'crush', 'rule'],
+                            image=image, fsid=fsid, hostname=hostname,
+                            args=args)
 
     return cmd
 
@@ -181,7 +193,10 @@ def main():
             bucket_type=dict(type='str', required=False, choices=['osd', 'host', 'chassis', 'rack', 'row', 'pdu', 'pod',  # noqa: E501
                                                                   'room', 'datacenter', 'zone', 'region', 'root']),  # noqa: E501
             device_class=dict(type='str', required=False),
-            profile=dict(type='str', required=False)
+            profile=dict(type='str', required=False),
+            image=dict(type='str', required=False),
+            fsid=dict(type='str', required=False),
+            hostname=dict(type='str', required=False)
         ),
         supports_check_mode=True,
         required_if=[

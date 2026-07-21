@@ -5,6 +5,9 @@
     state: "{{ item.state | default(omit) }}"
     caps: "{{ item.caps }}"
     secret: "{{ item.key | default(omit) }}"
+    image: "{{ cephadm_image }}"
+    fsid: "{{ cephadm_fsid | default(omit) }}"
+    hostname: "{{ inventory_hostname }}"
   with_items: "{{ cephadm_keys }}"
   delegate_to: "{{ groups['mons'][0] }}"
   run_once: true

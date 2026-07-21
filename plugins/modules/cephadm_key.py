@@ -132,7 +132,7 @@ def generate_caps(caps):
     return caps_cli
 
 
-def create_key(name, caps):  # noqa: E501
+def create_key(name, caps, image=None, fsid=None, hostname=None):  # noqa: E501
     '''
     Create a CephX key
     '''
@@ -145,12 +145,13 @@ def create_key(name, caps):  # noqa: E501
 
     args.extend(generate_caps(caps))
     cmd.append(generate_ceph_cmd(sub_cmd=['auth'],
+                                 image=image, fsid=fsid, hostname=hostname,
                                  args=args))
 
     return cmd
 
 
-def update_key(name, caps):
+def update_key(name, caps, image=None, fsid=None, hostname=None):
     '''
     Update the caps of a CephX key
     '''
@@ -163,12 +164,13 @@ def update_key(name, caps):
     ]
     args.extend(generate_caps(caps))
     cmd.append(generate_ceph_cmd(sub_cmd=['auth'],
+                                 image=image, fsid=fsid, hostname=hostname,
                                  args=args))
 
     return cmd
 
 
-def delete_key(name):
+def delete_key(name, image=None, fsid=None, hostname=None,):
     '''
     Delete a CephX key
     '''
@@ -181,12 +183,13 @@ def delete_key(name):
     ]
 
     cmd.append(generate_ceph_cmd(sub_cmd=['auth'],
+                                 image=image, fsid=fsid, hostname=hostname,
                                  args=args))
 
     return cmd
 
 
-def get_key(name, dest):
+def get_key(name, dest, image=None, fsid=None, hostname=None):
     '''
     Get a CephX key (write on the filesystem)
     '''
@@ -201,12 +204,13 @@ def get_key(name, dest):
     ]
 
     cmd.append(generate_ceph_cmd(sub_cmd=['auth'],
+                                 image=image, fsid=fsid, hostname=hostname,
                                  args=args))
 
     return cmd
 
 
-def info_key(name, output_format):
+def info_key(name, output_format, image=None, fsid=None, hostname=None):
     '''
     Get information about a CephX key
     '''
@@ -221,12 +225,13 @@ def info_key(name, output_format):
     ]
 
     cmd_list.append(generate_ceph_cmd(sub_cmd=['auth'],
+                                      image=image, fsid=fsid, hostname=hostname,
                                       args=args))
 
     return cmd_list
 
 
-def list_keys():
+def list_keys(image=None, fsid=None, hostname=None):
     '''
     List all CephX keys
     '''
@@ -240,6 +245,7 @@ def list_keys():
     ]
 
     cmd.append(generate_ceph_cmd(sub_cmd=['auth'],
+                                 image=image, fsid=fsid, hostname=hostname,
                                  args=args))
 
     return cmd
@@ -264,8 +270,10 @@ def run_module():
         state=dict(type='str', required=False, default='present', choices=['present', 'absent',  # noqa: E501
                                                                            'list', 'info']),  # noqa: E501
         caps=dict(type='dict', required=False, default={}),
-        output_format=dict(type='str', required=False, default='json', choices=['json', 'plain', 'xml', 'yaml'])  # noqa: E501
-    )
+        output_format=dict(type='str', required=False, default='json', choices=['json', 'plain', 'xml', 'yaml']),  # noqa: E501
+        image=dict(type='str', required=False),
+        fsid=dict(type='str', required=False),
+        hostname=dict(type='str', required=False))
 
     module = AnsibleModule(
         argument_spec=module_args,
@@ -277,6 +285,9 @@ def run_module():
     name = module.params.get('name')
     caps = module.params.get('caps')
     output_format = module.params.get('output_format')
+    image = module.params.get('image')
+    fsid = module.params.get('fsid')
+    hostname = module.params.get('hostname')
 
     changed = False
 
@@ -304,7 +315,7 @@ def run_module():
     if state == "present":
         _info_key = []
         rc, cmd, out, err = exec_commands(
-            module, info_key(name, output_format))  # noqa: E501
+            module, info_key(name, output_format, image=image, fsid=fsid, hostname=hostname))  # noqa: E501
         key_exist = rc
         if not caps and key_exist != 0:
             fatal("Capabilities must be provided when state is 'present'", module)  # noqa: E501
@@ -318,7 +329,7 @@ def run_module():
                 result["rc"] = 0
                 module.exit_json(**result)
             else:
-                rc, cmd, out, err = exec_commands(module, update_key(name, caps))  # noqa: E501
+                rc, cmd, out, err = exec_commands(module, update_key(name, caps, image=image, fsid=fsid, hostname=hostname))  # noqa: E501
                 if rc != 0:
                     result["msg"] = "Couldn't update caps for {0}".format(name)
                     result["stderr"] = err
@@ -326,7 +337,7 @@ def run_module():
                 changed = True
 
         else:
-            rc, cmd, out, err = exec_commands(module, create_key(name, caps))  # noqa: E501
+            rc, cmd, out, err = exec_commands(module, create_key(name, caps, image=image, fsid=fsid, hostname=hostname))  # noqa: E501
             if rc != 0:
                 result["msg"] = "Couldn't create {0}".format(name)
                 result["stderr"] = err
@@ -335,11 +346,11 @@ def run_module():
 
     elif state == "absent":
         rc, cmd, out, err = exec_commands(
-            module, info_key(name, output_format))  # noqa: E501
+            module, info_key(name, output_format, image=image, fsid=fsid, hostname=hostname))  # noqa: E501
         key_exist = rc
         if key_exist == 0:
             rc, cmd, out, err = exec_commands(
-                module, delete_key(name))  # noqa: E501
+                module, delete_key(name, image=image, fsid=fsid, hostname=hostname))  # noqa: E501
             if rc == 0:
                 changed = True
         else:
@@ -347,11 +358,11 @@ def run_module():
 
     elif state == "info":
         rc, cmd, out, err = exec_commands(
-            module, info_key(name, output_format))  # noqa: E501
+            module, info_key(name, output_format, image=image, fsid=fsid, hostname=hostname))  # noqa: E501
 
     elif state == "list":
         rc, cmd, out, err = exec_commands(
-            module, list_keys())
+            module, list_keys(image=image, fsid=fsid, hostname=hostname))
 
     endd = datetime.datetime.now()
     delta = endd - startd

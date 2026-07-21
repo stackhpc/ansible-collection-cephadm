@@ -1,7 +1,14 @@
 ---
 - name: Get Ceph FSID
   command:
-    cmd: "cephadm shell -- ceph fsid"
+    cmd: "cephadm {% if cephadm_image | length > 0 %}
+         --image {{ cephadm_image }} {% endif %}
+         shell
+         {% if cephadm_fsid | length > 0 %}
+         --fsid {{ cephadm_fsid }}
+         --config
+         /var/lib/ceph/{{ cephadm_fsid }}/mon.{{ inventory_hostname }}/config
+         {% endif %} -- ceph fsid"
   become: true
   register: cephadm_destroy_fsid
   changed_when: false

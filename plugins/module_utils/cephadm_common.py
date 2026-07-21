@@ -20,19 +20,31 @@ __metaclass__ = type
 import datetime
 
 
-def generate_ceph_cmd(sub_cmd, args):
+def generate_ceph_cmd(sub_cmd, args, image=None, fsid=None, hostname=None):
     '''
     Generate 'ceph' command line to execute
     '''
-
     cmd = [
         'cephadm',
         '--timeout',
         '60',
-        'shell',
-        '--',
-        'ceph',
     ]
+
+    if image:
+        cmd.extend(['--image', image])
+
+    cmd.append('shell')
+
+    if fsid:
+        cmd.extend(['--fsid', fsid])
+
+    if fsid and hostname:
+        cmd.extend([
+            '--config',
+            '/var/lib/ceph/{}/mon.{}/config'.format(fsid, hostname),
+        ])
+
+    cmd.extend(['--', 'ceph'])
     cmd.extend(sub_cmd + args)
 
     return cmd
