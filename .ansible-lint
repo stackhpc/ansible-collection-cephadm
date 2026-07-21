@@ -4,6 +4,7 @@ profile: shared
 exclude_paths:
   - changelogs/
   - .github/
+  - tests/playbooks
 
 mock_roles:
   - ensure-docker
