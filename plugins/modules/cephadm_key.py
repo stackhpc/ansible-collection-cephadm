@@ -57,6 +57,12 @@ options:
         default: {}
         required: false
         type: dict
+    key:
+        description:
+            - Secret value of the key. If specified, this key will be
+              used explicitly instead of being generated.
+        required: false
+        type: str
     output_format:
         description:
             - The key output format when retrieving the information of an
@@ -150,6 +156,25 @@ def create_key(name, caps):  # noqa: E501
     return cmd
 
 
+def create_key_by_import(name, caps, key):
+    '''
+    Create a CephX key by import
+    '''
+    cmd = []
+
+    caps_cli = []
+    for k, v in caps.items():
+        caps_cli.append(f'caps {k} = "{v}"')
+
+    key_entry = f"[{name}]\n\tkey = {key}\n\t" + "\n\t".join(caps_cli)
+
+    sub_cmd = ['auth', 'import']
+    args = ['-i', '-']
+    cmd.append(generate_ceph_cmd(sub_cmd=sub_cmd, args=args, key_entry=key_entry))
+
+    return cmd
+
+
 def update_key(name, caps):
     '''
     Update the caps of a CephX key
@@ -164,6 +189,15 @@ def update_key(name, caps):
     args.extend(generate_caps(caps))
     cmd.append(generate_ceph_cmd(sub_cmd=['auth'],
                                  args=args))
+
+    return cmd
+
+
+def update_key_by_import(name, caps, key=None):
+    '''
+    Update a CephX key by re-importing it
+    '''
+    cmd = create_key_by_import(name, caps, key)
 
     return cmd
 
@@ -264,6 +298,7 @@ def run_module():
         state=dict(type='str', required=False, default='present', choices=['present', 'absent',  # noqa: E501
                                                                            'list', 'info']),  # noqa: E501
         caps=dict(type='dict', required=False, default={}),
+        key=dict(type='str', required=False, default=None),
         output_format=dict(type='str', required=False, default='json', choices=['json', 'plain', 'xml', 'yaml'])  # noqa: E501
     )
 
@@ -276,6 +311,7 @@ def run_module():
     state = module.params['state']
     name = module.params.get('name')
     caps = module.params.get('caps')
+    key = module.params.get('key')
     output_format = module.params.get('output_format')
 
     changed = False
@@ -318,20 +354,33 @@ def run_module():
                 result["rc"] = 0
                 module.exit_json(**result)
             else:
-                rc, cmd, out, err = exec_commands(module, update_key(name, caps))  # noqa: E501
+                if key and key != _key:
+                    rc, cmd, out, err = exec_commands(
+                        module, update_key_by_import(name, caps, key))  # noqa: E501
+                else:
+                    rc, cmd, out, err = exec_commands(
+                        module, update_key(name, caps))  # noqa: E501
                 if rc != 0:
-                    result["msg"] = "Couldn't update caps for {0}".format(name)
+                    result["stdout"] = "Couldn't update {0}".format(name)
                     result["stderr"] = err
-                    module.fail_json(**result)
+                    module.exit_json(**result)
                 changed = True
 
         else:
-            rc, cmd, out, err = exec_commands(module, create_key(name, caps))  # noqa: E501
-            if rc != 0:
-                result["msg"] = "Couldn't create {0}".format(name)
-                result["stderr"] = err
-                module.fail_json(**result)
-            changed = True
+            if key:
+                rc, cmd, out, err = exec_commands(module, create_key_by_import(name, caps, key))
+                if rc != 0:
+                    result["stdout"] = "Couldn't import {0}".format(name)
+                    result["stderr"] = err
+                    module.exit_json(**result)
+                changed = True
+            else:
+                rc, cmd, out, err = exec_commands(module, create_key(name, caps))  # noqa: E501
+                if rc != 0:
+                    result["stdout"] = "Couldn't create {0}".format(name)
+                    result["stderr"] = err
+                    module.exit_json(**result)
+                changed = True
 
     elif state == "absent":
         rc, cmd, out, err = exec_commands(
