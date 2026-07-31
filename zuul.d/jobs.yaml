@@ -17,22 +17,6 @@
     parent: cephadm-base
     nodeset: cephadm-rocky10-multinode
 
-# Ubuntu Jammy signle node template
-
-- job:
-    name: .cephadm-jammy-single-template
-    abstract: true
-    parent: cephadm-base
-    nodeset: cephadm-jammy-single
-
-# Ubuntu Jammy multinode template
-
-- job:
-    name: .cephadm-jammy-multinode-template
-    abstract: true
-    parent: cephadm-base
-    nodeset: cephadm-jammy-multinode
-
 # Ubuntu Noble multinode template
 
 - job:
@@ -43,38 +27,6 @@
 
 ## Job definitions
 ## Note: Bootstrapping Reef on Noble is currently not supported, similar to Squid on Jammy.
-
-# Ubuntu Jammy single node
-
-- job:
-    name: cephadm-jammy-singlenode-docker-reef
-    parent: .cephadm-jammy-single-template
-    vars:
-      cephadm_ceph_release: reef
-      cephadm_container_engine: docker
-
-- job:
-    name: cephadm-jammy-singlenode-podman-reef
-    parent: .cephadm-jammy-single-template
-    vars:
-      cephadm_ceph_release: reef
-      cephadm_container_engine: podman
-
-# Ubuntu Jammy
-
-- job:
-    name: cephadm-jammy-multinode-docker-reef
-    parent: .cephadm-jammy-multinode-template
-    vars:
-      cephadm_ceph_release: reef
-      cephadm_container_engine: docker
-
-- job:
-    name: cephadm-jammy-multinode-podman-reef
-    parent: .cephadm-jammy-multinode-template
-    vars:
-      cephadm_ceph_release: reef
-      cephadm_container_engine: podman
 
 # Ubuntu Noble
 
