@@ -10,7 +10,7 @@ cephadm_recreate: false
 # is Ubuntu Noble.
 # This is because Ceph images for Noble are coming from Ubuntu repository
 # https://packages.ubuntu.com/noble-updates/cephadm
-cephadm_custom_repos: "{{ ansible_facts.distribution_release == 'noble' }}"
+cephadm_custom_repos: "{{ ansible_facts.distribution_release in ['noble', 'resolute'] }}"
 cephadm_package_update: false
 # Images
 cephadm_image: ""
