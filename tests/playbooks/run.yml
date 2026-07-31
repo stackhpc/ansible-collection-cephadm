@@ -36,3 +36,12 @@
       vars:
         cephadm_public_interface: "{{ ansible_default_ipv4.interface }}"
         cephadm_bootstrap_additional_parameters: "--allow-fqdn-hostname"
+
+    - role: pools
+      vars:
+        cephadm_pools:
+          - name: cephadm-test-pool
+            application: rbd
+            pool_type: replicated
+            rule_name: replicated
+            state: present
