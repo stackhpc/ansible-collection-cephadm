@@ -8,6 +8,9 @@
     bucket_type: "{{ item.bucket_type | default(omit) }}"
     device_class: "{{ item.device_class | default(omit) }}"
     profile: "{{ item.profile | default(omit) }}"
+    image: "{{ cephadm_image }}"
+    fsid: "{{ cephadm_fsid | default(omit) }}"
+    hostname: "{{ inventory_hostname }}"
   with_items: "{{ cephadm_crush_rules }}"
   delegate_to: "{{ groups['mons'][0] }}"
   run_once: true
