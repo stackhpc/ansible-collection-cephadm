@@ -22,6 +22,17 @@
         nodes: *multinode_nodes
 
 - nodeset:
+    name: cephadm-resolute-multinode
+    nodes:
+      - name: ceph-1
+        label: ubuntu-resolute
+      - name: ceph-2
+        label: ubuntu-resolute
+      - name: ceph-3
+        label: ubuntu-resolute
+    groups: *multinode_groups
+
+- nodeset:
     name: cephadm-rocky9-multinode
     nodes:
       - name: ceph-1

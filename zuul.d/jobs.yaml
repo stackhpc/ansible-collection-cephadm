@@ -17,13 +17,19 @@
     parent: cephadm-base
     nodeset: cephadm-rocky10-multinode
 
-# Ubuntu Noble multinode template
+# Ubuntu multinode templates
 
 - job:
     name: .cephadm-noble-multinode-template
     abstract: true
     parent: cephadm-base
     nodeset: cephadm-noble-multinode
+
+- job:
+    name: .cephadm-resolute-multinode-template
+    abstract: true
+    parent: cephadm-base
+    nodeset: cephadm-resolute-multinode
 
 ## Job definitions
 ## Note: Bootstrapping Reef on Noble is currently not supported, similar to Squid on Jammy.
@@ -54,6 +60,22 @@
 - job:
     name: cephadm-noble-multinode-podman-tentacle
     parent: .cephadm-noble-multinode-template
+    vars:
+      cephadm_ceph_release: tentacle
+      cephadm_container_engine: podman
+
+# Ubuntu Resolute
+
+- job:
+    name: cephadm-resolute-multinode-docker-tentacle
+    parent: .cephadm-resolute-multinode-template
+    vars:
+      cephadm_ceph_release: tentacle
+      cephadm_container_engine: docker
+
+- job:
+    name: cephadm-resolute-multinode-podman-tentacle
+    parent: .cephadm-resolute-multinode-template
     vars:
       cephadm_ceph_release: tentacle
       cephadm_container_engine: podman
