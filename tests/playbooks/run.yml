@@ -45,3 +45,8 @@
             pool_type: replicated
             rule_name: replicated
             state: present
+
+    - role: commands
+      vars:
+        cephadm_commands:
+          - "-s"
