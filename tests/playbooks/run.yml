@@ -36,3 +36,8 @@
       vars:
         cephadm_public_interface: "{{ ansible_default_ipv4.interface }}"
         cephadm_bootstrap_additional_parameters: "--allow-fqdn-hostname"
+
+    - role: commands
+      vars:
+        cephadm_commands:
+          - "health"
