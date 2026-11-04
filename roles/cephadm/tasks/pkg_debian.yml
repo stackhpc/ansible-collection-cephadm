@@ -39,7 +39,9 @@
 
 - name: Install cephadm package
   apt:
-    name: "cephadm"
+    name:
+      - "cephadm"
+      - "{{ 'ceph-common' if ansible_facts.distribution_release == 'resolute' else omit }}"
     state: "{{ 'latest' if cephadm_package_update | bool else 'present' }}"
     update_cache: true
   become: true
