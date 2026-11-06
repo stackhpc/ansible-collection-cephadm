@@ -14,6 +14,9 @@
     target_size_ratio: "{{ item.target_size_ratio | default(omit) }}"
     application: "{{ item.application | default(omit) }}"
     allow_ec_overwrites: "{{ item.allow_ec_overwrites | default(omit) }}"
+    image: "{{ cephadm_image }}"
+    fsid: "{{ cephadm_fsid | default(omit) }}"
+    hostname: "{{ inventory_hostname }}"
   with_items: "{{ cephadm_pools }}"
   delegate_to: "{{ groups['mons'][0] }}"
   run_once: true

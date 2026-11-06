@@ -1,7 +1,15 @@
 ---
 - name: Execute custom commands
   command:
-    cmd: "cephadm shell -- {{ cephadm_command }} {{ item }}"
+    cmd: "cephadm {% if cephadm_image | length > 0 %}
+         --image {{ cephadm_image }} {% endif %}
+         shell
+         {% if cephadm_fsid | length > 0 %}
+         --fsid {{ cephadm_fsid }}
+         --config
+         /var/lib/ceph/{{ cephadm_fsid }}/mon.{{ inventory_hostname }}/config
+         {% endif %}
+         -- {{ cephadm_command }} {{ item }}"
   register: cephadm_commands_result
   with_items: "{{ cephadm_commands }}"
   become: true

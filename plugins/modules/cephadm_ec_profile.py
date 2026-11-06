@@ -82,6 +82,21 @@ options:
             - Set the failure domain for the CRUSH rule (e.g., 'rack', 'host', 'osd')
         required: false
         type: str
+    image:
+        description:
+            - Container image used to run cephadm/ceph commands.
+        required: false
+        type: str
+    fsid:
+        description:
+            - Ceph cluster FSID used to target the correct cluster.
+        required: false
+        type: str
+    hostname:
+        description:
+            - Hostname passed to cephadm to run commands on a specific host.
+        required: false
+        type: str
 
 author:
     - Guillaume Abrioux <gabrioux@redhat.com>
@@ -119,7 +134,7 @@ import json
 RETURN = '''#  '''
 
 
-def get_profile(module, name):
+def get_profile(module, name, image=None, fsid=None, hostname=None):
     '''
     Get existing profile
     '''
@@ -127,12 +142,13 @@ def get_profile(module, name):
     args = ['get', name, '--format=json']
 
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'erasure-code-profile'],
+                            image=image, fsid=fsid, hostname=hostname,
                             args=args)
 
     return cmd
 
 
-def create_profile(module, name, k, m, stripe_unit, crush_device_class, crush_failure_domain, directory, plugin, force=False):  # noqa: E501
+def create_profile(module, name, k, m, stripe_unit, crush_device_class, crush_failure_domain, directory, plugin, image=None, fsid=None, hostname=None, force=False):  # noqa: E501
     '''
     Create a profile
     '''
@@ -152,12 +168,13 @@ def create_profile(module, name, k, m, stripe_unit, crush_device_class, crush_fa
         args.append('--force')
 
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'erasure-code-profile'],
+                            image=image, fsid=fsid, hostname=hostname,
                             args=args)
 
     return cmd
 
 
-def delete_profile(module, name):
+def delete_profile(module, name, image=None, fsid=None, hostname=None,):
     '''
     Delete a profile
     '''
@@ -165,6 +182,7 @@ def delete_profile(module, name):
     args = ['rm', name]
 
     cmd = generate_ceph_cmd(sub_cmd=['osd', 'erasure-code-profile'],
+                            image=image, fsid=fsid, hostname=hostname,
                             args=args)
 
     return cmd
@@ -182,6 +200,9 @@ def run_module():
         crush_failure_domain=dict(type='str', required=False),
         directory=dict(type='str', required=False),
         plugin=dict(type='str', required=False),
+        image=dict(type='str', required=False),
+        fsid=dict(type='str', required=False),
+        hostname=dict(type='str', required=False)
     )
 
     module = AnsibleModule(
@@ -200,6 +221,9 @@ def run_module():
     crush_failure_domain = module.params.get('crush_failure_domain')
     directory = module.params.get('directory')
     plugin = module.params.get('plugin')
+    image = module.params.get('image')
+    fsid = module.params.get('fsid')
+    hostname = module.params.get('hostname')
 
     if module.check_mode:
         module.exit_json(
@@ -216,7 +240,7 @@ def run_module():
     changed = False
 
     if state == "present":
-        rc, cmd, out, err = exec_command(module, get_profile(module, name))  # noqa: E501
+        rc, cmd, out, err = exec_command(module, get_profile(module, name, image, fsid, hostname))  # noqa: E501
         if rc == 0:
             # the profile already exists, let's check whether we have to
             # update it
@@ -238,6 +262,9 @@ def run_module():
                                                                 crush_failure_domain,
                                                                 directory,
                                                                 plugin,
+                                                                image,
+                                                                fsid,
+                                                                hostname,
                                                                 force=True))  # noqa: E501
                 changed = True
         else:
@@ -250,12 +277,15 @@ def run_module():
                                                                     crush_device_class,  # noqa: E501
                                                                     crush_failure_domain,
                                                                     directory,
+                                                                    image,
+                                                                    fsid,
+                                                                    hostname,
                                                                     plugin))
             if rc == 0:
                 changed = True
 
     elif state == "absent":
-        rc, cmd, out, err = exec_command(module, delete_profile(module, name))  # noqa: E501
+        rc, cmd, out, err = exec_command(module, delete_profile(module, name, image, fsid, hostname))  # noqa: E501
         if not err:
             out = 'Profile {0} removed.'.format(name)
             changed = True
